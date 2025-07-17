@@ -9,10 +9,7 @@ import javax.servlet.Filter;
 
 @Slf4j
 @Configuration
-//@PropertySource({"classpath:/application.properties"})
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
-
-//    @Value("${upload.maxFileSize}") Long maxFileSize;
 
     @Override
     protected Class<?>[] getRootConfigClasses() {

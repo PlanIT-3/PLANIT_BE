@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource({"classpath:/application.yml"})
+@PropertySource({"classpath:/application.properties"})
 @ComponentScan(basePackages = {"woojooin.planit"})
 @MapperScan(basePackages  = {"woojooin.planit.global.mapper"})
 @Slf4j
