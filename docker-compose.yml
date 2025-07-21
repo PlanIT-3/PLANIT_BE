@@ -1,0 +1,14 @@
+services:
+  plan-it-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: plan-it-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - plan-it-network
+
+networks:
+  plan-it-network:
+    external: true
