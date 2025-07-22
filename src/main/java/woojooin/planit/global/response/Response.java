@@ -1,5 +1,7 @@
 package woojooin.planit.global.response;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +10,7 @@ import lombok.Getter;
 public class Response<T> {
 	private final String code;
 	private final String message;
+	private final HttpStatus status;
 	private final T data;
 
 	public static <T> Response<T> ok(T data) {
@@ -16,6 +19,7 @@ public class Response<T> {
 		return Response.<T>builder()
 			.code(code.getCode())
 			.message(code.getMessage())
+			.status(HttpStatus.OK)
 			.data(data)
 			.build();
 	}
@@ -24,6 +28,7 @@ public class Response<T> {
 		return Response.<T>builder()
 			.code(code.getCode())
 			.message(code.getMessage())
+			.status(code.getHttpStatus())
 			.data(data)
 			.build();
 	}
@@ -32,6 +37,7 @@ public class Response<T> {
 		return Response.<Void>builder()
 			.code(code.getCode())
 			.message(code.getMessage())
+			.status(code.getHttpStatus())
 			.build();
 	}
 }
