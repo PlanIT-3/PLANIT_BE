@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySource({"classpath:/application.properties"})
 @ComponentScan(basePackages = {"woojooin.planit"})
-@MapperScan(basePackages  = {"woojooin.planit.global.mapper"})
+@MapperScan(basePackages  = {"woojooin.planit.domain.member.mapper"})
 @Slf4j
 @EnableTransactionManagement
 public class RootConfig {
@@ -52,6 +52,9 @@ public class RootConfig {
         sqlSessionFactory.setConfigLocation(
                 applicationContext.getResource("classpath:/mybatis-config.xml"));
         sqlSessionFactory.setDataSource(dataSource());
+
+        sqlSessionFactory.setMapperLocations(
+                applicationContext.getResources("classpath:/mapper/**/*.xml"));
         return (SqlSessionFactory) sqlSessionFactory.getObject();
     }
 

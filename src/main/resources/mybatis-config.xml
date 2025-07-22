@@ -9,7 +9,7 @@
     </settings>
 
     <typeAliases>
-        <package name="org.scoula.board.domain" />
+        <package name="woojooin.planit.domain.member.domain" />
     </typeAliases>
 
 </configuration>
