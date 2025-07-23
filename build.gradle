@@ -14,7 +14,7 @@ ext {
     junitVersion = '5.10.2'
     springVersion = '5.3.37'
     lombokVersion = '1.18.32'
-
+    flywayVersion = '7.15.0'
 }
 
 sourceCompatibility = '17'
@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     // 스프링
-    implementation ("org.springframework:spring-context:${springVersion}")
+    implementation("org.springframework:spring-context:${springVersion}")
             { exclude group: 'commons-logging', module: 'commons-logging' }
     implementation "org.springframework:spring-webmvc:${springVersion}"
     implementation 'javax.inject:javax.inject:1'
@@ -80,6 +80,9 @@ dependencies {
     implementation 'org.springframework.security:spring-security-core:5.8.6'
     implementation 'org.springframework.security:spring-security-web:5.8.6'
     implementation 'org.springframework.security:spring-security-crypto:5.8.6'
+
+    //Fly way
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
