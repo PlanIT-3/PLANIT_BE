@@ -11,7 +11,8 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan(basePackages = {
         "woojooin.planit.domain.member.controller",
-        "woojooin.planit.global.security.controller"
+        "woojooin.planit.global.security.controller",
+        "woojooin.planit.domain.account.isa.controller"
 })
 public class ServletConfig  implements WebMvcConfigurer {
     @Override
