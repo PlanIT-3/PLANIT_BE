@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 /**
  * RestTemplate snake 자동 변환을 위한 설정
@@ -22,12 +23,24 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 @Configuration
 public class RestTemplateConfig {
 
-	@Bean
-	public RestTemplate restTemplate() {
-		// 1. 커넥션 풀 설정
+	// snake_case RestTemplate
+	@Bean("snakeRestTemplate")
+	public RestTemplate snakeRestTemplate() {
+		return createRestTemplate(PropertyNamingStrategies.SNAKE_CASE);
+	}
+
+	// camelCase RestTemplate
+	@Bean("camelRestTemplate")
+	public RestTemplate camelRestTemplate() {
+		return createRestTemplate(PropertyNamingStrategies.LOWER_CAMEL_CASE);
+	}
+
+	private RestTemplate createRestTemplate(PropertyNamingStrategy namingStrategy) {
+
+		//RestTemplate 커넥션풀 설정
 		PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-		connectionManager.setMaxTotal(200);              // 전체 커넥션 최대값
-		connectionManager.setDefaultMaxPerRoute(50);     // 도메인 당 최대 커넥션 수
+		connectionManager.setMaxTotal(200);
+		connectionManager.setDefaultMaxPerRoute(50);
 
 		CloseableHttpClient httpClient = HttpClients.custom()
 			.setConnectionManager(connectionManager)
@@ -35,18 +48,16 @@ public class RestTemplateConfig {
 
 		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
-		// 2. ObjectMapper에 snake_case 설정
 		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+		objectMapper.setPropertyNamingStrategy(namingStrategy);
 
-		MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
-		jacksonConverter.setObjectMapper(objectMapper);
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		converter.setObjectMapper(objectMapper);
 
-		// 3. RestTemplate 생성 및 커스텀 컨버터 등록
 		RestTemplate restTemplate = new RestTemplate(factory);
 		List<HttpMessageConverter<?>> converters = restTemplate.getMessageConverters();
-		converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter); // 기존 제거
-		converters.add(jacksonConverter);
+		converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
+		converters.add(converter);
 
 		return restTemplate;
 	}
