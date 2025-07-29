@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import woojooin.planit.global.util.UrlEncodeUtil;
 import woojooin.planit.global.util.codef.dto.CodefResponse;
 import woojooin.planit.global.util.codef.dto.connectedId.AccountDto;
+import woojooin.planit.global.util.codef.dto.connectedId.add.ConnectedIdAddReq;
 import woojooin.planit.global.util.codef.dto.connectedId.create.ConnectedIdCreateReq;
 import woojooin.planit.global.util.codef.dto.connectedId.create.ConntectedIdCreateRes;
 import woojooin.planit.global.util.codef.dto.token.CodefTokenRes;
@@ -135,6 +136,41 @@ public class CodefAccountUtil {
 		CodefResponse<ConntectedIdCreateRes> res = UrlEncodeUtil.decodeToDto(resString, type, CAMEL);
 
 		return res.getData();
+	}
+
+	/**
+	 * codef_path : /v1/account/add
+	 * 유저의 connected_id를 기반으로 기관 추가 기능
+	 * AccountDto - 사용자의 실제 계좌 정보를 담은 객체
+	 * @param accountList
+	 */
+	public ConntectedIdCreateRes addAccount(List<AccountDto> accountList, String connectedId) {
+		String url = CODEF_API_URL + "/v1/account/add";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add(AUTHORIZATION_HEADER, BEARER_PREFIX + getAccessToken().accessToken());
+
+		ConnectedIdAddReq body = new ConnectedIdAddReq(accountList, connectedId);
+
+		HttpEntity<ConnectedIdAddReq> entity = new HttpEntity<>(body, headers);
+
+		ResponseEntity<String> responseEntity = camelRestTemplate.exchange(
+			url,
+			HttpMethod.POST,
+			entity,
+			String.class
+		);
+
+		String encodedBody = responseEntity.getBody();
+		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
+		};
+
+		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeToDto(encodedBody, type, CAMEL);
+
+		log.info(response.toString());
+
+		return response.getData();
 	}
 
 }
