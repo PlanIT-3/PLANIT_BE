@@ -1,7 +1,8 @@
 package woojooin.planit.global.config;
 
-import javax.sql.DataSource;
-
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -11,21 +12,26 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.sql.DataSource;
 
 @Configuration
 @PropertySource({"classpath:/application.properties"})
-@ComponentScan(basePackages = {"woojooin.planit"})
-@MapperScan(basePackages  = {"woojooin.planit.domain.member.mapper"})
-@Import(SwaggerConfig.class)
+@ComponentScan(basePackages = {"woojooin.planit"},
+    excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
+        @ComponentScan.Filter(type = FilterType.ANNOTATION, value = RestController.class)
+    })
+@MapperScan(basePackages  = {
+    "woojooin.planit.domain.member.mapper",
+    "woojooin.planit.domain.account.isa.mapper"  // ISA 계좌 mapper 추가
+})
 @Slf4j
 @EnableTransactionManagement
 public class RootConfig {
@@ -54,11 +60,12 @@ public class RootConfig {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setConfigLocation(
-                applicationContext.getResource("classpath:/mybatis-config.xml"));
+            applicationContext.getResource("classpath:/mybatis-config.xml"));
         sqlSessionFactory.setDataSource(dataSource());
 
         sqlSessionFactory.setMapperLocations(
-                applicationContext.getResources("classpath:/mapper/**/*.xml"));
+            applicationContext.getResources("classpath:/mapper/**/*.xml"));
+
         return (SqlSessionFactory) sqlSessionFactory.getObject();
     }
 
@@ -67,5 +74,4 @@ public class RootConfig {
         DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
         return manager;
     }
-
 }

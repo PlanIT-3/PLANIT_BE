@@ -12,7 +12,6 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {
 	"woojooin.planit"
 })
-
 public class ServletConfig  implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
