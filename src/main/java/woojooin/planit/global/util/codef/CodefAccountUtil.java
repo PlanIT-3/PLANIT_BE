@@ -19,11 +19,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.benmanes.caffeine.cache.Cache;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.global.util.ConnectionUtil;
+import woojooin.planit.global.util.UrlEncodeUtil;
 import woojooin.planit.global.util.codef.dto.CodefResponse;
 import woojooin.planit.global.util.codef.dto.connectedId.AccountDto;
 import woojooin.planit.global.util.codef.dto.connectedId.add.ConnectedIdAddReq;
@@ -60,6 +61,9 @@ public class CodefAccountUtil {
 	private final static String BEARER_PREFIX = "Bearer ";
 	private final static String AUTHORIZATION_HEADER = "Authorization";
 	private static final String TOKEN_CACHE_KEY = "codef_access_token";
+
+	public static PropertyNamingStrategy SNAKE = PropertyNamingStrategy.SNAKE_CASE;
+	public static PropertyNamingStrategy CAMEL = PropertyNamingStrategy.LOWER_CAMEL_CASE;
 
 	/**
 	 * codef_path : /oauth/token
@@ -110,7 +114,7 @@ public class CodefAccountUtil {
 	 * AccountDto - 사용자의 실제 계좌 정보를 담은 객체
 	 * @param accountList
 	 */
-	public ConntectedIdResData registerConnectedId(List<AccountDto> accountList) {
+	public ConntectedIdCreateRes registerConnectedId(List<AccountDto> accountList) {
 		String url = CODEF_API_URL + "/v1/account/create";
 
 		HttpHeaders headers = new HttpHeaders();
@@ -131,8 +135,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> res = ConnectionUtil.decodeUrlStringToDto(resString, type,
-			ConnectionUtil.CAMEL);
+		CodefResponse<ConntectedIdCreateRes> res = UrlEncodeUtil.decodeUrlStringToDto(resString, type, CAMEL);
 
 		return res.getData();
 	}
@@ -165,8 +168,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type,
-			ConnectionUtil.CAMEL);
+		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
 
 		log.info(response.toString());
 
@@ -201,8 +203,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type,
-			ConnectionUtil.CAMEL);
+		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
 
 		log.info("[CodefAccountUtil.deleteAccount()] - response {}", response.toString());
 
