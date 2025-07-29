@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="woojooin.planit.domain.goal.mapper.GoalMapper">
+
+    <insert id="insert"></insert>
+    <update id="updateGoal"></update>
+
+    <select id="selectGoalById" resultType="woojooin.planit.domain.goal.domain.Goal"></select>
+    <select id="selectAllGoals" resultType="woojooin.planit.domain.goal.domain.Goal"></select>
+
+    <delete id="deleteGoal"></delete>
+</mapper>
