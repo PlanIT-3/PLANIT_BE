@@ -24,7 +24,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.global.util.UrlEncodeUtil;
+import woojooin.planit.global.util.ConnectionUtil;
 import woojooin.planit.global.util.codef.dto.CodefResponse;
 import woojooin.planit.global.util.codef.dto.connectedId.AccountDto;
 import woojooin.planit.global.util.codef.dto.connectedId.add.ConnectedIdAddReq;
@@ -135,7 +135,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> res = UrlEncodeUtil.decodeUrlStringToDto(resString, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> res = ConnectionUtil.decodeUrlStringToDto(resString, type, CAMEL);
 
 		return res.getData();
 	}
@@ -168,7 +168,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
 
 		log.info(response.toString());
 
@@ -203,7 +203,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
 
 		log.info("[CodefAccountUtil.deleteAccount()] - response {}", response.toString());
 
