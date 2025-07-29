@@ -15,11 +15,7 @@ public class FlywayConfig {
 			.locations("classpath:db/migration")
 			.baselineOnMigrate(true)
 			.load();
-
-		// ❗ repair 먼저 실행하고
 		flyway.repair();
-
-		// ✅ 그 다음 migrate 정상 실행
 		return flyway;
 	}
 }

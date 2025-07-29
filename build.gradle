@@ -60,6 +60,9 @@ dependencies {
     implementation 'com.mysql:mysql-connector-j:8.1.0'
     implementation 'com.zaxxer:HikariCP:2.7.4'
 
+    // 로컬 캐시 (caffeine)
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
     implementation "org.springframework:spring-tx:${springVersion}"
     implementation "org.springframework:spring-jdbc:${springVersion}"
 
@@ -80,6 +83,12 @@ dependencies {
     implementation 'org.springframework.security:spring-security-core:5.8.6'
     implementation 'org.springframework.security:spring-security-web:5.8.6'
     implementation 'org.springframework.security:spring-security-crypto:5.8.6'
+
+    //Http components
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+    //jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
 
     //Fly way
     implementation "org.flywaydb:flyway-core:${flywayVersion}"
