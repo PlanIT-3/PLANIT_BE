@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -169,6 +171,41 @@ public class CodefAccountUtil {
 		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeToDto(encodedBody, type, CAMEL);
 
 		log.info(response.toString());
+
+		return response.getData();
+	}
+
+	/**
+	 * codef_path : /v1/account/delete
+	 * 유저의 connected_id를 기반으로 기관 추가 기능
+	 * AccountDto - 사용자의 실제 계좌 정보를 담은 객체
+	 * @param accountList
+	 */
+	public ConntectedIdCreateRes deleteAccount(@Valid List<AccountDto> accountList, String connectedId) {
+		String url = CODEF_API_URL + "/v1/account/delete";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add(AUTHORIZATION_HEADER, BEARER_PREFIX + getAccessToken().accessToken());
+
+		ConnectedIdAddReq body = new ConnectedIdAddReq(accountList, connectedId);
+
+		HttpEntity<ConnectedIdAddReq> entity = new HttpEntity<>(body, headers);
+
+		ResponseEntity<String> responseEntity = camelRestTemplate.exchange(
+			url,
+			HttpMethod.POST,
+			entity,
+			String.class
+		);
+
+		String encodedBody = responseEntity.getBody();
+		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<>() {
+		};
+
+		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeToDto(encodedBody, type, CAMEL);
+
+		log.info("[CodefAccountUtil.deleteAccount()] - response {}", response.toString());
 
 		return response.getData();
 	}
