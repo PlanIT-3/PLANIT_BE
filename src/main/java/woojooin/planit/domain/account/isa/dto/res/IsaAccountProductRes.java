@@ -1,4 +1,4 @@
-package woojooin.planit.domain.account.isa.dto;
+package woojooin.planit.domain.account.isa.dto.res;
 
 import java.math.BigDecimal;
 
@@ -10,7 +10,7 @@ import woojooin.planit.domain.product.domain.ProductTypeCode;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IsaAccountProductDto {
+public class IsaAccountProductRes {
 
 	private Long memberProductId;
 	private ProductTypeCode productTypeCode;
