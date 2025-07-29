@@ -19,7 +19,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.benmanes.caffeine.cache.Cache;
 
 import lombok.RequiredArgsConstructor;
@@ -61,9 +60,6 @@ public class CodefAccountUtil {
 	private final static String BEARER_PREFIX = "Bearer ";
 	private final static String AUTHORIZATION_HEADER = "Authorization";
 	private static final String TOKEN_CACHE_KEY = "codef_access_token";
-
-	public static PropertyNamingStrategy SNAKE = PropertyNamingStrategy.SNAKE_CASE;
-	public static PropertyNamingStrategy CAMEL = PropertyNamingStrategy.LOWER_CAMEL_CASE;
 
 	/**
 	 * codef_path : /oauth/token
@@ -135,7 +131,8 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> res = ConnectionUtil.decodeUrlStringToDto(resString, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> res = ConnectionUtil.decodeUrlStringToDto(resString, type,
+			ConnectionUtil.CAMEL);
 
 		return res.getData();
 	}
@@ -168,7 +165,8 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type,
+			ConnectionUtil.CAMEL);
 
 		log.info(response.toString());
 
@@ -203,7 +201,8 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type,
+			ConnectionUtil.CAMEL);
 
 		log.info("[CodefAccountUtil.deleteAccount()] - response {}", response.toString());
 
