@@ -20,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ConnectionUtil {
 
+	public static PropertyNamingStrategy CAMEL = PropertyNamingStrategy.LOWER_CAMEL_CASE;
+	public static PropertyNamingStrategy SNAKE = PropertyNamingStrategy.SNAKE_CASE;
+
 	/**
 	 * URL 인코딩 문자열을 DTO로 변환하는 메서드
 	 *
@@ -36,6 +39,26 @@ public class ConnectionUtil {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.setPropertyNamingStrategy(namingStrategy);
 			return objectMapper.readValue(decodedJson, typeReference);
+		} catch (Exception e) {
+			throw new RuntimeException("Decoding failed", e);
+		}
+	}
+
+	/**
+	 * json 문자열을 DTO로 변환하는 메서드
+	 *
+	 * @param jsonString : json 문자열
+	 * @param typeReference : 변환할 타입
+	 * @param namingStrategy : 문자열의 네이밍 전략
+	 * @return : 제네릭 클래스로 직렬화된 DTO 객체
+	 * @param <T> : 리턴받을 TypeReference로 감싼 DTO 클래스
+	 */
+	public static <T> T decodeJsonStringToDto(String jsonString, TypeReference<T> typeReference,
+		PropertyNamingStrategy namingStrategy) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.setPropertyNamingStrategy(namingStrategy);
+			return objectMapper.readValue(jsonString, typeReference);
 		} catch (Exception e) {
 			throw new RuntimeException("Decoding failed", e);
 		}
