@@ -110,7 +110,7 @@ public class CodefAccountUtil {
 	 * AccountDto - 사용자의 실제 계좌 정보를 담은 객체
 	 * @param accountList
 	 */
-	public ConntectedIdCreateRes registerConnectedId(List<AccountDto> accountList) {
+	public ConntectedIdResData registerConnectedId(List<AccountDto> accountList) {
 		String url = CODEF_API_URL + "/v1/account/create";
 
 		HttpHeaders headers = new HttpHeaders();
