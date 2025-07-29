@@ -10,9 +10,9 @@ import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
 @ComponentScan(basePackages = {
-        "woojooin.planit.domain.member.controller",
-        "woojooin.planit.global.security.controller"
+	"woojooin.planit"
 })
+
 public class ServletConfig  implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -33,14 +33,14 @@ public class ServletConfig  implements WebMvcConfigurer {
             .addResourceLocations("classpath:/META-INF/resources/");
     }
 
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        InternalResourceViewResolver bean = new InternalResourceViewResolver();
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+		InternalResourceViewResolver bean = new InternalResourceViewResolver();
 
-        bean.setViewClass(JstlView.class);
-        bean.setPrefix("/WEB-INF/views/");
-        bean.setSuffix(".jsp");
+		bean.setViewClass(JstlView.class);
+		bean.setPrefix("/WEB-INF/views/");
+		bean.setSuffix(".jsp");
 
-        registry.viewResolver(bean);
-    }
+		registry.viewResolver(bean);
+	}
 }
