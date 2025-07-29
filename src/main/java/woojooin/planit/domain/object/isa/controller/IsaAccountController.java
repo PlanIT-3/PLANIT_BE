@@ -1,4 +1,4 @@
-package woojooin.planit.domain.account.isa.controller;
+package woojooin.planit.domain.object.isa.controller;
 
 import java.util.List;
 
@@ -13,8 +13,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.domain.account.isa.dto.res.IsaAccountProductRes;
-import woojooin.planit.domain.account.isa.service.IsaAccountService;
+import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
+import woojooin.planit.domain.object.isa.service.IsaAccountService;
+import woojooin.planit.global.response.Response;
 
 @RestController
 @RequestMapping("/api/account/isa")
@@ -28,12 +29,13 @@ public class IsaAccountController {
 	@GetMapping("/{memberId}")
 	@ApiOperation(value = "유저의 ISA 계좌 상품 리스트 조회 API",
 		notes = "특정 회원의 모든 상품 정보를 조회합니다.")
-	public ResponseEntity<List<IsaAccountProductRes>> getIsaAccountProducts(
+	public ResponseEntity<Response<List<IsaAccountProductRes>>> getIsaAccountProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId) {
 
 		List<IsaAccountProductRes> products = isaAccountService.getMemberProductsByMemberId(memberId);
 
-		return ResponseEntity.ok(products);
+		Response<List<IsaAccountProductRes>> response = Response.ok(products);
+		return ResponseEntity.ok(response);
 	}
 }
