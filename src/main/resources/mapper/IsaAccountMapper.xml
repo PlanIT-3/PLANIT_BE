@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="woojooin.planit.domain.account.isa.mapper.IsaAccountMapper">
+
+    <resultMap id="isaAccountProductResultMap" type="woojooin.planit.domain.account.isa.dto.res.IsaAccountProductRes">
+        <id property="memberProductId" column="member_product_id"/>
+        <result property="productTypeCode" column="product_type_code"
+                typeHandler="woojooin.planit.domain.product.domain.ProductTypeConverter"/>
+        <result property="presentAmount" column="present_amount"/>
+        <result property="quantity" column="quantity"/>
+        <result property="itemName" column="item_name"/>
+        <result property="itemCode" column="item_code"/>
+    </resultMap>
+
+    <select id="findAllByMemberId" resultMap="isaAccountProductResultMap">
+        SELECT member_product_id, product_type_code, present_amount, quantity, item_name, item_code
+        FROM member_product
+        WHERE member_id = #{memberId}
+        ORDER BY created_at DESC
+    </select>
+</mapper>
