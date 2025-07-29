@@ -29,7 +29,7 @@ public class UrlEncodeUtil {
 	 * @return : 제네릭 클래스로 직렬화된 DTO 객체
 	 * @param <T> : 리턴받을 TypeReference로 감싼 DTO 클래스
 	 */
-	public static <T> T decodeToDto(String encoded, TypeReference<T> typeReference,
+	public static <T> T decodeUrlStringToDto(String encoded, TypeReference<T> typeReference,
 		PropertyNamingStrategy namingStrategy) {
 		try {
 			String decodedJson = URLDecoder.decode(encoded, StandardCharsets.UTF_8);

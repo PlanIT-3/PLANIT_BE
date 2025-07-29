@@ -135,7 +135,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> res = UrlEncodeUtil.decodeToDto(resString, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> res = UrlEncodeUtil.decodeUrlStringToDto(resString, type, CAMEL);
 
 		return res.getData();
 	}
@@ -168,7 +168,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeToDto(encodedBody, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
 
 		log.info(response.toString());
 
@@ -203,7 +203,7 @@ public class CodefAccountUtil {
 		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<>() {
 		};
 
-		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeToDto(encodedBody, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> response = UrlEncodeUtil.decodeUrlStringToDto(encodedBody, type, CAMEL);
 
 		log.info("[CodefAccountUtil.deleteAccount()] - response {}", response.toString());
 
