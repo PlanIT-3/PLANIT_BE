@@ -23,11 +23,11 @@ import com.github.benmanes.caffeine.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import woojooin.planit.global.util.UrlEncodeUtil;
-import woojooin.planit.global.util.codef.dto.req.connectedId.AccountDto;
-import woojooin.planit.global.util.codef.dto.req.connectedId.create.ConnectedIdCreateReq;
-import woojooin.planit.global.util.codef.dto.res.CodefResponse;
-import woojooin.planit.global.util.codef.dto.res.CodefTokenRes;
-import woojooin.planit.global.util.codef.dto.res.connectedId.ConntectedIdResData;
+import woojooin.planit.global.util.codef.dto.CodefResponse;
+import woojooin.planit.global.util.codef.dto.connectedId.AccountDto;
+import woojooin.planit.global.util.codef.dto.connectedId.create.ConnectedIdCreateReq;
+import woojooin.planit.global.util.codef.dto.connectedId.create.ConntectedIdCreateRes;
+import woojooin.planit.global.util.codef.dto.token.CodefTokenRes;
 
 @Slf4j
 @Component
@@ -111,7 +111,7 @@ public class CodefAccountUtil {
 	 * AccountDto - 사용자의 실제 계좌 정보를 담은 객체
 	 * @param accountList
 	 */
-	public ConntectedIdResData registerConnectedId(List<AccountDto> accountList) {
+	public ConntectedIdCreateRes registerConnectedId(List<AccountDto> accountList) {
 		String url = CODEF_API_URL + "/v1/account/create";
 
 		HttpHeaders headers = new HttpHeaders();
@@ -129,11 +129,12 @@ public class CodefAccountUtil {
 		);
 
 		String resString = responseEntity.getBody();
-		TypeReference<CodefResponse<ConntectedIdResData>> type = new TypeReference<CodefResponse<ConntectedIdResData>>() {
+		TypeReference<CodefResponse<ConntectedIdCreateRes>> type = new TypeReference<CodefResponse<ConntectedIdCreateRes>>() {
 		};
 
-		CodefResponse<ConntectedIdResData> res = UrlEncodeUtil.decodeToDto(resString, type, CAMEL);
+		CodefResponse<ConntectedIdCreateRes> res = UrlEncodeUtil.decodeToDto(resString, type, CAMEL);
 
 		return res.getData();
 	}
+
 }

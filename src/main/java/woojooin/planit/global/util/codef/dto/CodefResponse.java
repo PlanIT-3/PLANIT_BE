@@ -1,4 +1,4 @@
-package woojooin.planit.global.util.codef.dto.res;
+package woojooin.planit.global.util.codef.dto;
 
 import lombok.Getter;
 
