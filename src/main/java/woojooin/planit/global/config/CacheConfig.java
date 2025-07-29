@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import woojooin.planit.global.util.codef.dto.res.CodefTokenRes;
+import woojooin.planit.global.util.codef.dto.token.CodefTokenRes;
 
 @Configuration
 public class CacheConfig {
