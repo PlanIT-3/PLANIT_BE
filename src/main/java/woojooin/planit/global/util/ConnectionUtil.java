@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class UrlEncodeUtil {
+public class ConnectionUtil {
 
 	/**
 	 * URL 인코딩 문자열을 DTO로 변환하는 메서드
