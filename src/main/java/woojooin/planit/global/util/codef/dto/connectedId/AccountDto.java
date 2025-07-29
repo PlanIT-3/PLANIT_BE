@@ -1,4 +1,4 @@
-package woojooin.planit.global.util.codef.dto.req.connectedId;
+package woojooin.planit.global.util.codef.dto.connectedId;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,11 +1,11 @@
-package woojooin.planit.global.util.codef.dto.res.connectedId;
+package woojooin.planit.global.util.codef.dto.connectedId.create;
 
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class ConntectedIdResData {
+public class ConntectedIdCreateRes {
 
 	private List<SuccessItem> successList;
 	private List<Object> errorList;
