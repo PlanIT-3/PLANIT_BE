@@ -5,10 +5,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import woojooin.planit.domain.member.domain.MemberProduct;
+import woojooin.planit.domain.account.isa.dto.res.IsaAccountProductRes;
 
 @Mapper
 public interface IsaAccountMapper {
 
-	List<MemberProduct> findAllByMemberId(@Param("memberId") Long memberId);
+	List<IsaAccountProductRes> findAllByMemberId(@Param("memberId") Long memberId);
 }
