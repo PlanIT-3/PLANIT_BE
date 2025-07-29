@@ -1,11 +1,11 @@
-package woojooin.planit.domain.account.isa.mapper;
+package woojooin.planit.domain.object.isa.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import woojooin.planit.domain.account.isa.dto.res.IsaAccountProductRes;
+import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
 
 @Mapper
 public interface IsaAccountMapper {

@@ -3,7 +3,7 @@
 
 <mapper namespace="woojooin.planit.domain.account.isa.mapper.IsaAccountMapper">
 
-    <resultMap id="isaAccountProductResultMap" type="woojooin.planit.domain.account.isa.dto.res.IsaAccountProductRes">
+    <resultMap id="isaAccountProductResultMap" type="woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes">
         <id property="memberProductId" column="member_product_id"/>
         <result property="productTypeCode" column="product_type_code"
                 typeHandler="woojooin.planit.domain.product.domain.ProductTypeConverter"/>

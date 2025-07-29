@@ -1,4 +1,4 @@
-package woojooin.planit.domain.account.isa.service;
+package woojooin.planit.domain.object.isa.service;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import woojooin.planit.domain.account.isa.dto.res.IsaAccountProductRes;
-import woojooin.planit.domain.account.isa.mapper.IsaAccountMapper;
+import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
+import woojooin.planit.domain.object.isa.mapper.IsaAccountMapper;
 
 @Service
 @RequiredArgsConstructor
