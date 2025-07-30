@@ -18,4 +18,5 @@ public class IsaAccountProductRes {
 	private Integer quantity;
 	private String itemName;
 	private String itemCode;
+	private boolean checked;
 }

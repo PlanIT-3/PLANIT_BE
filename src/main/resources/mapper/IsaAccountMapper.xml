@@ -12,6 +12,7 @@
         <result property="quantity" column="quantity"/>
         <result property="itemName" column="item_name"/>
         <result property="itemCode" column="item_code"/>
+        <result property="checked" column="checked"/>
     </resultMap>
 
     <!-- Action 도메인용 ResultMap -->
@@ -31,14 +32,20 @@
     </resultMap>
 
     <select id="findAllByMemberId" resultMap="isaAccountProductResultMap">
-        SELECT mp.member_product_id, mp.product_type_code, mp.present_amount, mp.quantity, mp.item_name, mp.item_code
+        SELECT
+            mp.member_product_id,
+            mp.product_type_code,
+            mp.present_amount,
+            mp.quantity,
+            mp.item_name,
+            mp.item_code,
+            CASE
+                WHEN a.member_product_id IS NOT NULL THEN 1
+                ELSE 0
+                END as checked
         FROM member_product mp
+                 LEFT JOIN action a ON mp.member_product_id = a.member_product_id
         WHERE mp.member_id = #{memberId}
-          AND mp.member_product_id NOT IN (
-            SELECT DISTINCT a.member_product_id
-            FROM action a
-            WHERE a.member_product_id IS NOT NULL
-        )
         ORDER BY mp.created_at DESC
     </select>
 
