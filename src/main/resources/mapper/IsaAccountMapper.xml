@@ -42,7 +42,9 @@
             0 as checked
         FROM member_product mp
                  LEFT JOIN action a ON mp.member_product_id = a.member_product_id
+            AND a.is_deleted = false
         WHERE mp.member_id = #{memberId}
+          AND mp.is_deleted = false
           AND a.member_product_id IS NULL
         ORDER BY mp.created_at DESC
     </select>
@@ -59,7 +61,9 @@
         FROM member_product mp
                  INNER JOIN action a ON mp.member_product_id = a.member_product_id
         WHERE mp.member_id = #{memberId}
+          AND mp.is_deleted = false
           AND a.object_id = #{objectId}
+          AND a.is_deleted = false
 
         UNION ALL
 
@@ -73,10 +77,12 @@
             0 as checked
         FROM member_product mp
         WHERE mp.member_id = #{memberId}
+          AND mp.is_deleted = false
           AND mp.member_product_id NOT IN (
             SELECT DISTINCT member_product_id
             FROM action
             WHERE member_product_id IS NOT NULL
+              AND is_deleted = false
         )
         ORDER BY member_product_id DESC
     </select>
@@ -107,6 +113,7 @@
         </foreach>
     </insert>
 
+    <!-- Soft Delete 쿼리 - CASE 문 사용 방식 (권장) -->
     <update id="softDelete">
         UPDATE action
         SET is_deleted = CASE
@@ -129,6 +136,7 @@
         AND is_deleted = false
     </update>
 
+    <!-- UPSERT 쿼리 - ON DUPLICATE KEY UPDATE 사용 -->
     <insert id="upsert">
         INSERT INTO action (
         object_id,
@@ -168,4 +176,5 @@
         is_deleted = false,
         updated_at = NOW()
     </insert>
+
 </mapper>
