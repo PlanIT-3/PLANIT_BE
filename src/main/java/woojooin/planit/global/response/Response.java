@@ -24,6 +24,17 @@ public class Response<T> {
 			.build();
 	}
 
+	public static <T> Response<T> ok() {
+		ResponseCode code = ResponseCode.SUCCESS;
+
+		return Response.<T>builder()
+			.code(code.getCode())
+			.message(code.getMessage())
+			.status(HttpStatus.OK)
+			.data(null)
+			.build();
+	}
+
 	public static <T> Response<T> build(T data, ResponseCode code) {
 		return Response.<T>builder()
 			.code(code.getCode())
