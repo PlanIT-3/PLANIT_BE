@@ -1,4 +1,4 @@
-CREATE TABLE product (
+CREATE TABLE IF NOT EXISTS product (
                          srtn_cd        VARCHAR(20)  NOT NULL, -- 단축코드
                          isin_cd        VARCHAR(30)  NOT NULL, -- ISIN 코드
                          itms_nm        VARCHAR(100) NOT NULL, -- 종목명
