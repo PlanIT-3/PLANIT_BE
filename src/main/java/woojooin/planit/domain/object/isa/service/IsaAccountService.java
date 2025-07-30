@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductEditListReq;
 import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductRegisterListReq;
 import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.object.isa.mapper.IsaAccountMapper;
@@ -28,5 +29,10 @@ public class IsaAccountService {
     public void registerMemberProductsByMemberId(Long memberId, IsaAccountProductRegisterListReq isaAccountProductRegisterListReq) {
 
         isaAccountMapper.register(memberId, isaAccountProductRegisterListReq.getIsaAccountProductRegisterReqs());
+    }
+
+
+    public List<IsaAccountProductRes> findAllByMemberIdAndObjectId(Long memberId, Long objectId) {
+        return isaAccountMapper.findAllByMemberIdAndObjectId(memberId, objectId);
     }
 }
