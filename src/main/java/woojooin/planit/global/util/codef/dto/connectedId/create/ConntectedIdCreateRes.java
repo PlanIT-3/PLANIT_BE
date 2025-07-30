@@ -8,7 +8,7 @@ import lombok.Data;
 public class ConntectedIdCreateRes {
 
 	private List<SuccessItem> successList;
-	private List<Object> errorList;
+	private List<SuccessItem> errorList;
 	private String connectedId;
 
 	@Data
