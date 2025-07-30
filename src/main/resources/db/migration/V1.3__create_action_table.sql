@@ -8,6 +8,7 @@ CREATE TABLE action (
                         account_type VARCHAR(20) COMMENT '계좌 유형',
                         amount INT COMMENT '금액',
                         action_type VARCHAR(20) COMMENT '액션 유형 (ISA, DEPOSIT)',
+                        is_deleted BOOLEAN NOT NULL DEFAULT FALSE COMMENT '삭제 여부',
                         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
                         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시',
 

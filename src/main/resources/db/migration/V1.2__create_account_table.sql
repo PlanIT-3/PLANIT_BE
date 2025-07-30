@@ -9,6 +9,7 @@ CREATE TABLE account (
                          earnings_rate DECIMAL(5,4) DEFAULT 0.0000,
                          account_invested_cost DECIMAL(20,2) NOT NULL DEFAULT 0.00,
                          last_tran_date TIMESTAMP NULL,
+                         is_deleted BOOLEAN NOT NULL DEFAULT FALSE COMMENT '삭제 여부',
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
