@@ -45,13 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.authorizeRequests()
 			.antMatchers("/auth/**").authenticated()
-			.antMatchers("/test/**").permitAll()
-			.antMatchers("/api/**","refresh/**").permitAll()
+			.antMatchers("/test/**").authenticated()
+			.antMatchers("/api/**").permitAll()
 
 			.anyRequest().authenticated()
 
 			.and()
-			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean
