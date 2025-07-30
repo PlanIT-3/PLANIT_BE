@@ -31,10 +31,15 @@
     </resultMap>
 
     <select id="findAllByMemberId" resultMap="isaAccountProductResultMap">
-        SELECT member_product_id, product_type_code, present_amount, quantity, item_name, item_code
-        FROM member_product
-        WHERE member_id = #{memberId}
-        ORDER BY created_at DESC
+        SELECT mp.member_product_id, mp.product_type_code, mp.present_amount, mp.quantity, mp.item_name, mp.item_code
+        FROM member_product mp
+        WHERE mp.member_id = #{memberId}
+          AND mp.member_product_id NOT IN (
+            SELECT DISTINCT a.member_product_id
+            FROM action a
+            WHERE a.member_product_id IS NOT NULL
+        )
+        ORDER BY mp.created_at DESC
     </select>
 
     <insert id="register">
