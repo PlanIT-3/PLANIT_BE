@@ -17,7 +17,7 @@ public class ProductController {
 	//배치로 수정 예정
 	@GetMapping("/save")
 	public String saveProducts() {
-		//productService.fetchAndSaveProducts();
+		productService.fetchAndSaveProducts();
 		return "저장 완료!";
 	}
 
