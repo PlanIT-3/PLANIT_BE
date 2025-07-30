@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="woojooin.planit.domain.account.isa.mapper.IsaAccountMapper">
+<mapper namespace="woojooin.planit.domain.object.isa.mapper.IsaAccountMapper">
 
+    <!-- ISA 계좌 상품 조회용 ResultMap -->
     <resultMap id="isaAccountProductResultMap" type="woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes">
         <id property="memberProductId" column="member_product_id"/>
         <result property="productTypeCode" column="product_type_code"
@@ -13,10 +14,57 @@
         <result property="itemCode" column="item_code"/>
     </resultMap>
 
+    <!-- Action 도메인용 ResultMap -->
+    <resultMap id="actionResultMap" type="woojooin.planit.domain.object.action.domain.Action">
+        <id property="actionId" column="action_id"/>
+        <result property="objectId" column="object_id"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="memberProductId" column="member_product_id"/>
+        <result property="allocatedRate" column="allocated_rate"/>
+        <result property="accountAllocatedRate" column="account_allocated_rate"/>
+        <result property="accountType" column="account_type"/>
+        <result property="amount" column="amount"/>
+        <result property="actionType" column="action_type"
+                typeHandler="woojooin.planit.domain.object.action.domain.ActionTypeConverter"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
     <select id="findAllByMemberId" resultMap="isaAccountProductResultMap">
         SELECT member_product_id, product_type_code, present_amount, quantity, item_name, item_code
         FROM member_product
         WHERE member_id = #{memberId}
         ORDER BY created_at DESC
     </select>
+
+    <insert id="register">
+        INSERT INTO action (
+        object_id,
+        account_number,
+        member_product_id,
+        allocated_rate,
+        account_allocated_rate,
+        account_type,
+        amount,
+        action_type,
+        created_at,
+        updated_at
+        )
+        VALUES
+        <foreach collection="requestList" item="req" separator=",">
+            (
+            #{req.objectId},
+            #{req.accountNumber},
+            #{req.memberObjectId},
+            #{req.allocatedRate},
+            #{req.accountAllocatedRate},
+            #{req.accountType},
+            #{req.amount},
+            #{req.actionType},
+            NOW(),
+            NOW()
+            )
+        </foreach>
+    </insert>
+
 </mapper>

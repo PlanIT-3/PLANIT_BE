@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductRegisterListReq;
 import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.object.isa.service.IsaAccountService;
 import woojooin.planit.global.response.Response;
@@ -37,5 +40,18 @@ public class IsaAccountController {
 
 		Response<List<IsaAccountProductRes>> response = Response.ok(products);
 		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/{memberId}")
+	@ApiOperation(value = "유저의 ISA 계좌 상품 등록 API",
+		notes = "특정 회원의 ISA 계좌 상품을 등록합니다.")
+	public ResponseEntity<Response<Void>> registerIsaAccountProducts(
+		@ApiParam(value = "회원 ID", required = true, example = "1")
+		@PathVariable Long memberId,
+		@RequestBody IsaAccountProductRegisterListReq isaAccountProductRegisterListReq) {
+
+		isaAccountService.registerMemberProductsByMemberId(memberId, isaAccountProductRegisterListReq);
+
+		return ResponseEntity.ok(Response.ok(null));
 	}
 }
