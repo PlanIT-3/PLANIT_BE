@@ -12,9 +12,9 @@ import java.util.List;
 public interface GoalMapper {
     int insertGoal(Goal goal);
     //조회
-    Goal selectGoalById(@Param("goalId") Long goalId, @Param("userId") Long userId);
-    List<Goal> selectAllGoals(Long userId);
+    Goal selectGoalById(@Param("objectId") Long objectId, @Param("memberId") Long memberId);
+    List<Goal> selectAllGoals(Long memberId);
     int updateGoal(Goal goal);
-    int deleteGoal(@Param("goalId") Long goalId, @Param("userId") Long userId);
+    int deleteGoal(@Param("objectId") Long objectId, @Param("memberId") Long memberId);
 
 }
