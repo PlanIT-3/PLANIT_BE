@@ -16,10 +16,8 @@ import java.util.Optional;
 public class GoalController {
     private final GoalSettingService goalService;
 
-    // TODO: 현재 로그인된 사용자의 ID를 가져오기
     private Long getCurrentAuthenticatedUserId() {
-        // 실제로는 JWT 토큰을 통해 사용자 ID를 추출
-        System.out.println("DEBUG: getCurrentAuthenticatedUserId() called - Returning dummy ID 1L. Please implement real authentication.");
+        // todo 실제 인증 처리 필요
         return 1L; // **임시 값 사용자 ID**
     }
 
@@ -27,9 +25,10 @@ public class GoalController {
     /*목표 생성  ( /api/goals )  */
     @PostMapping
     public ResponseEntity<Goal> createGoal(@RequestBody Goal goal) {
-        Long userID = getCurrentAuthenticatedUserId();
+        Long memberID = getCurrentAuthenticatedUserId();
+        goal.setMemberId(memberID);
         try{
-            int result = goalService.createGoal(userID,goal);
+            int result = goalService.createGoal(memberID,goal);
             if(result>0){
                 return new ResponseEntity<>(goal,HttpStatus.OK);
             }
@@ -62,9 +61,9 @@ public class GoalController {
     public ResponseEntity<Void> updateGoal(@PathVariable Long goalId, @RequestBody Goal goal) {
         Long userId = getCurrentAuthenticatedUserId();
         try {
-            goal.setGoalId(goalId);
-            goal.setUserId(userId);
-            int result = goalService.updateGoal(userId,goalId,goal);
+            goal.setObjectId(goalId);
+            goal.setMemberId(userId);
+            int result = goalService.updateGoal(goalId,userId,goal);
             return new ResponseEntity<>(HttpStatus.OK); // 200 OK
         }catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
