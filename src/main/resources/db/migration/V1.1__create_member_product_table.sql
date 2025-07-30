@@ -6,6 +6,7 @@ CREATE TABLE member_product (
                                 quantity INT DEFAULT 0,
                                 item_name VARCHAR(255) NOT NULL,
                                 item_code VARCHAR(100) NOT NULL,
+                                is_deleted BOOLEAN NOT NULL DEFAULT FALSE COMMENT '삭제 여부',
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
