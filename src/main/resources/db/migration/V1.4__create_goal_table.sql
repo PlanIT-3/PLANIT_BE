@@ -7,7 +7,8 @@ CREATE TABLE `goal` (
                           `end_date` DATE NOT NULL COMMENT '목표 종료일',
                           `deposit_ratio` INT NOT NULL COMMENT '예적금 할당 비율', -- 여기서 공백 제거
                           `isa_ratio` INT NOT NULL COMMENT 'ISA 할당 비율',     -- 여기서 공백 제거
+                          'start_amount' BIGINT NOT NULL  COMMENT '초기금액',
+                          'goal_rate' INT NOT NULL comment '목표달성률',
                           PRIMARY KEY (`goal_id`),
                           CONSTRAINT `fk_object_user_id` FOREIGN KEY (`user_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='사용자 목표 설정 정보';
-

@@ -23,7 +23,7 @@ public class GoalSettingService {
     //1.  목표 생성
     public int createGoal(Long currentUserID ,Goal goal) {
         goal.setUserId(currentUserID);
-        return goalMapper.insert(goal);
+        return goalMapper.insertGoal(goal);
     }
 
     //  목표 하나 조회
@@ -43,7 +43,6 @@ public class GoalSettingService {
         updatedGoal.setGoalId(goalId);//pathvariable로 받은  goalid를 Goal객체에
         updatedGoal.setUserId(currentUserID);// 사용자 id를 goal객체에
         int rowAffected = goalMapper.updateGoal(updatedGoal);
-
         if(rowAffected == 0){
             throw new IllegalArgumentException("Goal not found or access denied for ID: " + goalId);}
         return rowAffected;
@@ -55,6 +54,6 @@ public class GoalSettingService {
         if(goal == null){
             throw new IllegalArgumentException("Goal not found or access denied for ID: " + goalId);
         }
-        return goalMapper.deleteGoal(goalId);
+        return goalMapper.deleteGoal(goalId,currentUserID);
     }
 }
