@@ -72,4 +72,17 @@ public class IsaAccountController {
 
 		return ResponseEntity.ok(Response.ok(null));
 	}
+
+	@PutMapping("/{memberId}")
+	@ApiOperation(value = "유저의 ISA 계좌 상품 수정 API",
+		notes = "특정 회원의 ISA 계좌 상품을 수정합니다.")
+	public ResponseEntity<Response<Void>> editIsaAccountProducts(
+		@ApiParam(value = "회원 ID", required = true, example = "1")
+		@PathVariable Long memberId,
+		@RequestBody IsaAccountProductEditListReq isaAccountProductEditListReq) {
+
+		isaAccountService.editMemberProductsByMemberId(memberId, isaAccountProductEditListReq);
+
+		return ResponseEntity.ok(Response.ok(null));
+	}
 }
