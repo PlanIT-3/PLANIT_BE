@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="woojooin.planit.domain.product.mapper.ProductMapper">
+
+    <resultMap id="productResultMap" type="woojooin.planit.domain.product.domain.Product">
+        <result property="srtnCd" column="srtn_cd"/>
+        <result property="isinCd" column="isin_cd"/>
+        <result property="itmsNm" column="itms_nm"/>
+        <result property="basDt" column="bas_dt"/>
+        <result property="clpr" column="clpr"/>
+        <result property="vs" column="vs"/>
+        <result property="fltRt" column="flt_rt"/>
+        <result property="mkp" column="mkp"/>
+        <result property="hipr" column="hipr"/>
+        <result property="lopr" column="lopr"/>
+        <result property="trqu" column="trqu"/>
+        <result property="trPrc" column="tr_prc"/>
+        <result property="lstgStCnt" column="lstg_st_cnt"/>
+        <result property="mrktTotAmt" column="mrkt_tot_amt"/>
+        <result property="riskLevel" column="risk_level"/>
+    </resultMap>
+
+    <insert id="insertProduct" parameterType="woojooin.planit.domain.product.domain.Product">
+        INSERT INTO product (
+            srtn_cd, isin_cd, itms_nm, bas_dt, clpr, vs, flt_rt,
+            mkp, hipr, lopr, trqu, tr_prc, lstg_st_cnt, mrkt_tot_amt,
+            risk_level
+        )
+        VALUES (
+                   #{srtnCd}, #{isinCd}, #{itmsNm}, #{basDt}, #{clpr}, #{vs}, #{fltRt},
+                   #{mkp}, #{hipr}, #{lopr}, #{trqu}, #{trPrc}, #{lstgStCnt}, #{mrktTotAmt},
+                   #{riskLevel}
+               )
+    </insert>
+
+</mapper>
