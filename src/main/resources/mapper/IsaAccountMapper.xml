@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="woojooin.planit.domain.account.isa.mapper.IsaAccountMapper">
+<mapper namespace="woojooin.planit.domain.object.isa.mapper.IsaAccountMapper">
 
+    <!-- ISA 계좌 상품 조회용 ResultMap -->
     <resultMap id="isaAccountProductResultMap" type="woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes">
         <id property="memberProductId" column="member_product_id"/>
         <result property="productTypeCode" column="product_type_code"
@@ -11,12 +12,169 @@
         <result property="quantity" column="quantity"/>
         <result property="itemName" column="item_name"/>
         <result property="itemCode" column="item_code"/>
+        <result property="checked" column="checked"/>
+    </resultMap>
+
+    <!-- Action 도메인용 ResultMap -->
+    <resultMap id="actionResultMap" type="woojooin.planit.domain.object.action.domain.Action">
+        <id property="actionId" column="action_id"/>
+        <result property="objectId" column="object_id"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="memberProductId" column="member_product_id"/>
+        <result property="allocatedRate" column="allocated_rate"/>
+        <result property="accountAllocatedRate" column="account_allocated_rate"/>
+        <result property="accountType" column="account_type"/>
+        <result property="amount" column="amount"/>
+        <result property="actionType" column="action_type"
+                typeHandler="woojooin.planit.domain.object.action.domain.ActionTypeConverter"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
     <select id="findAllByMemberId" resultMap="isaAccountProductResultMap">
-        SELECT member_product_id, product_type_code, present_amount, quantity, item_name, item_code
-        FROM member_product
-        WHERE member_id = #{memberId}
-        ORDER BY created_at DESC
+        SELECT
+            mp.member_product_id,
+            mp.product_type_code,
+            mp.present_amount,
+            mp.quantity,
+            mp.item_name,
+            mp.item_code,
+            0 as checked
+        FROM member_product mp
+                 LEFT JOIN action a ON mp.member_product_id = a.member_product_id
+            AND a.is_deleted = false
+        WHERE mp.member_id = #{memberId}
+          AND mp.is_deleted = false
+          AND a.member_product_id IS NULL
+        ORDER BY mp.created_at DESC
     </select>
+
+    <select id="findAllByMemberIdAndObjectId" resultMap="isaAccountProductResultMap">
+        SELECT
+            mp.member_product_id,
+            mp.product_type_code,
+            mp.present_amount,
+            mp.quantity,
+            mp.item_name,
+            mp.item_code,
+            1 as checked
+        FROM member_product mp
+                 INNER JOIN action a ON mp.member_product_id = a.member_product_id
+        WHERE mp.member_id = #{memberId}
+          AND mp.is_deleted = false
+          AND a.object_id = #{objectId}
+          AND a.is_deleted = false
+
+        UNION ALL
+
+        SELECT
+            mp.member_product_id,
+            mp.product_type_code,
+            mp.present_amount,
+            mp.quantity,
+            mp.item_name,
+            mp.item_code,
+            0 as checked
+        FROM member_product mp
+        WHERE mp.member_id = #{memberId}
+          AND mp.is_deleted = false
+          AND mp.member_product_id NOT IN (
+            SELECT DISTINCT member_product_id
+            FROM action
+            WHERE member_product_id IS NOT NULL
+              AND is_deleted = false
+        )
+        ORDER BY member_product_id DESC
+    </select>
+
+    <insert id="register">
+        INSERT INTO action (
+        object_id,
+        account_number,
+        member_product_id,
+        allocated_rate,
+        account_allocated_rate,
+        account_type,
+        amount,
+        action_type
+        )
+        VALUES
+        <foreach collection="requestList" item="req" separator=",">
+            (
+            #{req.objectId},
+            #{req.accountNumber},
+            #{req.memberObjectId},
+            #{req.allocatedRate},
+            #{req.accountAllocatedRate},
+            #{req.accountType},
+            #{req.amount},
+            #{req.actionType}
+            )
+        </foreach>
+    </insert>
+
+    <!-- Soft Delete 쿼리 - CASE 문 사용 방식 (권장) -->
+    <update id="softDelete">
+        UPDATE action
+        SET is_deleted = CASE
+        <foreach collection="requestList" item="req" separator=" ">
+            WHEN object_id = #{req.objectId} AND member_product_id = #{req.memberObjectId} THEN true
+        </foreach>
+        ELSE is_deleted
+        END,
+        updated_at = CASE
+        <foreach collection="requestList" item="req" separator=" ">
+            WHEN object_id = #{req.objectId} AND member_product_id = #{req.memberObjectId} THEN NOW()
+        </foreach>
+        ELSE updated_at
+        END
+        WHERE (object_id, member_product_id) IN (
+        <foreach collection="requestList" item="req" separator=",">
+            (#{req.objectId}, #{req.memberObjectId})
+        </foreach>
+        )
+        AND is_deleted = false
+    </update>
+
+    <!-- UPSERT 쿼리 - ON DUPLICATE KEY UPDATE 사용 -->
+    <insert id="upsert">
+        INSERT INTO action (
+        object_id,
+        member_product_id,
+        account_number,
+        account_type,
+        amount,
+        allocated_rate,
+        account_allocated_rate,
+        action_type,
+        is_deleted,
+        created_at,
+        updated_at
+        ) VALUES
+        <foreach collection="requestList" item="req" separator=",">
+            (
+            #{req.objectId},
+            #{req.memberObjectId},
+            #{req.accountNumber},
+            #{req.accountType},
+            #{req.amount},
+            #{req.allocatedRate},
+            #{req.accountAllocatedRate},
+            #{req.actionType},
+            false,
+            NOW(),
+            NOW()
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        account_number = VALUES(account_number),
+        account_type = VALUES(account_type),
+        amount = VALUES(amount),
+        allocated_rate = VALUES(allocated_rate),
+        account_allocated_rate = VALUES(account_allocated_rate),
+        action_type = VALUES(action_type),
+        is_deleted = false,
+        updated_at = NOW()
+    </insert>
+
 </mapper>

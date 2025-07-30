@@ -1,0 +1,37 @@
+package woojooin.planit.domain.object.isa.dto.req;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import woojooin.planit.domain.object.action.domain.ActionType;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class IsaAccountProductEditReq {
+
+	@NonNull
+	private Long objectId;
+
+	@NonNull
+	private Long memberObjectId;
+
+	private String accountNumber;
+
+	private String accountType;
+
+	@NonNull
+	private Integer amount;
+
+	@NonNull
+	private Integer allocatedRate;
+
+	@NonNull
+	private Integer accountAllocatedRate;
+
+	private ActionType actionType = ActionType.ISA;
+
+	@NonNull
+	private boolean checked;
+}
