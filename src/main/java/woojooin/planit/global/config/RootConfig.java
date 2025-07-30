@@ -31,7 +31,11 @@ import javax.sql.DataSource;
 @MapperScan(basePackages  = {
     "woojooin.planit.domain.member.mapper",
     "woojooin.planit.domain.object.isa.mapper",  // ISA 계좌 mapper 추가
+<<<<<<< HEAD
     "woojooin.planit.domain.goal.mapper"
+=======
+    "woojooin.planit.domain.product.mapper",
+>>>>>>> f678096 (feat: 상품 등록용 MyBatis Mapper 및 XML 추가(#20))
 })
 @Slf4j
 @EnableTransactionManagement
