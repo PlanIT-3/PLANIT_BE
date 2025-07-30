@@ -18,4 +18,7 @@ public class Goal {
     private LocalDate endDate;   // `end_date` 컬럼 매핑
     private Integer depositRatio; // `deposit_ratio` 컬럼 매핑
     private Integer isaRatio;     // `isa_ratio` 컬럼 매핑
+    private Long startAmount; //초기금액
+    private Integer goalRate; //달성률
+
 }

@@ -9,37 +9,37 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
-import woojooin.planit.global.security.SecurityConfig;
 
 import javax.sql.DataSource;
 
 @Configuration
 @PropertySource({"classpath:/application.properties"})
 @ComponentScan(basePackages = {"woojooin.planit"},
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
-                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = RestController.class)
-        })
-@MapperScan(basePackages = {
-        "woojooin.planit.domain.member.mapper",
-        "woojooin.planit.domain.object.isa.mapper"  // ISA 계좌 mapper 추가
+    excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
+        @ComponentScan.Filter(type = FilterType.ANNOTATION, value = RestController.class)
+    })
+@MapperScan(basePackages  = {
+    "woojooin.planit.domain.member.mapper",
+    "woojooin.planit.domain.object.isa.mapper",  // ISA 계좌 mapper 추가
+    "woojooin.planit.domain.goal.mapper"
 })
 @Slf4j
 @EnableTransactionManagement
 public class RootConfig {
-    @Value("${jdbc.driver}")
-    String driver;
-    @Value("${jdbc.url}")
-    String url;
-    @Value("${jdbc.username}")
-    String username;
-    @Value("${jdbc.password}")
-    String password;
+    @Value("${jdbc.driver}") String driver;
+    @Value("${jdbc.url}") String url;
+    @Value("${jdbc.username}") String username;
+    @Value("${jdbc.password}") String password;
 
     @Bean
     public DataSource dataSource() {
@@ -61,17 +61,17 @@ public class RootConfig {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setConfigLocation(
-                applicationContext.getResource("classpath:/mybatis-config.xml"));
+            applicationContext.getResource("classpath:/mybatis-config.xml"));
         sqlSessionFactory.setDataSource(dataSource());
 
         sqlSessionFactory.setMapperLocations(
-                applicationContext.getResources("classpath:/mapper/**/*.xml"));
+            applicationContext.getResources("classpath:/mapper/**/*.xml"));
 
         return (SqlSessionFactory) sqlSessionFactory.getObject();
     }
 
     @Bean
-    public DataSourceTransactionManager transactionManager() {
+    public DataSourceTransactionManager transactionManager(){
         DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
         return manager;
     }
