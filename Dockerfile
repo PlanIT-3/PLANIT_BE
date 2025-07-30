@@ -11,3 +11,8 @@ COPY build/libs/plan-it-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
 
 # 5. 기본 실행은 ENTRYPOINT로 유지
+
+# deploy-utils/Dockerfile.redis
+#FROM redis:alpine
+#COPY redis.conf /usr/local/etc/redis/redis.conf
+#CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]

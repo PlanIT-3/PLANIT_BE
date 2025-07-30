@@ -1,5 +1,7 @@
 package woojooin.planit.global.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,7 @@ import woojooin.planit.global.security.jwt.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthFilter;
 	@Autowired
@@ -32,11 +35,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		log.info("시큐리티 시작");
+		http.httpBasic().disable()
+			.formLogin().disable();
+
+			// CSRF 보호 비활성화 (API 서버에서는 일반적으로 비활성화)
+			// CSRF 보호는 상태 기반 세션 인증에 필요하지만, JWT를 사용하는 경우에는 필요하지 않음
 		http.csrf().disable()
 
 			.authorizeRequests()
+			.antMatchers("/auth/**").authenticated()
 			.antMatchers("/test/**").permitAll()
-			.antMatchers("/api/login").permitAll()
+			.antMatchers("/api/**","refresh/**").permitAll()
+
 			.anyRequest().authenticated()
 
 			.and()

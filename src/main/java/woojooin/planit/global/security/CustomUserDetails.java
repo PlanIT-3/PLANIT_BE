@@ -51,4 +51,16 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Long getId() {
+        return member.getMemberId();
+    }
+
+    public String getRole() {
+        return member.getRole();
+    }
 }

@@ -11,5 +11,6 @@ CREATE TABLE `member` (
                           `password` VARCHAR(255) DEFAULT NULL,
                           `benefit` TINYINT(1) DEFAULT NULL,
                           `nickname` VARCHAR(20) DEFAULT NULL,
+                          `isServiceTermsAgreed` BOOLEAN DEFAULT NULL,
                           PRIMARY KEY (`member_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
