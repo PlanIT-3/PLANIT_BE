@@ -27,22 +27,7 @@ public enum ResponseCode {
 	UNAUTHORIZED("GEN-015", "인증이 필요합니다.", HttpStatus.UNAUTHORIZED),
 
 	// 5xx
-	INTERNAL_ERROR("GEN-999", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-
-	// ISA Account Domain Errors
-	ISA_MEMBER_NOT_FOUND("ISA-001", "해당 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-	ISA_PRODUCT_NOT_FOUND("ISA-002", "해당 상품을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-	ISA_OBJECT_NOT_FOUND("ISA-003", "해당 목표를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-	ISA_EMPTY_PRODUCT_LIST("ISA-004", "등록할 상품 목록이 비어있습니다.", HttpStatus.BAD_REQUEST),
-	ISA_INVALID_ALLOCATION_RATE("ISA-005", "할당 비율이 올바르지 않습니다. (0-100 사이의 값이어야 합니다)", HttpStatus.BAD_REQUEST),
-	ISA_TOTAL_ALLOCATION_EXCEEDED("ISA-006", "총 할당 비율이 100%를 초과할 수 없습니다.", HttpStatus.BAD_REQUEST),
-	ISA_INVALID_AMOUNT("ISA-007", "투자 금액이 올바르지 않습니다. (양수여야 합니다)", HttpStatus.BAD_REQUEST),
-	ISA_ACCOUNT_NUMBER_REQUIRED("ISA-008", "계좌번호는 필수입니다.", HttpStatus.BAD_REQUEST),
-	ISA_DUPLICATE_PRODUCT("ISA-009", "중복된 상품이 포함되어 있습니다.", HttpStatus.BAD_REQUEST),
-	ISA_REGISTRATION_FAILED("ISA-010", "상품 등록에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-	ISA_UPDATE_FAILED("ISA-011", "상품 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-	ISA_DELETE_FAILED("ISA-012", "상품 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-	;
+	INTERNAL_ERROR("GEN-999", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	private final String code;
 	private final String message;
