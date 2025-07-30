@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="woojooin.planit.domain.goal.mapper.GoalMapper">
+    
+    <resultMap id="GoalResultMap" type="woojooin.planit.domain.goal.domain.Goal">
+        <id property="goalId" column="goal_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="goalName" column="goal_name"/>
+        <result property="goalAmount" column="goal_amount"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="depositRatio" column="deposit_ratio"/>
+        <result property="isaRatio" column="isa_ratio"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="woojooin.planit.domain.goal.domain.Goal" useGeneratedKeys="true" keyProperty="goalId">
+    insert  into `goal`(user_id,goal_name,goal_amount,start_date,end_date,deposit_ratio,isa_ratio)
+    values(#{userId},#{goalName},#{goalAmount},#{startDate},#{endDate},#{depositRatio},#{isaRatio})
+    </insert>
+
+    <update id="updateGoal" parameterType="woojooin.planit.domain.goal.domain.Goal">
+        UPDATE `goal`
+        SET
+            goal_name = #{goalName},
+            goal_amount = #{goalAmount},
+            start_date = #{startDate},
+            end_date = #{endDate},
+            isa_ratio = #{isaRatio},
+            deposit_ratio=#{depositRatio}
+        WHERE goal_id = #{goalId} and user_id=#{userId}
+    </update>
+
+    <select id="selectGoalById" resultMap="GoalResultMap" parameterType="Long">
+        SELECT
+            goal_id, user_id, goal_name, goal_amount,
+            start_date, end_date, deposit_ratio, isa_ratio
+        FROM `goal`
+        WHERE goal_id = #{goalId} and user_id=#{userID}
+    </select>
+
+
+
+    <select id="selectAllGoals" resultMap="GoalResultMap" parameterType="Long">
+        SELECT
+            goal_id, user_id, goal_name, goal_amount,
+            start_date, end_date, deposit_ratio, isa_ratio
+        FROM `goal`
+        WHERE user_id = #{userId} ORDER BY goal_id DESC
+    </select>
+
+    <delete id="deleteGoal" parameterType="long">
+        delete from `goal` where goal_id=#{goalId}AND user_id = #{userId}
+    </delete>
+</mapper>
+

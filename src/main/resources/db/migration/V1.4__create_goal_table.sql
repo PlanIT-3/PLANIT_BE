@@ -1,4 +1,4 @@
-CREATE TABLE `object` (
+CREATE TABLE `goal` (
                           `goal_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '목표 고유 ID',
                           `user_id` BIGINT NOT NULL COMMENT '사용자 ID (member 테이블의 member_id 참조)',
                           `goal_name` VARCHAR(255) NOT NULL COMMENT '목표명',
@@ -10,3 +10,4 @@ CREATE TABLE `object` (
                           PRIMARY KEY (`goal_id`),
                           CONSTRAINT `fk_object_user_id` FOREIGN KEY (`user_id`) REFERENCES `member` (`member_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='사용자 목표 설정 정보';
+
