@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.goal.service.GoalSettingService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +23,10 @@ public class GoalController {
         return 1L; // **임시 값 사용자 ID**
     }
 
-
-    /*목표 생성  ( /api/goals )  */
     @PostMapping
-    public ResponseEntity<Goal> createGoal(@RequestBody Goal goal) {
+    public ResponseEntity<Goal> createGoal(@Valid @RequestBody GoalRequestDto dto) {
         Long memberID = getCurrentAuthenticatedUserId();
+        Goal goal =dto.toEntity();
         goal.setMemberId(memberID);
         try{
             int result = goalService.createGoal(memberID,goal);
@@ -40,14 +41,13 @@ public class GoalController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-   /* 모든 목표 조회 (/api/goals)*/
     @GetMapping
     public ResponseEntity<List<Goal>> getAllGoals() {
         Long userID = getCurrentAuthenticatedUserId();
         List<Goal> goals = goalService.getGoals(userID);
         return new ResponseEntity<>(goals,HttpStatus.OK);
     }
-   /*특정 목표 1개 조회하기 (/api/goals/{goalId}*/
+
     @GetMapping("/{goalsId}")
     public ResponseEntity<Goal> getGoal(@PathVariable Long goalsId) {
         Long userID = getCurrentAuthenticatedUserId();
@@ -56,13 +56,14 @@ public class GoalController {
     }
 
 
-    //목표 수정 (/api/goals/{id})
+
     @PutMapping("/{goalId}")
-    public ResponseEntity<Void> updateGoal(@PathVariable Long goalId, @RequestBody Goal goal) {
+    public ResponseEntity<Void> updateGoal(@PathVariable Long goalId, @RequestBody GoalRequestDto dto) {
         Long userId = getCurrentAuthenticatedUserId();
+        Goal goal = dto.toEntity();
+        goal.setObjectId(goalId);
+        goal.setMemberId(userId);
         try {
-            goal.setObjectId(goalId);
-            goal.setMemberId(userId);
             int result = goalService.updateGoal(goalId,userId,goal);
             return new ResponseEntity<>(HttpStatus.OK); // 200 OK
         }catch (IllegalArgumentException e) {
@@ -80,15 +81,15 @@ public class GoalController {
             int rowsAffected = goalService.deleteGoal(goalId, currentUserId);
             if (rowsAffected > 0) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content (성공적으로 처리되었으나 반환할 내용 없음)
-            } else {
+            }
+            else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found (대상 목표 없거나 권한 없음)
             }
         } catch (IllegalArgumentException e) {
-            System.err.println("Error deleting goal: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            System.err.println("Unexpected error deleting goal: " + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 }
