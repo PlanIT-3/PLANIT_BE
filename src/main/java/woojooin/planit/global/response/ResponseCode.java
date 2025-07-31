@@ -40,6 +40,22 @@ public enum ResponseCode {
 	ISA_UPDATE_FAILED("ISA-011", "상품 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 	ISA_DELETE_FAILED("ISA-012", "상품 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
+	// Deposit Account Domain Errors
+	DEPOSIT_MEMBER_NOT_FOUND("DEP-001", "해당 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+	DEPOSIT_PRODUCT_NOT_FOUND("DEP-002", "해당 예적금 상품을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+	DEPOSIT_OBJECT_NOT_FOUND("DEP-003", "해당 목표를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+	DEPOSIT_EMPTY_PRODUCT_LIST("DEP-004", "등록할 예적금 상품 목록이 비어있습니다.", HttpStatus.BAD_REQUEST),
+	DEPOSIT_INVALID_ALLOCATION_RATE("DEP-005", "할당 비율이 올바르지 않습니다. (0-100 사이의 값이어야 합니다)", HttpStatus.BAD_REQUEST),
+	DEPOSIT_TOTAL_ALLOCATION_EXCEEDED("DEP-006", "총 할당 비율이 100%를 초과할 수 없습니다.", HttpStatus.BAD_REQUEST),
+	DEPOSIT_INVALID_AMOUNT("DEP-007", "투자 금액이 올바르지 않습니다. (양수여야 합니다)", HttpStatus.BAD_REQUEST),
+	DEPOSIT_ACCOUNT_NUMBER_REQUIRED("DEP-008", "계좌번호는 필수입니다.", HttpStatus.BAD_REQUEST),
+	DEPOSIT_DUPLICATE_PRODUCT("DEP-009", "중복된 예적금 상품이 포함되어 있습니다.", HttpStatus.BAD_REQUEST),
+	DEPOSIT_REGISTRATION_FAILED("DEP-010", "예적금 상품 등록에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+	DEPOSIT_UPDATE_FAILED("DEP-011", "예적금 상품 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+	DEPOSIT_DELETE_FAILED("DEP-012", "예적금 상품 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+	DEPOSIT_VALIDATION_FAILED("DEP-013", "예적금 상품 검증에 실패했습니다.", HttpStatus.BAD_REQUEST),
+	INSUFFICIENT_AMOUNT("DEP-014", "할당 가능한 잔여액이 부족합니다.", HttpStatus.BAD_REQUEST),
+
   // 5xx
 	INTERNAL_ERROR("GEN-999", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
