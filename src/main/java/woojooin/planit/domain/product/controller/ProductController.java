@@ -26,6 +26,6 @@ public class ProductController {
 	public Response<List<Product>> getRecommendedProducts() {
 		String userRiskLevel = "SAFE"; // 임시로 하드코딩한 값
 		List<Product> recommendedProducts = productService.recommendProduct(userRiskLevel);
-		return Response.ok(recommendedProducts); // Response 객체로 감싸서 반환
+		return Response.ok(recommendedProducts);
 	}
 }
