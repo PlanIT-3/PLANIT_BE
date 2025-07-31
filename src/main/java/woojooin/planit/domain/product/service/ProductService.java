@@ -27,7 +27,6 @@ public class ProductService {
 
 		for (ETFPriceRes.Item item : response.getResponse().getBody().getItems().getItem()) {
 			Product product = ETFPriceRes.mapItemToProduct(item);
-			log.info("product={}", product);
 			mapper.insertProduct(product);
 		}
 	}
