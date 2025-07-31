@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import woojooin.planit.domain.product.domain.Product;
+import woojooin.planit.domain.product.domain.RiskLevel;
 
 @Data
 public class ETFPriceRes {
@@ -96,7 +97,7 @@ public class ETFPriceRes {
 		product.setLstgStCnt(item.getStLstgCnt());
 		product.setMrktTotAmt(item.getMrktTotAmt());
 
-		product.setRiskLevel(null);
+		product.setRiskLevel(String.valueOf(RiskLevel.SAFE));
 
 		return product;
 	}
