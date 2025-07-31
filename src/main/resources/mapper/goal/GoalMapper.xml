@@ -17,7 +17,7 @@
         <result property="goalRate" column="goal_rate"/>
     </resultMap>
 
-    <insert id="insertGoal" parameterType="woojooin.planit.domain.goal.domain.Goal" useGeneratedKeys="true" keyProperty="goalId">
+    <insert id="insertGoal" parameterType="woojooin.planit.domain.goal.domain.Goal" useGeneratedKeys="true" keyProperty="objectId">
     insert  into `goal`  (member_id, object_name, target_amount, start_date, end_date,
             deposit_rate, isa_rate, start_amount, goal_rate
         )
@@ -65,7 +65,8 @@
     </select>
 
     <delete id="deleteGoal" >
-        delete from `goal`object_id = #{objectId} AND member_id = #{memberId}
+        delete from `goal`
+               where object_id = #{objectId} AND member_id = #{memberId}
     </delete>
 </mapper>
 
