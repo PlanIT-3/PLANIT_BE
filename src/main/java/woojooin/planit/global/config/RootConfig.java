@@ -30,7 +30,8 @@ import javax.sql.DataSource;
     })
 @MapperScan(basePackages  = {
     "woojooin.planit.domain.member.mapper",
-    "woojooin.planit.domain.object.isa.mapper"  // ISA 계좌 mapper 추가
+    "woojooin.planit.domain.object.isa.mapper",  // ISA 계좌 mapper 추가
+    "woojooin.planit.domain.object.deposit.mapper"  // Deposit mapper 추가
 })
 @Slf4j
 @EnableTransactionManagement
