@@ -72,19 +72,24 @@ public class GoalSettingService {
         List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
                 memberId, objectId
         );
-        long startAmount = isaProducts.stream()
+        long isaAmount = isaProducts.stream()
                 .mapToLong(p -> p.getPresentAmount().longValue())
                 .sum();
-
+        long savingAmount = 0;
+        long startAmount = isaAmount + savingAmount;
+        updatedGoal.setStartAmount(startAmount);
         updatedGoal.setObjectId(objectId);
         updatedGoal.setMemberId(memberId);
         updatedGoal.setStartAmount(startAmount);
+
         if (updatedGoal.getTargetAmount() != null && updatedGoal.getTargetAmount() > 0) {
             int goalRate = (int) ((double) startAmount * 100 / updatedGoal.getTargetAmount());
             updatedGoal.setGoalRate(goalRate);
-        } else {
+        }
+        else {
             updatedGoal.setGoalRate(0);
         }
+
         int rowAffected = goalMapper.updateGoal(updatedGoal);
         if(rowAffected == 0){
             throw new IllegalArgumentException("Goal not found or access denied for ID: " + objectId);}
