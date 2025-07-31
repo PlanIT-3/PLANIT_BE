@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import woojooin.planit.domain.product.domain.Product;
 import woojooin.planit.domain.product.service.ProductService;
+import woojooin.planit.global.response.Response;
 
 @RestController
 @RequestMapping("/auth/api/products")
@@ -22,8 +23,9 @@ public class ProductController {
 
 	@GetMapping("/recommend")
 	@ApiOperation(value = "추천 상품 조회", notes = "사용자의 투자 위험성에 맞는 추천 상품 목록을 반환합니다.")
-	public List<Product> getRecommendedProducts() {
-		String userRiskLevel = "SAFE";
-		return productService.recommendProduct(userRiskLevel);
+	public Response<List<Product>> getRecommendedProducts() {
+		String userRiskLevel = "SAFE"; // 임시로 하드코딩한 값
+		List<Product> recommendedProducts = productService.recommendProduct(userRiskLevel);
+		return Response.ok(recommendedProducts); // Response 객체로 감싸서 반환
 	}
 }
