@@ -1,8 +1,8 @@
 package woojooin.planit.domain.object.deposit.service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -13,11 +13,11 @@ import org.springframework.validation.annotation.Validated;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.domain.object.deposit.dto.req.DepositProductEditListReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositProductEditReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositProductRegisterListReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositProductRegisterReq;
-import woojooin.planit.domain.object.deposit.dto.res.DepositProductRes;
+import woojooin.planit.domain.object.deposit.dto.req.DepositAccountEditListReq;
+import woojooin.planit.domain.object.deposit.dto.req.DepositAccountEditReq;
+import woojooin.planit.domain.object.deposit.dto.req.DepositAccountRegisterListReq;
+import woojooin.planit.domain.object.deposit.dto.req.DepositAccountRegisterReq;
+import woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes;
 import woojooin.planit.domain.object.deposit.mapper.DepositMapper;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
@@ -32,39 +32,39 @@ public class DepositService {
     private final DepositMapper depositMapper;
 
     /**
-     * 회원의 모든 예적금 조회
+     * 회원의 예적금 계좌 조회
      * @param memberId 회원 ID
-     * @return 예적금 목록
+     * @return 예적금 계좌 목록
      */
-    public List<DepositProductRes> getMemberProductsByMemberId(Long memberId) {
+    public List<DepositAccountRes> getMemberAccountsByMemberId(Long memberId) {
 
         try {
-            List<DepositProductRes> products = depositMapper.findAllByMemberId(memberId);
-            return products;
+            List<DepositAccountRes> accounts = depositMapper.findAllByMemberId(memberId);
+            return accounts;
         } catch (Exception e) {
-            log.error("[DepositService.getMemberProductsByMemberId()] - failed to retrieve products memberId=\"{}\" error=\"{}\"", memberId, e.getMessage());
-            throw new BusinessException(ResponseCode.DEPOSIT_PRODUCT_NOT_FOUND);
+            log.error("[DepositService.getMemberAccountsByMemberId()] - failed to retrieve accounts memberId=\"{}\" error=\"{}\"", memberId, e.getMessage());
+            throw new BusinessException(ResponseCode.DEPOSIT_ACCOUNT_NOT_FOUND);
         }
     }
 
     /**
-     * 예적금 등록
+     * 예적금 계좌 등록
      * @param memberId 회원 ID
      * @param request 등록 요청 정보
      */
     @Transactional
-    public void registerMemberProductsByMemberId(Long memberId, @Valid DepositProductRegisterListReq request) {
+    public void registerMemberAccountsByMemberId(Long memberId, @Valid DepositAccountRegisterListReq request) {
 
-        // 기존 검증: 요청 목록 내에서 동일한 상품 중복 등록 방지
-        validateDuplicateProducts(request.getDepositProductRegisterReqs());
+        // 기존 검증: 요청 목록 내에서 동일한 계좌 중복 등록 방지
+        validateDuplicateAccounts(request.getDepositAccountRegisterReqs());
         
         // 추가 검증: 각 계좌의 잔여액 확인하여 100% 초과 할당 방지
-        validateAvailableAmount(memberId, request.getDepositProductRegisterReqs());
+        validateAvailableAmount(memberId, request.getDepositAccountRegisterReqs());
 
         try {
-            depositMapper.register(memberId, request.getDepositProductRegisterReqs());
+            depositMapper.register(memberId, request.getDepositAccountRegisterReqs());
         } catch (Exception e) {
-            log.error("[DepositService.registerMemberProductsByMemberId()] - failed to register products memberId=\"{}\" productCount=\"{}\" error=\"{}\"", memberId, request.getDepositProductRegisterReqs().size(), e.getMessage());
+            log.error("[DepositService.registerMemberAccountsByMemberId()] - failed to register accounts memberId=\"{}\" accountCount=\"{}\" error=\"{}\"", memberId, request.getDepositAccountRegisterReqs().size(), e.getMessage());
             throw new BusinessException(ResponseCode.DEPOSIT_REGISTRATION_FAILED);
         }
     }
@@ -75,15 +75,15 @@ public class DepositService {
      * @param request 수정 요청 정보
      */
     @Transactional
-    public void editMemberProductsByMemberId(Long memberId, @Valid DepositProductEditListReq request) {
+    public void editMemberAccountsByMemberId(Long memberId, @Valid DepositAccountEditListReq request) {
 
-        List<DepositProductEditReq> editReqs = request.getEditReqs();
+        List<DepositAccountEditReq> editReqs = request.getEditReqs();
 
-        List<DepositProductEditReq> checkedItems = editReqs.stream()
-            .filter(DepositProductEditReq::isChecked)
+        List<DepositAccountEditReq> checkedItems = editReqs.stream()
+            .filter(DepositAccountEditReq::isChecked)
             .collect(Collectors.toList());
 
-        List<DepositProductEditReq> uncheckedItems = editReqs.stream()
+        List<DepositAccountEditReq> uncheckedItems = editReqs.stream()
             .filter(req -> !req.isChecked())
             .collect(Collectors.toList());
 
@@ -96,7 +96,7 @@ public class DepositService {
                 depositMapper.upsert(memberId, checkedItems);
             }
         } catch (Exception e) {
-            log.error("[DepositService.editMemberProductsByMemberId()] - failed to edit products memberId=\"{}\" checkedCount=\"{}\" uncheckedCount=\"{}\" error=\"{}\"", memberId, checkedItems.size(), uncheckedItems.size(), e.getMessage());
+            log.error("[DepositService.editMemberAccountsByMemberId()] - failed to edit accounts memberId=\"{}\" checkedCount=\"{}\" uncheckedCount=\"{}\" error=\"{}\"", memberId, checkedItems.size(), uncheckedItems.size(), e.getMessage());
             throw new BusinessException(ResponseCode.DEPOSIT_UPDATE_FAILED);
         }
     }
@@ -107,26 +107,43 @@ public class DepositService {
      * @param objectId 목적 ID
      * @return 예적금 목록
      */
-    public List<DepositProductRes> findAllByMemberIdAndObjectId(Long memberId, Long objectId) {
+    public List<DepositAccountRes> findAllByMemberIdAndObjectId(Long memberId, Long objectId) {
 
         try {
-            List<DepositProductRes> products = depositMapper.findAllByMemberIdAndObjectId(memberId, objectId);
-            return products;
+            List<DepositAccountRes> accounts = depositMapper.findAllByMemberIdAndObjectId(memberId, objectId);
+            return accounts;
         } catch (Exception e) {
-            log.error("[DepositService.findAllByMemberIdAndObjectId()] - failed to retrieve products memberId=\"{}\" objectId=\"{}\" error=\"{}\"", memberId, objectId, e.getMessage());
-            throw new BusinessException(ResponseCode.DEPOSIT_PRODUCT_NOT_FOUND);
+            log.error("[DepositService.findAllByMemberIdAndObjectId()] - failed to retrieve accounts memberId=\"{}\" objectId=\"{}\" error=\"{}\"", memberId, objectId, e.getMessage());
+            throw new BusinessException(ResponseCode.DEPOSIT_ACCOUNT_NOT_FOUND);
+        }
+    }
+
+    /**
+     * 회원의 특정 목적에 할당 가능한 예적금 조회
+     * @param memberId 회원 ID
+     * @param objectId 목적 ID
+     * @return 할당 가능한 예적금 목록
+     */
+    public List<DepositAccountRes> findAvailableAccountsByMemberIdAndObjectId(Long memberId, Long objectId) {
+
+        try {
+            List<DepositAccountRes> accounts = depositMapper.findAvailableAccountsByMemberIdAndObjectId(memberId, objectId);
+            return accounts;
+        } catch (Exception e) {
+            log.error("[DepositService.findAvailableAccountsByMemberIdAndObjectId()] - failed to retrieve available accounts memberId=\"{}\" objectId=\"{}\" error=\"{}\"", memberId, objectId, e.getMessage());
+            throw new BusinessException(ResponseCode.DEPOSIT_ACCOUNT_NOT_FOUND);
         }
     }
 
     /**
      * 중복 검증
-     * @param productReqs 등록 요청 목록
+     * @param accountReqs 등록 요청 목록
      */
-    private void validateDuplicateProducts(List<DepositProductRegisterReq> productReqs) {
-        Set<Long> memberProductIds = new HashSet<>();
-        for (DepositProductRegisterReq req : productReqs) {
-            if (!memberProductIds.add(req.getMemberObjectId())) {
-                throw new BusinessException(ResponseCode.DEPOSIT_DUPLICATE_PRODUCT);
+    private void validateDuplicateAccounts(List<DepositAccountRegisterReq> accountReqs) {
+        Set<Long> memberAccountIds = new HashSet<>();
+        for (DepositAccountRegisterReq req : accountReqs) {
+            if (!memberAccountIds.add(req.getMemberAccountId())) {
+                throw new BusinessException(ResponseCode.DEPOSIT_DUPLICATE_ACCOUNT);
             }
         }
     }
@@ -135,48 +152,32 @@ public class DepositService {
      * 요청 금액이 계좌의 잔여액을 초과하지 않는지 확인
      * 
      *  각 요청 계좌에 대해 현재까지 할당된 총액을 조회
-     *  계좌의 총 보유액에서 할당된 총액을 차감하여 잔여액 계산
-     *  요청 금액이 잔여액을 초과하는지 확인
-     *  초과하는 경우 INSUFFICIENT_AMOUNT 예외 발생
+     *  총 보유액에서 할당된 총액을 차감한 잔여액과 요청 금액을 비교
+     *  요청 금액이 잔여액을 초과하면 예외 발생
      * 
-     * @param memberId 회원 ID (로깅용)
-     * @param productReqs 등록 요청할 계좌 목록
-     * @throws BusinessException 잔여액 부족 시 INSUFFICIENT_AMOUNT 예외 발생
+     * @param memberId 회원 ID
+     * @param accountReqs 등록 요청 목록
      */
-    private void validateAvailableAmount(Long memberId, List<DepositProductRegisterReq> productReqs) {
-        for (DepositProductRegisterReq req : productReqs) {
-            try {
-                // 현재 할당된 총액 조회 (NULL 방지를 위해 0으로 초기화)
-                Integer currentAllocated = depositMapper.getCurrentAllocatedAmount(req.getMemberObjectId());
-                if (currentAllocated == null) {
-                    currentAllocated = 0;
-                }
-                
-                // 계좌의 총 보유액 조회
-                Integer totalAmount = depositMapper.getTotalAmount(req.getMemberObjectId());
-                if (totalAmount == null) {
-                    log.error("[DepositService.validateAvailableAmount()] - product not found memberProductId=\"{}\"", req.getMemberObjectId());
-                    throw new BusinessException(ResponseCode.DEPOSIT_PRODUCT_NOT_FOUND);
-                }
-                
-                // 잔여액 계산 = 총 보유액 - 현재 할당된 총액
-                Integer remainingAmount = totalAmount - currentAllocated;
-                
-                // 요청 금액이 잔여액을 초과하는지 검증
-                if (req.getAmount() > remainingAmount) {
-                    log.warn("[DepositService.validateAvailableAmount()] - insufficient amount memberId=\"{}\" memberProductId=\"{}\" requestAmount=\"{}\" remainingAmount=\"{}\"", 
-                            memberId, req.getMemberObjectId(), req.getAmount(), remainingAmount);
-                    throw new BusinessException(ResponseCode.INSUFFICIENT_AMOUNT);
-                }
-                
-                log.debug("[DepositService.validateAvailableAmount()] - validation passed memberProductId=\"{}\" totalAmount=\"{}\" currentAllocated=\"{}\" remainingAmount=\"{}\" requestAmount=\"{}\"", 
-                        req.getMemberObjectId(), totalAmount, currentAllocated, remainingAmount, req.getAmount());
-                        
-            } catch (BusinessException e) {
-                throw e;
-            } catch (Exception e) {
-                log.error("[DepositService.validateAvailableAmount()] - validation failed memberProductId=\"{}\" error=\"{}\"", req.getMemberObjectId(), e.getMessage());
-                throw new BusinessException(ResponseCode.DEPOSIT_VALIDATION_FAILED);
+    private void validateAvailableAmount(Long memberId, List<DepositAccountRegisterReq> accountReqs) {
+        for (DepositAccountRegisterReq req : accountReqs) {
+            // 현재 할당된 총액 조회
+            Integer currentAllocatedAmount = depositMapper.getCurrentAllocatedAmount(req.getMemberAccountId());
+            
+            // 총 보유액 조회
+            Integer totalAmount = depositMapper.getTotalAmount(req.getMemberAccountId());
+            
+            if (totalAmount == null) {
+                log.error("[DepositService.validateAvailableAmount()] - total amount is null memberAccountId=\"{}\"", req.getMemberAccountId());
+                throw new BusinessException(ResponseCode.DEPOSIT_ACCOUNT_NOT_FOUND);
+            }
+            
+            // 잔여액 계산 = 총 보유액 - 현재 할당된 총액
+            int remainingAmount = totalAmount - currentAllocatedAmount;
+            
+            // 요청 금액이 잔여액을 초과하는지 확인
+            if (req.getAmount() > remainingAmount) {
+                log.error("[DepositService.validateAvailableAmount()] - insufficient remaining amount memberAccountId=\"{}\" requestedAmount=\"{}\" remainingAmount=\"{}\"", req.getMemberAccountId(), req.getAmount(), remainingAmount);
+                throw new BusinessException(ResponseCode.DEPOSIT_INSUFFICIENT_AMOUNT);
             }
         }
     }

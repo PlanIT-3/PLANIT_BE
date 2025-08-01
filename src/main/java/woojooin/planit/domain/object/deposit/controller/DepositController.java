@@ -17,9 +17,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.domain.object.deposit.dto.req.DepositProductEditListReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositProductRegisterListReq;
-import woojooin.planit.domain.object.deposit.dto.res.DepositProductRes;
+import woojooin.planit.domain.object.deposit.dto.req.DepositAccountEditListReq;
+import woojooin.planit.domain.object.deposit.dto.req.DepositAccountRegisterListReq;
+import woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes;
 import woojooin.planit.domain.object.deposit.service.DepositService;
 import woojooin.planit.global.response.Response;
 
@@ -35,38 +35,52 @@ public class DepositController {
 	@GetMapping("/{memberId}")
 	@ApiOperation(value = "유저의 예적금 계좌 리스트 조회 API",
 		notes = "특정 회원의 모든 예적금 계좌 정보를 조회합니다.")
-	public ResponseEntity<Response<List<DepositProductRes>>> getDepositProducts(
+	public ResponseEntity<Response<List<DepositAccountRes>>> getDepositAccounts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId) {
 
-		List<DepositProductRes> products = depositService.getMemberProductsByMemberId(memberId);
+		List<DepositAccountRes> accounts = depositService.getMemberAccountsByMemberId(memberId);
 
-		return ResponseEntity.ok(Response.ok(products));
+		return ResponseEntity.ok(Response.ok(accounts));
 	}
 
 	@GetMapping("/edit/{memberId}")
-	@ApiOperation(value = "유저의 예적금 계좌 리스트 조회 API",
-		notes = "특정 회원의 특정 목적에 대한 예적금 계좌 정보를 조회합니다.")
-	public ResponseEntity<Response<List<DepositProductRes>>> getDepositProducts(
+	@ApiOperation(value = "특정 목적에 할당된 예적금 계좌 조회 API",
+		notes = "특정 목적에 할당된 예적금 계좌 정보를 조회합니다.")
+	public ResponseEntity<Response<List<DepositAccountRes>>> getDepositAccounts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
 		@ApiParam(value = "목적 ID", required = true, example = "1")
 		@RequestParam("objectId") Long objectId) {
 
-		List<DepositProductRes> products = depositService.findAllByMemberIdAndObjectId(memberId, objectId);
+		List<DepositAccountRes> accounts = depositService.findAllByMemberIdAndObjectId(memberId, objectId);
 
-		return ResponseEntity.ok(Response.ok(products));
+		return ResponseEntity.ok(Response.ok(accounts));
+	}
+
+	@GetMapping("/available/{memberId}")
+	@ApiOperation(value = "할당 가능한 예적금 계좌 조회 API",
+		notes = "아직 할당되지 않았거나 부분 할당된 예적금 계좌들을 조회합니다.")
+	public ResponseEntity<Response<List<DepositAccountRes>>> getAvailableDepositAccounts(
+		@ApiParam(value = "회원 ID", required = true, example = "1")
+		@PathVariable Long memberId,
+		@ApiParam(value = "목적 ID", required = true, example = "1")
+		@RequestParam("objectId") Long objectId) {
+
+		List<DepositAccountRes> accounts = depositService.findAvailableAccountsByMemberIdAndObjectId(memberId, objectId);
+
+		return ResponseEntity.ok(Response.ok(accounts));
 	}
 
 	@PostMapping("/{memberId}")
 	@ApiOperation(value = "유저의 예적금 계좌 등록 API",
 		notes = "특정 회원의 예적금 계좌를 등록합니다.")
-	public ResponseEntity<Response<Void>> registerDepositProducts(
+	public ResponseEntity<Response<Void>> registerDepositAccounts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
-		@RequestBody DepositProductRegisterListReq depositProductRegisterListReq) {
+		@RequestBody DepositAccountRegisterListReq depositAccountRegisterListReq) {
 
-		depositService.registerMemberProductsByMemberId(memberId, depositProductRegisterListReq);
+		depositService.registerMemberAccountsByMemberId(memberId, depositAccountRegisterListReq);
 
 		return ResponseEntity.status(201).body(Response.ok());
 	}
@@ -74,12 +88,12 @@ public class DepositController {
 	@PutMapping("/{memberId}")
 	@ApiOperation(value = "유저의 예적금 계좌 수정 API",
 		notes = "특정 회원의 예적금 계좌를 수정합니다.")
-	public ResponseEntity<Response<Void>> editDepositProducts(
+	public ResponseEntity<Response<Void>> editDepositAccounts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
-		@RequestBody DepositProductEditListReq depositProductEditListReq) {
+		@RequestBody DepositAccountEditListReq depositAccountEditListReq) {
 
-		depositService.editMemberProductsByMemberId(memberId, depositProductEditListReq);
+		depositService.editMemberAccountsByMemberId(memberId, depositAccountEditListReq);
 
 		return ResponseEntity.ok(Response.ok());
 	}

@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepositProductRegisterListReq {
+public class DepositAccountEditListReq {
 
+	
 	@NotEmpty(message = "예적금 상품 목록은 비어있을 수 없습니다.")
 	@Valid
-	private List<DepositProductRegisterReq> depositProductRegisterReqs;
+	private List<DepositAccountEditReq> editReqs;
 }

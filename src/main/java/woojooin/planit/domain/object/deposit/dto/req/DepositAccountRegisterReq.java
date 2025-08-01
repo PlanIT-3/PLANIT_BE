@@ -9,13 +9,13 @@ import woojooin.planit.domain.object.action.domain.ActionType;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepositProductRegisterReq {
+public class DepositAccountRegisterReq {
 
 	@NonNull
 	private Long objectId;
 
 	@NonNull
-	private Long memberObjectId;
+	private Long memberAccountId;
 
 	@NonNull
 	private String accountNumber;
