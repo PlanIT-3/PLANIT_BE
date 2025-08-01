@@ -24,7 +24,7 @@ import woojooin.planit.domain.object.deposit.service.DepositService;
 import woojooin.planit.global.response.Response;
 
 @RestController
-@RequestMapping("/api/account/deposit")
+@RequestMapping("/auth/api/account/deposit")
 @Api(value = "예적금 계좌 API", description = "예적금 계좌 관련 API")
 @RequiredArgsConstructor
 @Slf4j
@@ -47,7 +47,7 @@ public class DepositController {
 	@GetMapping("/edit/{memberId}")
 	@ApiOperation(value = "특정 목적에 할당된 예적금 계좌 조회 API",
 		notes = "특정 목적에 할당된 예적금 계좌 정보를 조회합니다.")
-	public ResponseEntity<Response<List<DepositAccountRes>>> getDepositAccounts(
+	public ResponseEntity<Response<List<DepositAccountRes>>> getDepositAccountsByObjectId(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
 		@ApiParam(value = "목적 ID", required = true, example = "1")
