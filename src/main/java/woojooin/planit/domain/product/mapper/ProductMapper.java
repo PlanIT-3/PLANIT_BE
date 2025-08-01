@@ -8,4 +8,5 @@ public interface ProductMapper {
 	void insertProduct(Product product);
 	void deleteAll();
 	List<Product> selectByRiskLevel(String riskLevel);
+	Product selectBySrtnCd(String srtncd);
 }
