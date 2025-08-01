@@ -24,7 +24,7 @@ import woojooin.planit.domain.object.isa.service.IsaAccountService;
 import woojooin.planit.global.response.Response;
 
 @RestController
-@RequestMapping("/api/account/isa")
+@RequestMapping("/auth/api/account/isa")
 @Api(value = "ISA 계좌 API", description = "ISA 계좌 관련 API")
 @RequiredArgsConstructor
 @Slf4j
