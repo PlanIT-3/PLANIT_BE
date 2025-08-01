@@ -13,7 +13,7 @@ import woojooin.planit.domain.product.service.ProductService;
 import woojooin.planit.global.response.Response;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/product")
 @Api(value = "Product API", description = "상품 API")
 @RequiredArgsConstructor
 public class PublicProductController {
