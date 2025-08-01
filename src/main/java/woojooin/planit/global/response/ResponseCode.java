@@ -25,6 +25,8 @@ public enum ResponseCode {
 	BIND_ERROR("GEN-013", "요청 바인딩에 실패했습니다.", HttpStatus.BAD_REQUEST),
 	ACCESS_DENIED("GEN-014", "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
 	UNAUTHORIZED("GEN-015", "인증이 필요합니다.", HttpStatus.UNAUTHORIZED),
+	INSUFFICIENT_PRIVILEGES("GEN-016", "권한이 부족합니다.", HttpStatus.FORBIDDEN),
+	ROLE_MISMATCH("GEN-017", "요청한 역할과 현재 역할이 일치하지 않습니다.", HttpStatus.FORBIDDEN),
 
 	// ISA Account Domain Errors
 	ISA_MEMBER_NOT_FOUND("ISA-001", "해당 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
@@ -46,8 +48,8 @@ public enum ResponseCode {
 	GOAL_UPDATE_FAILED("GOAL-003", "목표 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 	GOAL_DELETE_FAILED("GOAL-004", "목표 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
-  
-  // 5xx
+
+	// 5xx
 	INTERNAL_ERROR("GEN-999", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	private final String code;

@@ -22,4 +22,6 @@ public class Member {
     private String password;
     private Boolean benefit;
     private String nickname;
+    private Boolean isAgreed;
+
 }
