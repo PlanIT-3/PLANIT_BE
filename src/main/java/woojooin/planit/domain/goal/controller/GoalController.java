@@ -62,7 +62,6 @@ public class GoalController {
         Long userId = getCurrentAuthenticatedUserId();
         Goal goal = dto.toEntity();
         goal.setObjectId(goalId);
-        goal.setMemberId(userId);
         goalService.updateGoal(goalId, userId, goal);
         return ResponseEntity.ok(Response.ok());
     }
