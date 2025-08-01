@@ -21,7 +21,7 @@ public class ProductService {
 	private final OpenApiUtil openApiUtil;
 	private final ProductMapper mapper;
 
-	public void fetchAndSaveProducts(){
+	public void fetchAndSaveProducts() {
 		OpenApiResponse<ETFPriceRes> response = openApiUtil.getETFPriceInfo();
 
 		if (!isValidResponse(response)) {
@@ -39,13 +39,20 @@ public class ProductService {
 		mapper.deleteAll();
 	}
 
-
 	public List<Product> recommendProduct(String riskLevel) {
 		List<Product> products = mapper.selectByRiskLevel(riskLevel);
 		if (products == null || products.isEmpty()) {
 			throw new BusinessException(ResponseCode.ISA_PRODUCT_NOT_FOUND);
 		}
 		return products;
+	}
+
+	public Product getProductBySrtnCd(String srtnCd) {
+		Product product = mapper.selectBySrtnCd(srtnCd);
+		if (product == null) {
+			throw new BusinessException(ResponseCode.ISA_PRODUCT_NOT_FOUND);
+		}
+		return product;
 	}
 
 
@@ -56,6 +63,5 @@ public class ProductService {
 			response.getResponse().getBody().getItems() != null &&
 			response.getResponse().getBody().getItems().getItem() != null;
 	}
-
 
 }
