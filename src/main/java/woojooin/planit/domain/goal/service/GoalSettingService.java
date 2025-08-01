@@ -9,7 +9,8 @@ import woojooin.planit.domain.goal.domain.Goal;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.object.isa.service.IsaAccountService;
-
+import woojooin.planit.global.exception.BusinessException;
+import woojooin.planit.global.response.ResponseCode;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class GoalSettingService {
 
 
     //1.  목표 생성
-    public int createGoal(Long memberId ,Goal goal) {
+    public void createGoal(Long memberId ,Goal goal) {
         //1. isa 할당한 금액 금액 가져오기
         List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
                 memberId, goal.getObjectId()
@@ -32,12 +33,12 @@ public class GoalSettingService {
         long isaAmount = isaProducts.stream()
                         .mapToLong(p->p.getPresentAmount().longValue())
                                 .sum();
+
         //3.예적금 금액 -> 임시 0 (todo)
         long savingAmount = 0;
 
         //4.초기 자산 설정 (isa + 예적금)
         long startAmount = isaAmount+savingAmount;
-
 
         goal.setMemberId(memberId);
         goal.setStartAmount(startAmount);
@@ -51,11 +52,14 @@ public class GoalSettingService {
             goal.setGoalRate(0);
         }
 
+        int rowsAffected = goalMapper.insertGoal(goal);
+        if (rowsAffected == 0) {
+            throw new BusinessException(ResponseCode.GOAL_CREATE_FAILED);
+        }
 
-        return goalMapper.insertGoal(goal);
     }
 
-    //  목표 하나 조회
+
     @Transactional(readOnly = true)
     public Optional<Goal> getGoal(Long memberId,Long goalId ){
         return Optional.ofNullable(goalMapper.selectGoalById(goalId,memberId));
@@ -67,8 +71,8 @@ public class GoalSettingService {
         return goalMapper.selectAllGoals(memberId);
     }
 
-    //목표 수정
-    public int updateGoal(Long objectId, Long memberId ,Goal updatedGoal) {
+
+    public void updateGoal(Long objectId, Long memberId ,Goal updatedGoal) {
         List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
                 memberId, objectId
         );
@@ -77,31 +81,28 @@ public class GoalSettingService {
                 .sum();
         long savingAmount = 0;
         long startAmount = isaAmount + savingAmount;
+
         updatedGoal.setStartAmount(startAmount);
         updatedGoal.setObjectId(objectId);
         updatedGoal.setMemberId(memberId);
-        updatedGoal.setStartAmount(startAmount);
+
 
         if (updatedGoal.getTargetAmount() != null && updatedGoal.getTargetAmount() > 0) {
             int goalRate = (int) ((double) startAmount * 100 / updatedGoal.getTargetAmount());
             updatedGoal.setGoalRate(goalRate);
-        }
-        else {
+        } else {
             updatedGoal.setGoalRate(0);
         }
 
-        int rowAffected = goalMapper.updateGoal(updatedGoal);
-        if(rowAffected == 0){
-            throw new IllegalArgumentException("Goal not found or access denied for ID: " + objectId);}
-        return rowAffected;
+
+        int rowsAffected = goalMapper.updateGoal(updatedGoal);
+        if (rowsAffected == 0) {
+            throw new BusinessException(ResponseCode.GOAL_UPDATE_FAILED);
+        }
     }
 
     //목표 삭제
     public int deleteGoal(Long objectId, Long memberId) {
-        Goal goal = goalMapper.selectGoalById(objectId,memberId);
-        if(goal == null){
-            throw new IllegalArgumentException("Goal not found or access denied for ID: " + objectId);
-        }
-        return goalMapper.deleteGoal(objectId,memberId);
+        return goalMapper.deleteGoal(objectId, memberId);
     }
 }
