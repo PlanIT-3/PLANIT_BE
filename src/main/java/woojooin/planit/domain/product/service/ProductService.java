@@ -23,24 +23,6 @@ public class ProductService {
 	private final OpenApiUtil openApiUtil;
 	private final ProductMapper mapper;
 
-	public void fetchAndSaveProducts() {
-		OpenApiResponse<ETFPriceRes> response = openApiUtil.getETFPriceInfo();
-
-		if (!isValidResponse(response)) {
-			System.out.println("ETF API 응답이 비어 있습니다.");
-			return;
-		}
-
-		for (ETFPriceRes.Item item : response.getResponse().getBody().getItems().getItem()) {
-			Product product = ETFPriceRes.mapItemToProduct(item);
-			mapper.insertProduct(product);
-		}
-	}
-
-	public void deleteAllProducts() {
-		mapper.deleteAll();
-	}
-
 	public List<ProductRecommendationDto> recommendProduct(String riskLevel) {
 		List<Product> products = mapper.selectByRiskLevel(riskLevel);
 		if (products == null || products.isEmpty()) {
@@ -58,16 +40,6 @@ public class ProductService {
 			throw new BusinessException(ResponseCode.ISA_PRODUCT_NOT_FOUND);
 		}
 		return ProductDetailDto.from(product);
-	}
-
-
-
-	private boolean isValidResponse(OpenApiResponse<ETFPriceRes> response) {
-		return response != null &&
-			response.getResponse() != null &&
-			response.getResponse().getBody() != null &&
-			response.getResponse().getBody().getItems() != null &&
-			response.getResponse().getBody().getItems().getItem() != null;
 	}
 
 }
