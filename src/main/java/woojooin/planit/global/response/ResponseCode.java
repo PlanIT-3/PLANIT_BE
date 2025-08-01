@@ -40,6 +40,12 @@ public enum ResponseCode {
 	ISA_UPDATE_FAILED("ISA-011", "상품 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 	ISA_DELETE_FAILED("ISA-012", "상품 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
+	//goal
+	GOAL_NOT_FOUND("GOAL-001", "해당 목표를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+	GOAL_CREATE_FAILED("GOAL-002", "목표 생성에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+	GOAL_UPDATE_FAILED("GOAL-003", "목표 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+	GOAL_DELETE_FAILED("GOAL-004", "목표 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+
   
   // 5xx
 	INTERNAL_ERROR("GEN-999", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
