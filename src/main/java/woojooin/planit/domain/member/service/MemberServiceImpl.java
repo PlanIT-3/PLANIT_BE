@@ -24,4 +24,9 @@ public class MemberServiceImpl implements MemberService {
     public void save(Member member) {
         memberRepository.save(member);
     }
+
+    @Override
+    public void update(Member member) {
+        memberRepository.update(member);
+    }
 }

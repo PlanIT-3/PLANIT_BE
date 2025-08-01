@@ -9,7 +9,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import woojooin.planit.domain.member.domain.Member;
-import woojooin.planit.domain.member.repository.MemberRepository;
 import woojooin.planit.domain.member.service.MemberService;
 import woojooin.planit.global.security.Role;
 import woojooin.planit.global.security.dto.request.LoginReq;
@@ -50,13 +49,14 @@ public class AuthController {
         newMember.setPassword(passwordEncoder.encode(request.getPassword()));
         newMember.setNickname(request.getNickname());
         newMember.setRole(Role.SEMI_USER.name());
+        newMember.setIsAgreed(true);
         log.info("New member created: {}", newMember.getRole());
 
         memberService.save(newMember);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("reissue")
+    @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@RequestBody RefreshTokenReq refreshTokenReq) {
         try {
             String newAccessToken = authService.reissueAccessToken(refreshTokenReq.getRefreshToken());

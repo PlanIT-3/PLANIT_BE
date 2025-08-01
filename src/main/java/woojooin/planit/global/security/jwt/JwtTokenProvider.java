@@ -4,15 +4,20 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import woojooin.planit.global.security.dto.general.Token;
+import woojooin.planit.domain.member.domain.Member;
+import woojooin.planit.domain.member.service.MemberService;
+import woojooin.planit.global.exception.BusinessException;
+import woojooin.planit.global.response.ResponseCode;
 import woojooin.planit.global.repository.TokenRepository;
 
 import java.math.BigInteger;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -30,6 +35,9 @@ public class JwtTokenProvider {
     @Autowired
     private TokenRepository tokenRepository;
 
+    @Autowired
+    private MemberService memberService;
+
     // Access Token 생성
     public String createAccessToken(Long userId, String role) {
         Date now = new Date();
@@ -43,6 +51,86 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, SECRET.getBytes())
                 .compact();
     }
+
+    public String createValidatedAccessToken(Long userId, String requestedRole) {
+        Member member = memberService.findById(userId);
+
+        if (member == null) {
+            throw new JwtException("User not found with ID: " + userId);
+        }
+
+        String finalRole = validateAndDetermineRole(member, requestedRole);
+        String accessToken = createAccessToken(userId, finalRole);
+
+        log.info("Validated access token created for user: {} with role: {}", userId, finalRole);
+        return accessToken;
+    }
+
+    public String createValidatedRefreshToken(Long userId, String requestedRole) {
+        Member member = memberService.findById(userId);
+
+        if (member == null) {
+            throw new JwtException("User not found with ID: " + userId);
+        }
+
+        String finalRole = validateAndDetermineRole(member, requestedRole);
+        String refreshToken = createRefreshToken(userId, finalRole);
+
+        log.info("Validated refresh token created for user: {} with role: {}", userId, finalRole);
+        return refreshToken;
+    }
+
+    private String validateAndDetermineRole(Member member, String requestedRole) {
+        String currentDbRole = member.getRole();
+        String connectedId = member.getConnectedId();
+
+        // connected_id가 있는 경우 (완전 회원)
+        if (connectedId != null) {
+            // SEMI_USER 요청은 불가
+//            if ("SEMI_USER".equals(requestedRole)) {
+//                log.warn("Invalid role request: User {} has connected_id but requested SEMI_USER",
+//                        member.getMemberId());
+//                throw new BusinessException(ResponseCode.INSUFFICIENT_PRIVILEGES);
+//            }
+
+            // DB에 SEMI_USER로 되어있으면 USER로 업그레이드
+            if ("SEMI_USER".equals(requestedRole)) {
+                log.info("Upgrading user {} from SEMI_USER to USER due to connected_id", member.getMemberId());
+                member.setRole("USER");
+                memberService.update(member);
+                return "USER";
+            }
+
+            // 요청된 권한이 DB 권한과 일치하는지 확인
+            if (!requestedRole.equals(currentDbRole)) {
+                log.warn("Role mismatch: User {} requested {} but DB has {}",
+                        member.getMemberId(), requestedRole, currentDbRole);
+                throw new BusinessException(ResponseCode.ROLE_MISMATCH);
+            }
+
+            return currentDbRole;
+        }
+        // connected_id가 없는 경우 (반회원)
+        else {
+            // USER 이상의 권한 요청은 불가
+            if (!"SEMI_USER".equals(requestedRole)) {
+                log.warn("Invalid role request: User {} has no connected_id but requested {}",
+                        member.getMemberId(), requestedRole);
+                throw new BusinessException(ResponseCode.INSUFFICIENT_PRIVILEGES);
+            }
+
+            // DB에 USER로 되어있으면 SEMI_USER로 다운그레이드
+            if (!"SEMI_USER".equals(currentDbRole)) {
+                log.info("User {} has no connected_id, maintaining SEMI_USER role", member.getMemberId());
+                // 필요시 DB 업데이트
+                // member.updateRole("SEMI_USER");
+                // memberService.updateMember(member);
+            }
+
+            return "SEMI_USER";
+        }
+    }
+
 
     // Refresh Token 생성
     public String createRefreshToken(Long userId, String role) {
@@ -99,23 +187,6 @@ public class JwtTokenProvider {
         }
     }
 
-
-
-    // Refresh Token으로 새 Access Token 발급
-    public String refreshAccessToken(String refreshToken) {
-        if (!validateToken(refreshToken)) {
-            throw new JwtException("Invalid refresh token");
-        }
-
-        Long userId = getUserId(refreshToken);
-        // Redis에서 해당 refresh token이 존재하는지 확인
-        Token storedToken = tokenRepository.findToken(Long.valueOf(userId));
-        if (storedToken == null || !storedToken.getRefreshToken().equals(refreshToken)) {
-            throw new JwtException("Refresh token not found or invalid");
-        }
-
-        return createAccessToken(userId, getRole(refreshToken));
-    }
 
     // Refresh Token 삭제 (로그아웃 시)
     public void deleteRefreshToken(Long userId) {

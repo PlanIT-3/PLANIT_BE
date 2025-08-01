@@ -36,11 +36,12 @@ public class AuthService {
             Long userId = userDetails.getId();
             String role = userDetails.getRole();
 
-            String accessToken = jwtTokenProvider.createAccessToken(userId, role);
-            String refreshToken =   jwtTokenProvider.createRefreshToken(userId, role);
+            String accessToken = jwtTokenProvider.createValidatedAccessToken(userId, role);
+            String refreshToken =   jwtTokenProvider.createValidatedRefreshToken(userId, role);
 
             // Redis에 Refresh Token 저장
             tokenRepository.saveToken(refreshToken, userId, refreshTokenExpirationMillis/ 1000);
+
 
             return new LoginRes(accessToken, refreshToken);
         } catch (AuthenticationException e) {
@@ -62,7 +63,7 @@ public class AuthService {
         if (storedRefreshToken == null || !storedRefreshToken.getRefreshToken().equals(refreshToken)) {
             throw new BadCredentialsException("Refresh token does not match stored token");
         }
-        return jwtTokenProvider.createAccessToken(userId, role);
+        return jwtTokenProvider.createValidatedAccessToken(userId, role);
     }
 
 }
