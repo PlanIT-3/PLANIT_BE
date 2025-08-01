@@ -2,6 +2,7 @@ package woojooin.planit.domain.object.deposit.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,19 +35,19 @@ public class DepositController {
 	@GetMapping("/{memberId}")
 	@ApiOperation(value = "유저의 예적금 계좌 상품 리스트 조회 API",
 		notes = "특정 회원의 모든 예적금 상품 정보를 조회합니다.")
-	public Response<List<DepositProductRes>> getDepositProducts(
+	public ResponseEntity<Response<List<DepositProductRes>>> getDepositProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId) {
 
 		List<DepositProductRes> products = depositService.getMemberProductsByMemberId(memberId);
 
-		return Response.ok(products);
+		return ResponseEntity.ok(Response.ok(products));
 	}
 
 	@GetMapping("/edit/{memberId}")
 	@ApiOperation(value = "유저의 예적금 계좌 상품 리스트 조회 API",
 		notes = "특정 회원의 특정 목적에 대한 예적금 상품 정보를 조회합니다.")
-	public Response<List<DepositProductRes>> getDepositProducts(
+	public ResponseEntity<Response<List<DepositProductRes>>> getDepositProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
 		@ApiParam(value = "목적 ID", required = true, example = "1")
@@ -54,32 +55,32 @@ public class DepositController {
 
 		List<DepositProductRes> products = depositService.findAllByMemberIdAndObjectId(memberId, objectId);
 
-		return Response.ok(products);
+		return ResponseEntity.ok(Response.ok(products));
 	}
 
 	@PostMapping("/{memberId}")
 	@ApiOperation(value = "유저의 예적금 계좌 상품 등록 API",
 		notes = "특정 회원의 예적금 계좌 상품을 등록합니다.")
-	public Response<Void> registerDepositProducts(
+	public ResponseEntity<Response<Void>> registerDepositProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
 		@RequestBody DepositProductRegisterListReq depositProductRegisterListReq) {
 
 		depositService.registerMemberProductsByMemberId(memberId, depositProductRegisterListReq);
 
-		return Response.ok();
+		return ResponseEntity.status(201).body(Response.ok());
 	}
 
 	@PutMapping("/{memberId}")
 	@ApiOperation(value = "유저의 예적금 계좌 상품 수정 API",
 		notes = "특정 회원의 예적금 계좌 상품을 수정합니다.")
-	public Response<Void> editDepositProducts(
+	public ResponseEntity<Response<Void>> editDepositProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
 		@RequestBody DepositProductEditListReq depositProductEditListReq) {
 
 		depositService.editMemberProductsByMemberId(memberId, depositProductEditListReq);
 
-		return Response.ok();
+		return ResponseEntity.ok(Response.ok());
 	}
 }
