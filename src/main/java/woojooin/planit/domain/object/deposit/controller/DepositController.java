@@ -33,8 +33,8 @@ public class DepositController {
 	private final DepositService depositService;
 
 	@GetMapping("/{memberId}")
-	@ApiOperation(value = "유저의 예적금 계좌 상품 리스트 조회 API",
-		notes = "특정 회원의 모든 예적금 상품 정보를 조회합니다.")
+	@ApiOperation(value = "유저의 예적금 계좌 리스트 조회 API",
+		notes = "특정 회원의 모든 예적금 계좌 정보를 조회합니다.")
 	public ResponseEntity<Response<List<DepositProductRes>>> getDepositProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId) {
@@ -45,8 +45,8 @@ public class DepositController {
 	}
 
 	@GetMapping("/edit/{memberId}")
-	@ApiOperation(value = "유저의 예적금 계좌 상품 리스트 조회 API",
-		notes = "특정 회원의 특정 목적에 대한 예적금 상품 정보를 조회합니다.")
+	@ApiOperation(value = "유저의 예적금 계좌 리스트 조회 API",
+		notes = "특정 회원의 특정 목적에 대한 예적금 계좌 정보를 조회합니다.")
 	public ResponseEntity<Response<List<DepositProductRes>>> getDepositProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
@@ -59,8 +59,8 @@ public class DepositController {
 	}
 
 	@PostMapping("/{memberId}")
-	@ApiOperation(value = "유저의 예적금 계좌 상품 등록 API",
-		notes = "특정 회원의 예적금 계좌 상품을 등록합니다.")
+	@ApiOperation(value = "유저의 예적금 계좌 등록 API",
+		notes = "특정 회원의 예적금 계좌를 등록합니다.")
 	public ResponseEntity<Response<Void>> registerDepositProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
@@ -72,8 +72,8 @@ public class DepositController {
 	}
 
 	@PutMapping("/{memberId}")
-	@ApiOperation(value = "유저의 예적금 계좌 상품 수정 API",
-		notes = "특정 회원의 예적금 계좌 상품을 수정합니다.")
+	@ApiOperation(value = "유저의 예적금 계좌 수정 API",
+		notes = "특정 회원의 예적금 계좌를 수정합니다.")
 	public ResponseEntity<Response<Void>> editDepositProducts(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
