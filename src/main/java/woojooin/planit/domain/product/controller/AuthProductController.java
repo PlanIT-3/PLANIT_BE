@@ -15,9 +15,9 @@ import woojooin.planit.global.response.Response;
 
 @RestController
 @RequestMapping("/auth/api/products")
-@Api(value = "Product API", description = "상품 추천 API")
+@Api(value = "Product API", description = "상품 API")
 @RequiredArgsConstructor
-public class ProductController {
+public class AuthProductController {
 
 	private final ProductService productService;
 
@@ -28,4 +28,5 @@ public class ProductController {
 		List<Product> recommendedProducts = productService.recommendProduct(userRiskLevel);
 		return Response.ok(recommendedProducts);
 	}
+
 }
