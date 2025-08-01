@@ -33,7 +33,6 @@ public class GoalController {
     public ResponseEntity<Response<Goal>> createGoal(@Valid @RequestBody GoalRequestDto dto) {
         Long memberID = getCurrentAuthenticatedUserId();
         Goal goal =dto.toEntity();
-        goal.setMemberId(memberID);
         goalService.createGoal(memberID,goal);
         return ResponseEntity.ok(Response.ok(goal));
     }
@@ -61,7 +60,6 @@ public class GoalController {
     public ResponseEntity<Response<Void>> updateGoal(@PathVariable Long goalId, @RequestBody GoalRequestDto dto) {
         Long userId = getCurrentAuthenticatedUserId();
         Goal goal = dto.toEntity();
-        goal.setObjectId(goalId);
         goalService.updateGoal(goalId, userId, goal);
         return ResponseEntity.ok(Response.ok());
     }
