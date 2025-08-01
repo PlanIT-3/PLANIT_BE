@@ -1,4 +1,4 @@
-package woojooin.planit.domain.product.domain.dto;
+package woojooin.planit.domain.product.domain.dto.res;
 
 import lombok.Builder;
 import lombok.Data;
