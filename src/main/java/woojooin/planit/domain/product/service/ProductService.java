@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import woojooin.planit.domain.product.domain.Product;
+import woojooin.planit.domain.product.domain.dto.res.ProductDetailDto;
+import woojooin.planit.domain.product.domain.dto.res.ProductRecommendationDto;
 import woojooin.planit.domain.product.mapper.ProductMapper;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
@@ -39,21 +41,25 @@ public class ProductService {
 		mapper.deleteAll();
 	}
 
-	public List<Product> recommendProduct(String riskLevel) {
+	public List<ProductRecommendationDto> recommendProduct(String riskLevel) {
 		List<Product> products = mapper.selectByRiskLevel(riskLevel);
 		if (products == null || products.isEmpty()) {
 			throw new BusinessException(ResponseCode.ISA_PRODUCT_NOT_FOUND);
 		}
-		return products;
+		return products.stream()
+			.map(ProductRecommendationDto::from)
+			.toList();
 	}
 
-	public Product getProductBySrtnCd(String srtnCd) {
+
+	public ProductDetailDto getProductBySrtnCd(String srtnCd) {
 		Product product = mapper.selectBySrtnCd(srtnCd);
 		if (product == null) {
 			throw new BusinessException(ResponseCode.ISA_PRODUCT_NOT_FOUND);
 		}
-		return product;
+		return ProductDetailDto.from(product);
 	}
+
 
 
 	private boolean isValidResponse(OpenApiResponse<ETFPriceRes> response) {
