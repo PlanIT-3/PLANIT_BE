@@ -22,16 +22,30 @@
     </resultMap>
 
     <insert id="insertProduct" parameterType="woojooin.planit.domain.product.domain.Product">
-        INSERT INTO product (
-            srtn_cd, isin_cd, itms_nm, bas_dt, clpr, vs, flt_rt,
-            mkp, hipr, lopr, trqu, tr_prc, lstg_st_cnt, mrkt_tot_amt,
-            risk_level
-        )
-        VALUES (
-                   #{srtnCd}, #{isinCd}, #{itmsNm}, #{basDt}, #{clpr}, #{vs}, #{fltRt},
-                   #{mkp}, #{hipr}, #{lopr}, #{trqu}, #{trPrc}, #{lstgStCnt}, #{mrktTotAmt},
-                   #{riskLevel}
-               )
+        INSERT INTO product (srtn_cd, isin_cd, itms_nm, bas_dt, clpr, vs, flt_rt,
+                             mkp, hipr, lopr, trqu, tr_prc, lstg_st_cnt, mrkt_tot_amt,
+                             risk_level)
+        VALUES (#{srtnCd}, #{isinCd}, #{itmsNm}, #{basDt}, #{clpr}, #{vs}, #{fltRt},
+                #{mkp}, #{hipr}, #{lopr}, #{trqu}, #{trPrc}, #{lstgStCnt}, #{mrktTotAmt},
+                #{riskLevel})
     </insert>
+
+
+    <delete id="deleteAll">
+        DELETE
+        FROM product
+    </delete>
+
+
+    <select id="selectByRiskLevel" resultMap="productResultMap">
+        SELECT p.*
+        FROM product p
+                 INNER JOIN (SELECT srtn_cd, MAX(bas_dt) AS max_bas_dt
+                             FROM product
+                             WHERE risk_level = #{riskLevel}
+                             GROUP BY srtn_cd) sub ON p.srtn_cd = sub.srtn_cd AND p.bas_dt = sub.max_bas_dt
+        WHERE p.risk_level = #{riskLevel}
+        ORDER BY CAST(p.flt_rt AS DECIMAL(10, 4)) DESC
+    </select>
 
 </mapper>
