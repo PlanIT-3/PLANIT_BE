@@ -5,6 +5,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
+import woojooin.planit.domain.product.domain.Product;
+import woojooin.planit.domain.product.domain.RiskLevel;
 
 @Data
 public class ETFPriceRes {
@@ -76,4 +78,29 @@ public class ETFPriceRes {
 		@JsonProperty("nPptTotAmt")
 		private String nPptTotAmt;       // 순자산총액
 	}
+
+	public static Product mapItemToProduct(Item item) {
+		Product product = new Product();
+
+		product.setSrtnCd(item.getSrtnCd());
+		product.setIsinCd(item.getIsinCd());
+		product.setItmsNm(item.getItmsNm());
+		product.setBasDt(item.getBasDt());
+		product.setClpr(item.getClpr());
+		product.setVs(item.getVs());
+		product.setFltRt(item.getFltRt());
+		product.setMkp(item.getMkp());
+		product.setHipr(item.getHipr());
+		product.setLopr(item.getLopr());
+		product.setTrqu(item.getTrqu());
+		product.setTrPrc(item.getTrPrc());
+		product.setLstgStCnt(item.getStLstgCnt());
+		product.setMrktTotAmt(item.getMrktTotAmt());
+
+		product.setRiskLevel(String.valueOf(RiskLevel.SAFE));
+
+		return product;
+	}
+
+
 }
