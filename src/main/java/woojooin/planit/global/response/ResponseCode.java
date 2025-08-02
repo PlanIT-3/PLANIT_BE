@@ -25,8 +25,13 @@ public enum ResponseCode {
 	BIND_ERROR("GEN-013", "요청 바인딩에 실패했습니다.", HttpStatus.BAD_REQUEST),
 	ACCESS_DENIED("GEN-014", "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
 	UNAUTHORIZED("GEN-015", "인증이 필요합니다.", HttpStatus.UNAUTHORIZED),
-	INSUFFICIENT_PRIVILEGES("GEN-016", "권한이 부족합니다.", HttpStatus.FORBIDDEN),
-	ROLE_MISMATCH("GEN-017", "요청한 역할과 현재 역할이 일치하지 않습니다.", HttpStatus.FORBIDDEN),
+
+	// Authentication and Authorization
+	INSUFFICIENT_PRIVILEGES("AUTH-001", "권한이 부족합니다.", HttpStatus.FORBIDDEN),
+	ROLE_MISMATCH("AUTH-002", "요청한 역할과 현재 역할이 일치하지 않습니다.", HttpStatus.FORBIDDEN),
+	DUPLICATE_EMAIL("AUTH-003", "이미 사용 중인 이메일입니다.", HttpStatus.BAD_REQUEST),
+	INVALID_LOGIN("AUTH-004", "유효하지 않은 이메일 또는 비밀번호입니다.", HttpStatus.UNAUTHORIZED),
+	REISSUE_FAILED("AUTH-005", "리프레시 토큰 재발급에 실패했습니다.", HttpStatus.UNAUTHORIZED),
 
 	// ISA Account Domain Errors
 	ISA_MEMBER_NOT_FOUND("ISA-001", "해당 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

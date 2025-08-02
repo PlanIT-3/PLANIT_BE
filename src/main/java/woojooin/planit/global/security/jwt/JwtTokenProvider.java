@@ -119,13 +119,12 @@ public class JwtTokenProvider {
                 throw new BusinessException(ResponseCode.INSUFFICIENT_PRIVILEGES);
             }
 
-            // DB에 USER로 되어있으면 SEMI_USER로 다운그레이드
-            if (!"SEMI_USER".equals(currentDbRole)) {
-                log.info("User {} has no connected_id, maintaining SEMI_USER role", member.getMemberId());
-                // 필요시 DB 업데이트
-                // member.updateRole("SEMI_USER");
-                // memberService.updateMember(member);
-            }
+//            // DB에 USER로 되어있으면 SEMI_USER로 다운그레이드
+//            if (!"SEMI_USER".equals(currentDbRole)) {
+//                log.info("User {} has no connected_id, maintaining SEMI_USER role", member.getMemberId());
+//                 member.setRole("SEMI_USER");
+//                 memberService.update(member);
+//            }
 
             return "SEMI_USER";
         }

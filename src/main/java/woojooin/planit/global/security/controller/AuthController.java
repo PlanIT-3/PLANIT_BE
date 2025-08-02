@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import woojooin.planit.domain.member.domain.Member;
 import woojooin.planit.domain.member.service.MemberService;
+import woojooin.planit.global.exception.BusinessException;
+import woojooin.planit.global.response.ResponseCode;
 import woojooin.planit.global.security.Role;
 import woojooin.planit.global.security.dto.request.LoginReq;
 import woojooin.planit.global.security.dto.request.RefreshTokenReq;
@@ -33,26 +35,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq request) {
         LoginRes res = authService.login(request.getEmail(), request.getPassword());
-
         return ResponseEntity.ok(res);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpReq request) {
-        log.info("Signup request: {}", request);
-        if (memberService.findByEmail(request.getEmail()) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
-        }
-
-        Member newMember = new Member();
-        newMember.setEmail(request.getEmail());
-        newMember.setPassword(passwordEncoder.encode(request.getPassword()));
-        newMember.setNickname(request.getNickname());
-        newMember.setRole(Role.SEMI_USER.name());
-        newMember.setIsAgreed(true);
-        log.info("New member created: {}", newMember.getRole());
-
-        memberService.save(newMember);
+        authService.signup(request);
         return ResponseEntity.ok().build();
     }
 
@@ -63,7 +51,7 @@ public class AuthController {
             return ResponseEntity.ok(new LoginRes(newAccessToken));
         } catch (AuthenticationException e) {
             log.error("Reissue failed: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Reissue failed");
+            throw new BusinessException(ResponseCode.REISSUE_FAILED);
         }
     }
 }
