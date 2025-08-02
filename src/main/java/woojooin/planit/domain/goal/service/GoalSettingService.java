@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.object.isa.service.IsaAccountService;
@@ -14,6 +15,7 @@ import woojooin.planit.global.response.ResponseCode;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,65 +23,92 @@ public class GoalSettingService {
     private final GoalMapper goalMapper;
     private final IsaAccountService isaAccountService;
 
-
-    //1.  목표 생성
     public void createGoal(Long memberId ,Goal goal) {
-        //1. isa 할당한 금액 금액 가져오기
+        //1. 기본 세팅
+        goal.setMemberId(memberId);
+        goal.setStartAmount(0L);
+        goal.setGoalRate(0);
+
+        //2. insert 먼저 수행 -> objectID 생성
+        int rowAffected = goalMapper.insertGoal(goal);
+        if(rowAffected == 0) {
+            throw new BusinessException(ResponseCode.GOAL_CREATE_FAILED);
+        }
+
+        //3 objectID 기반 isa 조회
+        Long objectId = goal.getObjectId();
         List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
                 memberId, goal.getObjectId()
         );
 
-        //2. isa 금액 합산
         long isaAmount = isaProducts.stream()
                         .mapToLong(p->p.getPresentAmount().longValue())
                                 .sum();
-
-        //3.예적금 금액 -> 임시 0 (todo)
+        //예적금 금액 -> 임시 0 (todo)
         long savingAmount = 0;
-
-        //4.초기 자산 설정 (isa + 예적금)
         long startAmount = isaAmount+savingAmount;
-
-        goal.setMemberId(memberId);
         goal.setStartAmount(startAmount);
 
-        //5.목표 달성률 계산
+
         if(goal.getTargetAmount()!=null&&goal.getTargetAmount()>0){
             int goalRate = (int)((double)startAmount*100/goal.getTargetAmount());
             goal.setGoalRate(goalRate);
         }
-        else {
-            goal.setGoalRate(0);
-        }
-
-        int rowsAffected = goalMapper.insertGoal(goal);
-        if (rowsAffected == 0) {
-            throw new BusinessException(ResponseCode.GOAL_CREATE_FAILED);
-        }
-
+        goalMapper.updateGoal(goal);
     }
 
 
     @Transactional(readOnly = true)
-    public Optional<Goal> getGoal(Long memberId,Long goalId ){
-        return Optional.ofNullable(goalMapper.selectGoalById(goalId,memberId));
+    public GoalDetailResponseDto getGoalDetail(Long memberId, Long goalId ){
+        Goal goal = Optional.ofNullable(goalMapper.selectGoalById(goalId, memberId))
+                .orElseThrow(() -> new BusinessException(ResponseCode.NOT_FOUND));
+
+        List<IsaAccountProductRes> isaAccounts =
+                isaAccountService.findAllByMemberIdAndObjectId(memberId, goalId);
+
+        //todo 예적금 list
+
+        return GoalDetailResponseDto.builder()
+                .objectName(goal.getObjectName())
+                .targetAmount(goal.getTargetAmount())
+                .totalAmount(goal.getStartAmount())
+                .goalRate(goal.getGoalRate())
+                .endDate(goal.getEndDate())
+                .isaAccounts(isaAccounts)
+                //todo 예적금 연결
+                .build();
     }
 
-    //모든 목표 조회
+
     @Transactional(readOnly = true)
-    public List<Goal> getGoals(Long memberId) {
-        return goalMapper.selectAllGoals(memberId);
+    public List<GoalDetailResponseDto> getAllGoals(Long memberId) {
+        List<Goal> goals = goalMapper.selectAllGoals(memberId);
+        return goals.stream()
+                .map(goal -> {
+                    List<IsaAccountProductRes> isaAccounts =
+                            isaAccountService.findAllByMemberIdAndObjectId(memberId, goal.getObjectId());
+
+                    return GoalDetailResponseDto.builder()
+                            .objectName(goal.getObjectName())
+                            .targetAmount(goal.getTargetAmount())
+                            .totalAmount(goal.getStartAmount())
+                            .goalRate(goal.getGoalRate())
+                            .endDate(goal.getEndDate())
+                            .isaAccounts(isaAccounts)
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
 
-    public void updateGoal(Long objectId, Long memberId ,Goal updatedGoal) {
+    public GoalDetailResponseDto updateGoal(Long objectId, Long memberId ,Goal updatedGoal) {
         List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
                 memberId, objectId
         );
         long isaAmount = isaProducts.stream()
                 .mapToLong(p -> p.getPresentAmount().longValue())
                 .sum();
-        long savingAmount = 0;
+        long savingAmount = 0; //todo 예적금 확장
         long startAmount = isaAmount + savingAmount;
 
         updatedGoal.setStartAmount(startAmount);
@@ -99,6 +128,14 @@ public class GoalSettingService {
         if (rowsAffected == 0) {
             throw new BusinessException(ResponseCode.GOAL_UPDATE_FAILED);
         }
+        return GoalDetailResponseDto.builder()
+                .objectName(updatedGoal.getObjectName())
+                .targetAmount(updatedGoal.getTargetAmount())
+                .totalAmount(updatedGoal.getStartAmount())
+                .goalRate(updatedGoal.getGoalRate())
+                .endDate(updatedGoal.getEndDate())
+                .isaAccounts(isaProducts)
+                .build();
     }
 
     //목표 삭제

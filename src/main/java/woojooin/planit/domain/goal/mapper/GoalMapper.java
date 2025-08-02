@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface GoalMapper {
     int insertGoal(Goal goal);
-    //조회
     Goal selectGoalById(@Param("objectId") Long objectId, @Param("memberId") Long memberId);
     List<Goal> selectAllGoals(Long memberId);
     int updateGoal(Goal goal);
