@@ -1,6 +1,7 @@
 package woojooin.planit.domain.goal.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -38,30 +39,29 @@ public class GoalController {
     }
 
     @GetMapping
-    @ApiOperation(value = "목표리스트 조회" , notes = "사용자의 모든 목표를 조회합니다")
-    public ResponseEntity<Response<List<Goal>>> getAllGoals() {
+    @ApiOperation(value = "목표리스트 조회", notes = "사용자의 모든 목표(ISA 포함)를 상세 조회합니다")
+    public ResponseEntity<Response<List<GoalDetailResponseDto>>> getAllGoals() {
         Long userID = getCurrentAuthenticatedUserId();
-        List<Goal> goals = goalService.getGoals(userID);
+        List<GoalDetailResponseDto> goals = goalService.getAllGoals(userID);
         return ResponseEntity.ok(Response.ok(goals));
     }
 
-    @GetMapping("/{goalsId}")
+    @GetMapping("/{goalId}")
     @ApiOperation(value = "목표 조회 ", notes = "사용자의 특정 목표를 조회합니다")
-    public ResponseEntity<Response<Goal>> getGoal(@PathVariable Long goalsId) {
-        Long userID = getCurrentAuthenticatedUserId();
-        Optional<Goal> goal = goalService.getGoal(userID, goalsId);
-        Goal foundGoal = goal.orElseThrow(() -> new BusinessException(ResponseCode.NOT_FOUND));
-        return ResponseEntity.ok(Response.ok(foundGoal));
+    public ResponseEntity<Response<GoalDetailResponseDto>> getGoalDetail(@PathVariable Long goalId) {
+        Long userId = getCurrentAuthenticatedUserId();
+        GoalDetailResponseDto response = goalService.getGoalDetail(userId, goalId);
+        return ResponseEntity.ok(Response.ok(response));
 
     }
 
     @PutMapping("/{goalId}")
     @ApiOperation(value = "목표 수정",notes = "사용자의 목표를 수정합니다")
-    public ResponseEntity<Response<Void>> updateGoal(@PathVariable Long goalId, @RequestBody GoalRequestDto dto) {
+    public ResponseEntity<Response<GoalDetailResponseDto>> updateGoal(@PathVariable Long goalId, @RequestBody GoalRequestDto dto) {
         Long userId = getCurrentAuthenticatedUserId();
         Goal goal = dto.toEntity();
-        goalService.updateGoal(goalId, userId, goal);
-        return ResponseEntity.ok(Response.ok());
+        GoalDetailResponseDto response = goalService.updateGoal(goalId, userId, goal);
+        return ResponseEntity.ok(Response.ok(response));
     }
 
     @DeleteMapping("/{goalId}")
