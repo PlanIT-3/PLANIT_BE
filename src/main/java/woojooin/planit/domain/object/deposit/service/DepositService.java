@@ -37,7 +37,6 @@ public class DepositService {
      * @return 예적금 계좌 목록
      */
     public List<DepositAccountRes> getMemberAccountsByMemberId(Long memberId) {
-
         try {
             List<DepositAccountRes> accounts = depositMapper.findAllByMemberId(memberId);
             return accounts;
@@ -54,7 +53,6 @@ public class DepositService {
      */
     @Transactional
     public void registerMemberAccountsByMemberId(Long memberId, @Valid DepositAccountRegisterListReq request) {
-
         // 기존 검증: 요청 목록 내에서 동일한 계좌 중복 등록 방지
         validateDuplicateAccounts(request.getDepositAccountRegisterReqs());
         
@@ -76,7 +74,6 @@ public class DepositService {
      */
     @Transactional
     public void editMemberAccountsByMemberId(Long memberId, @Valid DepositAccountEditListReq request) {
-
         List<DepositAccountEditReq> editReqs = request.getEditReqs();
 
         List<DepositAccountEditReq> checkedItems = editReqs.stream()
@@ -108,7 +105,6 @@ public class DepositService {
      * @return 예적금 목록
      */
     public List<DepositAccountRes> findAllByMemberIdAndObjectId(Long memberId, Long objectId) {
-
         try {
             List<DepositAccountRes> accounts = depositMapper.findAllByMemberIdAndObjectId(memberId, objectId);
             return accounts;
@@ -125,7 +121,6 @@ public class DepositService {
      * @return 할당 가능한 예적금 목록
      */
     public List<DepositAccountRes> findAvailableAccountsByMemberIdAndObjectId(Long memberId, Long objectId) {
-
         try {
             List<DepositAccountRes> accounts = depositMapper.findAvailableAccountsByMemberIdAndObjectId(memberId, objectId);
             return accounts;
@@ -140,6 +135,10 @@ public class DepositService {
      * @param accountReqs 등록 요청 목록
      */
     private void validateDuplicateAccounts(List<DepositAccountRegisterReq> accountReqs) {
+        if (accountReqs == null || accountReqs.isEmpty()) {
+            throw new BusinessException(ResponseCode.DEPOSIT_ACCOUNT_NOT_FOUND);
+        }
+        
         Set<Long> memberAccountIds = new HashSet<>();
         for (DepositAccountRegisterReq req : accountReqs) {
             if (!memberAccountIds.add(req.getMemberAccountId())) {
@@ -159,6 +158,10 @@ public class DepositService {
      * @param accountReqs 등록 요청 목록
      */
     private void validateAvailableAmount(Long memberId, List<DepositAccountRegisterReq> accountReqs) {
+        if (accountReqs == null || accountReqs.isEmpty()) {
+            return;
+        }
+        
         for (DepositAccountRegisterReq req : accountReqs) {
             // 현재 할당된 총액 조회
             Integer currentAllocatedAmount = depositMapper.getCurrentAllocatedAmount(req.getMemberAccountId());
@@ -181,4 +184,5 @@ public class DepositService {
             }
         }
     }
+
 }

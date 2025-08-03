@@ -14,8 +14,8 @@
     <!-- 예적금 계좌 조회용 ResultMap -->
     <resultMap id="depositAccountResultMap" type="woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes">
         <id property="memberAccountId" column="member_product_id"/>
-        <result property="accountNumber" column="item_code"/>
-        <result property="accountName" column="item_name"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="accountName" column="account_name"/>
         <result property="presentAmount" column="present_amount"/>
         <result property="checked" column="checked"/>
         <result property="allocatedAmount" column="allocated_amount"/>
@@ -59,7 +59,7 @@
                 SUM(a.amount) as total_allocated
             FROM action a 
             WHERE a.is_deleted = false 
-              AND a.action_type = '예적금'
+              AND a.action_type = 'DEPOSIT'
             GROUP BY a.member_product_id
         ) allocated_sum ON mp.member_product_id = allocated_sum.member_product_id
         WHERE mp.member_id = #{memberId}
@@ -84,7 +84,7 @@
                 SUM(a.amount) as total_allocated
             FROM action a 
             WHERE a.is_deleted = false 
-              AND a.action_type = '예적금'
+              AND a.action_type = 'DEPOSIT'
             GROUP BY a.member_product_id
         ) allocated_sum ON mp.member_product_id = allocated_sum.member_product_id
         INNER JOIN action a ON mp.member_product_id = a.member_product_id
@@ -92,7 +92,7 @@
           AND mp.is_deleted = false
           AND a.object_id = #{objectId}
           AND a.is_deleted = false
-          AND a.action_type = '예적금'
+          AND a.action_type = 'DEPOSIT'
         ORDER BY member_product_id DESC
     </select>
 
@@ -118,7 +118,7 @@
                 SUM(a.amount) as total_allocated
             FROM action a 
             WHERE a.is_deleted = false 
-              AND a.action_type = '예적금'
+              AND a.action_type = 'DEPOSIT'
             GROUP BY a.member_product_id
         ) allocated_sum ON mp.member_product_id = allocated_sum.member_product_id
         WHERE mp.member_id = #{memberId}
@@ -132,7 +132,7 @@
             WHERE object_id = #{objectId}
               AND member_product_id IS NOT NULL
               AND is_deleted = false
-              AND action_type = '예적금'
+              AND action_type = 'DEPOSIT'
         )
         ORDER BY mp.created_at DESC
     </select>
@@ -168,13 +168,13 @@
         UPDATE action
         SET is_deleted = CASE
         <foreach collection="requestList" item="req" separator=" ">
-            WHEN object_id = #{req.objectId} AND member_product_id = #{req.memberAccountId} AND action_type = '예적금' THEN true
+            WHEN object_id = #{req.objectId} AND member_product_id = #{req.memberAccountId} AND action_type = 'DEPOSIT' THEN true
         </foreach>
         ELSE is_deleted
         END,
         updated_at = CASE
         <foreach collection="requestList" item="req" separator=" ">
-            WHEN object_id = #{req.objectId} AND member_product_id = #{req.memberAccountId} AND action_type = '예적금' THEN NOW()
+            WHEN object_id = #{req.objectId} AND member_product_id = #{req.memberAccountId} AND action_type = 'DEPOSIT' THEN NOW()
         </foreach>
         ELSE updated_at
         END
@@ -238,7 +238,7 @@
         FROM action 
         WHERE member_product_id = #{memberAccountId}
           AND is_deleted = false
-          AND action_type = '예적금'
+          AND action_type = 'DEPOSIT'
     </select>
 
     <!-- 
