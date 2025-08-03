@@ -47,13 +47,13 @@ public class DepositController {
 	@GetMapping("/edit/{memberId}")
 	@ApiOperation(value = "특정 목적에 할당된 예적금 계좌 조회 API",
 		notes = "특정 목적에 할당된 예적금 계좌 정보를 조회합니다.")
-	public ResponseEntity<Response<List<DepositAccountRes>>> getDepositAccountsByObjectId(
+	public ResponseEntity<Response<List<DepositAccountRes>>> getDepositAccountsByGoalId(
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
 		@ApiParam(value = "목적 ID", required = true, example = "1")
-		@RequestParam("objectId") Long objectId) {
+		@RequestParam("goalId") Long goalId) {
 
-		List<DepositAccountRes> accounts = depositService.findAllByMemberIdAndObjectId(memberId, objectId);
+		List<DepositAccountRes> accounts = depositService.findAllByMemberIdAndObjectId(memberId, goalId);
 
 		return ResponseEntity.ok(Response.ok(accounts));
 	}
@@ -65,9 +65,9 @@ public class DepositController {
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
 		@ApiParam(value = "목적 ID", required = true, example = "1")
-		@RequestParam("objectId") Long objectId) {
+		@RequestParam("goalId") Long goalId) {
 
-		List<DepositAccountRes> accounts = depositService.findAvailableAccountsByMemberIdAndObjectId(memberId, objectId);
+		List<DepositAccountRes> accounts = depositService.findAvailableAccountsByMemberIdAndObjectId(memberId, goalId);
 
 		return ResponseEntity.ok(Response.ok(accounts));
 	}
