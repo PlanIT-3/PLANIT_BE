@@ -2,6 +2,9 @@ package woojooin.planit.domain.goal.domain;
 
 import java.time.LocalDateTime;
 
+import lombok.Data;
+
+@Data
 public class GoalProgress {
 	private int dailyGoalProgressId;  // daily_goal_progress_id
 	private int goalId;                // goal_id

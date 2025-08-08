@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import woojooin.planit.domain.goal.domain.GoalProgress;
 
 @Data
 @NoArgsConstructor
@@ -15,5 +16,12 @@ public class GoalProgressGraphDTO {
 	private double isaProgress;
 	private double depositProgress;
 
+	public static GoalProgressGraphDTO fromEntity(GoalProgress entity) {
+		return new GoalProgressGraphDTO(
+			entity.getProgressDate(),
+			entity.getIsaProgress(),
+			entity.getDepositProgress()
+		);
+	}
 }
 

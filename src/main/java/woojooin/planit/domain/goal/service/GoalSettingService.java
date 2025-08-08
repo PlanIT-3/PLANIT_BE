@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.domain.GoalProgress;
 import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.isa.service.IsaAccountService;
+import woojooin.planit.domain.product.domain.Product;
+import woojooin.planit.domain.product.domain.dto.res.ProductRecommendationDto;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
 
@@ -109,6 +112,12 @@ public class GoalSettingService {
 
 
     public List<GoalProgressGraphDTO> getGoalProgressByGoalId(Long goalId) {
-        return goalMapper.selectGoalProgressByGoalId(goalId);
+        List<GoalProgress> goalProgresses = goalMapper.selectGoalProgressByGoalId(goalId);
+        if (goalProgresses == null || goalProgresses.isEmpty()) {
+            throw new BusinessException(ResponseCode.ISA_PRODUCT_NOT_FOUND);
+        }
+        return goalProgresses.stream()
+            .map(GoalProgressGraphDTO::fromEntity)
+            .toList();
     }
 }

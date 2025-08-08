@@ -81,7 +81,7 @@ public class GoalController {
 
 	@GetMapping("/{goalId}/progress")
 	@ApiOperation(value = "목표 진행 추이", notes = "사용자 목표 진행 추이를 그래프로 나타냄니다.")
-	public Response<List<GoalProgressGraphDTO>> getGoalProgressList(@PathVariable Long goalId) {
+	public Response<List<GoalProgressGraphDTO>> getGoalProgressList(@PathVariable("goalId") Long goalId) {
 		List<GoalProgressGraphDTO> list = goalService.getGoalProgressByGoalId(goalId);
 		return Response.ok(list);
 
