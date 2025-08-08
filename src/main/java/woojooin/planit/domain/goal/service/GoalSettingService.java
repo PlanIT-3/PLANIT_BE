@@ -108,7 +108,7 @@ public class GoalSettingService {
     }
 
 
-    public List<GoalProgressGraphDTO> getGoalProgressByGoalId(int goalId) {
+    public List<GoalProgressGraphDTO> getGoalProgressByGoalId(Long goalId) {
         return goalMapper.selectGoalProgressByGoalId(goalId);
     }
 }

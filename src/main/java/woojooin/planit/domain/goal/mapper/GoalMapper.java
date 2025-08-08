@@ -22,6 +22,6 @@ public interface GoalMapper {
 
 	int deleteGoal(@Param("objectId") Long objectId, @Param("memberId") Long memberId);
 
-	List<GoalProgressGraphDTO> selectGoalProgressByGoalId(int goalId);
+	List<GoalProgressGraphDTO> selectGoalProgressByGoalId(Long goalId);
 
 }
