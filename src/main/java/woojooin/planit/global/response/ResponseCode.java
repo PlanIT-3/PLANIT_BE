@@ -26,6 +26,13 @@ public enum ResponseCode {
 	ACCESS_DENIED("GEN-014", "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
 	UNAUTHORIZED("GEN-015", "인증이 필요합니다.", HttpStatus.UNAUTHORIZED),
 
+	// Authentication and Authorization
+	INSUFFICIENT_PRIVILEGES("AUTH-001", "권한이 부족합니다.", HttpStatus.FORBIDDEN),
+	ROLE_MISMATCH("AUTH-002", "요청한 역할과 현재 역할이 일치하지 않습니다.", HttpStatus.FORBIDDEN),
+	DUPLICATE_EMAIL("AUTH-003", "이미 사용 중인 이메일입니다.", HttpStatus.BAD_REQUEST),
+	INVALID_LOGIN("AUTH-004", "유효하지 않은 이메일 또는 비밀번호입니다.", HttpStatus.UNAUTHORIZED),
+	REISSUE_FAILED("AUTH-005", "리프레시 토큰 재발급에 실패했습니다.", HttpStatus.UNAUTHORIZED),
+
 	// ISA Account Domain Errors
 	ISA_MEMBER_NOT_FOUND("ISA-001", "해당 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 	ISA_PRODUCT_NOT_FOUND("ISA-002", "해당 상품을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
@@ -64,6 +71,7 @@ public enum ResponseCode {
 	GOAL_CREATE_FAILED("GOAL-002", "목표 생성에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 	GOAL_UPDATE_FAILED("GOAL-003", "목표 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 	GOAL_DELETE_FAILED("GOAL-004", "목표 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+
 
   // 5xx
 	INTERNAL_ERROR("GEN-999", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
