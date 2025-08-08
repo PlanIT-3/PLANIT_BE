@@ -85,6 +85,11 @@
           AND act.is_deleted = 0
           AND a.is_deleted = 0
     </select>
+    <select id="getTargetAmountByGoalId" resultType="java.lang.Long">
+        SELECT target_amount
+        FROM goal
+        WHERE goal_id = #{goalId}
+    </select>
 
 
 </mapper>

@@ -31,4 +31,6 @@ public interface GoalMapper {
 	@MapKey("bankCode")
 	List<Map<String, Object>> getGoalAccountRates(@Param("goalId")Long goalId);
 
+	Long getTargetAmountByGoalId(Long goalId);
+
 }

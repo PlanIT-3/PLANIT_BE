@@ -90,13 +90,10 @@ public class GoalController {
 
 	@GetMapping("/{goalId}/rate")
 	@ApiOperation(value = "목표 대비 계좌별 진행률", notes = "계좌 잔액과 할당 비율 기준 목표 대비 진행률(%) 반환")
-	public List<GoalAccountRateResponse> getGoalAccountRates(
-		@PathVariable Long goalId,
-		@RequestParam long totalGoalAmount) {  // 전체 목표 금액을 파라미터로 받음
-
-		return goalService.getGoalAccountRates(goalId, totalGoalAmount);
+	public Response<List<GoalAccountRateResponse>> getGoalAccountRates(@PathVariable("goalId") Long goalId) {
+		List<GoalAccountRateResponse> list = goalService.getGoalAccountRates(goalId);
+		return Response.ok(list);
 	}
-
 
 }
 

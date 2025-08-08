@@ -13,8 +13,6 @@ import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.isa.service.IsaAccountService;
-import woojooin.planit.domain.product.domain.Product;
-import woojooin.planit.domain.product.domain.dto.res.ProductRecommendationDto;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
 
@@ -125,7 +123,13 @@ public class GoalSettingService {
             .toList();
     }
 
-    public List<GoalAccountRateResponse> getGoalAccountRates(Long goalId, long totalGoalAmount) {
+    public List<GoalAccountRateResponse> getGoalAccountRates(Long goalId) {
+        Long targetAmount = goalMapper.getTargetAmountByGoalId(goalId);
+
+        if (targetAmount == null) {
+            throw new IllegalArgumentException("해당 goalId의 목표 금액이 존재하지 않습니다: " + goalId);
+        }
+
         List<Map<String, Object>> rows = goalMapper.getGoalAccountRates(goalId);
 
         return rows.stream()
@@ -133,10 +137,10 @@ public class GoalSettingService {
                 String bankCode = (String) row.get("bankCode");
                 String bankName = Bank.getNameByCode(bankCode);
 
-                long accountActualAmount = ((Number) row.get("accountAmount")).longValue(); // 계좌 잔액
-                int accountAllocatedRate = ((Number) row.get("allocatedRate")).intValue();  // 할당 비율
+                long accountBalance = ((Number) row.get("accountBalance")).longValue();
+                int accountAllocatedRate = ((Number) row.get("allocatedRate")).intValue();
 
-                double progress = (accountActualAmount * (accountAllocatedRate / 100.0)) / totalGoalAmount * 100;
+                double progress = (accountBalance * (accountAllocatedRate / 100.0)) / targetAmount * 100;
 
                 return new GoalAccountRateResponse(bankName, progress);
             })
