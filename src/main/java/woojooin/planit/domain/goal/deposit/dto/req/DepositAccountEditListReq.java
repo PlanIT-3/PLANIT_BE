@@ -1,4 +1,4 @@
-package woojooin.planit.domain.object.deposit.dto.req;
+package woojooin.planit.domain.goal.deposit.dto.req;
 
 import java.util.List;
 

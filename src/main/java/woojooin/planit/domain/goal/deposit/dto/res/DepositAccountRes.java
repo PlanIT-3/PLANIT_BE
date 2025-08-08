@@ -1,4 +1,4 @@
-package woojooin.planit.domain.object.deposit.dto.res;
+package woojooin.planit.domain.goal.deposit.dto.res;
 
 import java.math.BigDecimal;
 

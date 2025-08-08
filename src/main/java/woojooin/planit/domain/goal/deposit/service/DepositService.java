@@ -1,4 +1,4 @@
-package woojooin.planit.domain.object.deposit.service;
+package woojooin.planit.domain.goal.deposit.service;
 
 import java.util.List;
 import java.util.Set;
@@ -13,12 +13,12 @@ import org.springframework.validation.annotation.Validated;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.domain.object.deposit.dto.req.DepositAccountEditListReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositAccountEditReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositAccountRegisterListReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositAccountRegisterReq;
-import woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes;
-import woojooin.planit.domain.object.deposit.mapper.DepositMapper;
+import woojooin.planit.domain.goal.deposit.dto.req.DepositAccountEditListReq;
+import woojooin.planit.domain.goal.deposit.dto.req.DepositAccountEditReq;
+import woojooin.planit.domain.goal.deposit.dto.req.DepositAccountRegisterListReq;
+import woojooin.planit.domain.goal.deposit.dto.req.DepositAccountRegisterReq;
+import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
+import woojooin.planit.domain.goal.deposit.mapper.DepositMapper;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
 

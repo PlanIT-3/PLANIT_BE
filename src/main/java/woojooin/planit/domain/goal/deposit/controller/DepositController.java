@@ -1,4 +1,4 @@
-package woojooin.planit.domain.object.deposit.controller;
+package woojooin.planit.domain.goal.deposit.controller;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.domain.object.deposit.dto.req.DepositAccountEditListReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositAccountRegisterListReq;
-import woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes;
-import woojooin.planit.domain.object.deposit.service.DepositService;
+import woojooin.planit.domain.goal.deposit.dto.req.DepositAccountEditListReq;
+import woojooin.planit.domain.goal.deposit.dto.req.DepositAccountRegisterListReq;
+import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
+import woojooin.planit.domain.goal.deposit.service.DepositService;
 import woojooin.planit.global.response.Response;
 
 @RestController

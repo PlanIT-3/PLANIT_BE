@@ -1,15 +1,15 @@
-package woojooin.planit.domain.object.deposit.dto.req;
+package woojooin.planit.domain.goal.deposit.dto.req;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import woojooin.planit.domain.object.action.domain.ActionType;
+import woojooin.planit.domain.goal.action.domain.ActionType;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepositAccountEditReq {
+public class DepositAccountRegisterReq {
 
 	@NonNull
 	private Long objectId;
@@ -30,8 +30,6 @@ public class DepositAccountEditReq {
 
 	@NonNull
 	private Integer accountAllocatedRate;
-
-	private boolean checked;
 
 	private ActionType actionType = ActionType.DEPOSIT;
 }

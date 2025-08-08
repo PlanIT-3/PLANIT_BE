@@ -12,7 +12,7 @@
     </sql>
 
     <!-- 예적금 계좌 조회용 ResultMap -->
-    <resultMap id="depositAccountResultMap" type="woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes">
+    <resultMap id="depositAccountResultMap" type="woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes">
         <id property="memberAccountId" column="member_product_id"/>
         <result property="accountNumber" column="account_number"/>
         <result property="accountName" column="account_name"/>
@@ -23,7 +23,7 @@
     </resultMap>
 
     <!-- Action 도메인용 ResultMap -->
-    <resultMap id="actionResultMap" type="woojooin.planit.domain.object.action.domain.Action">
+    <resultMap id="actionResultMap" type="woojooin.planit.domain.goal.action.domain.Action">
         <id property="actionId" column="action_id"/>
         <result property="objectId" column="object_id"/>
         <result property="accountNumber" column="account_number"/>
@@ -33,7 +33,7 @@
         <result property="accountType" column="account_type"/>
         <result property="amount" column="amount"/>
         <result property="actionType" column="action_type"
-                typeHandler="woojooin.planit.domain.object.action.domain.ActionTypeConverter"/>
+                typeHandler="woojooin.planit.domain.goal.action.domain.ActionTypeConverter"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>

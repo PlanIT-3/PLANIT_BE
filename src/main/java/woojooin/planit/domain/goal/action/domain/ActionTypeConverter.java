@@ -1,4 +1,4 @@
-package woojooin.planit.domain.object.action.domain;
+package woojooin.planit.domain.goal.action.domain;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;

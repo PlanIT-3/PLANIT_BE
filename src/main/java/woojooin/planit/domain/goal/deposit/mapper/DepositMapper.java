@@ -1,13 +1,13 @@
-package woojooin.planit.domain.object.deposit.mapper;
+package woojooin.planit.domain.goal.deposit.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import woojooin.planit.domain.object.deposit.dto.req.DepositAccountEditReq;
-import woojooin.planit.domain.object.deposit.dto.req.DepositAccountRegisterReq;
-import woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes;
+import woojooin.planit.domain.goal.deposit.dto.req.DepositAccountEditReq;
+import woojooin.planit.domain.goal.deposit.dto.req.DepositAccountRegisterReq;
+import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
 
 @Mapper
 public interface DepositMapper {

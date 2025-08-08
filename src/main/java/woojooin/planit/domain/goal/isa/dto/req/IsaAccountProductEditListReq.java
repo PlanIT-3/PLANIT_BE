@@ -1,4 +1,4 @@
-package woojooin.planit.domain.object.isa.dto.req;
+package woojooin.planit.domain.goal.isa.dto.req;
 
 import java.util.List;
 
