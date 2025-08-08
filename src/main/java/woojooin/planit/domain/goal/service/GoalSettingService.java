@@ -37,13 +37,14 @@ public class GoalSettingService {
 
         //3 objectID 기반 isa 조회
         Long objectId = goal.getObjectId();
-        List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
+        List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndGoalId(
                 memberId, goal.getObjectId()
         );
 
         long isaAmount = isaProducts.stream()
-                        .mapToLong(p->p.getPresentAmount().longValue())
-                                .sum();
+                .mapToLong(p->p.getPresentAmount().longValue())
+                .sum();
+
         //예적금 금액 -> 임시 0 (todo)
         long savingAmount = 0;
         long startAmount = isaAmount+savingAmount;
@@ -64,7 +65,7 @@ public class GoalSettingService {
                 .orElseThrow(() -> new BusinessException(ResponseCode.NOT_FOUND));
 
         List<IsaAccountProductRes> isaAccounts =
-                isaAccountService.findAllByMemberIdAndObjectId(memberId, goalId);
+                isaAccountService.findAllByMemberIdAndGoalId(memberId, goalId);
 
         //todo 예적금 list
 
@@ -86,7 +87,7 @@ public class GoalSettingService {
         return goals.stream()
                 .map(goal -> {
                     List<IsaAccountProductRes> isaAccounts =
-                            isaAccountService.findAllByMemberIdAndObjectId(memberId, goal.getObjectId());
+                            isaAccountService.findAllByMemberIdAndGoalId(memberId, goal.getObjectId());
 
                     return GoalDetailResponseDto.builder()
                             .objectName(goal.getObjectName())
@@ -102,7 +103,7 @@ public class GoalSettingService {
 
 
     public GoalDetailResponseDto updateGoal(Long objectId, Long memberId ,Goal updatedGoal) {
-        List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
+        List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndGoalId(
                 memberId, objectId
         );
         long isaAmount = isaProducts.stream()

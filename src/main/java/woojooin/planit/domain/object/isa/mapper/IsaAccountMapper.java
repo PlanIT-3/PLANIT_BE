@@ -16,9 +16,9 @@ public interface IsaAccountMapper {
 
 	void register(@Param("memberId") Long memberId, @Param("requestList") List<IsaAccountProductRegisterReq> isaAccountProductRegisterReqs);
 
-	List<IsaAccountProductRes> findAllByMemberIdAndObjectId(
+	List<IsaAccountProductRes> findAllByMemberIdAndGoalId(
 		@Param("memberId") Long memberId,
-		@Param("objectId") Long objectId
+		@Param("goalId") Long goalId
 	);
 
 	void softDelete(@Param("memberId") Long memberId, @Param("requestList") List<IsaAccountProductEditReq> editReqs);
