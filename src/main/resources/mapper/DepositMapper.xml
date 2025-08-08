@@ -25,7 +25,7 @@
     <!-- Action 도메인용 ResultMap -->
     <resultMap id="actionResultMap" type="woojooin.planit.domain.object.action.domain.Action">
         <id property="actionId" column="action_id"/>
-        <result property="objectId" column="object_id"/>
+        <result property="goalId" column="goal_id"/>
         <result property="accountNumber" column="account_number"/>
         <result property="memberProductId" column="member_product_id"/>
         <result property="allocatedRate" column="allocated_rate"/>
@@ -68,7 +68,7 @@
         ORDER BY mp.created_at DESC
     </select>
 
-    <select id="findAllByMemberIdAndObjectId" resultMap="depositAccountResultMap">
+    <select id="findAllByMemberIdAndGoalId" resultMap="depositAccountResultMap">
         SELECT
             mp.member_product_id,
             mp.item_code as account_number,
@@ -90,7 +90,7 @@
         INNER JOIN action a ON mp.member_product_id = a.member_product_id
         WHERE mp.member_id = #{memberId}
           AND mp.is_deleted = false
-          AND a.object_id = #{objectId}
+          AND a.goal_id = #{goalId}
           AND a.is_deleted = false
           AND a.action_type = 'DEPOSIT'
         ORDER BY member_product_id DESC
@@ -102,7 +102,7 @@
         - 사용처: 할당 페이지에서 추가 할당 가능한 계좌들 표시
         - 반환값: 할당 가능한 예적금 계좌 목록
     -->
-    <select id="findAvailableAccountsByMemberIdAndObjectId" resultMap="depositAccountResultMap">
+    <select id="findAvailableAccountsByMemberIdAndGoalId" resultMap="depositAccountResultMap">
         SELECT
             mp.member_product_id,
             mp.item_code as account_number,
@@ -129,7 +129,7 @@
           AND mp.member_product_id NOT IN (
             SELECT DISTINCT member_product_id
             FROM action
-            WHERE object_id = #{objectId}
+            WHERE goal_id = #{goalId}
               AND member_product_id IS NOT NULL
               AND is_deleted = false
               AND action_type = 'DEPOSIT'
@@ -139,7 +139,7 @@
 
     <insert id="register">
         INSERT INTO action (
-        object_id,
+        goal_id,
         account_number,
         member_product_id,
         allocated_rate,
@@ -151,7 +151,7 @@
         VALUES
         <foreach collection="requestList" item="req" separator=",">
             (
-            #{req.objectId},
+            #{req.goalId},
             #{req.accountNumber},
             #{req.memberAccountId},
             #{req.allocatedRate},
@@ -168,19 +168,19 @@
         UPDATE action
         SET is_deleted = CASE
         <foreach collection="requestList" item="req" separator=" ">
-            WHEN object_id = #{req.objectId} AND member_product_id = #{req.memberAccountId} AND action_type = 'DEPOSIT' THEN true
+            WHEN goal_id = #{req.goalId} AND member_product_id = #{req.memberAccountId} AND action_type = 'DEPOSIT' THEN true
         </foreach>
         ELSE is_deleted
         END,
         updated_at = CASE
         <foreach collection="requestList" item="req" separator=" ">
-            WHEN object_id = #{req.objectId} AND member_product_id = #{req.memberAccountId} AND action_type = 'DEPOSIT' THEN NOW()
+            WHEN goal_id = #{req.goalId} AND member_product_id = #{req.memberAccountId} AND action_type = 'DEPOSIT' THEN NOW()
         </foreach>
         ELSE updated_at
         END
-        WHERE (object_id, member_product_id, action_type) IN (
+        WHERE (goal_id, member_product_id, action_type) IN (
         <foreach collection="requestList" item="req" separator=",">
-            (#{req.objectId}, #{req.memberAccountId}, '예적금')
+            (#{req.goalId}, #{req.memberAccountId}, '예적금')
         </foreach>
         )
         AND is_deleted = false
@@ -189,7 +189,7 @@
     <!-- UPSERT 쿼리 - ON DUPLICATE KEY UPDATE 사용 -->
     <insert id="upsert">
         INSERT INTO action (
-        object_id,
+        goal_id,
         member_product_id,
         account_number,
         account_type,
@@ -203,7 +203,7 @@
         ) VALUES
         <foreach collection="requestList" item="req" separator=",">
             (
-            #{req.objectId},
+            #{req.goalId},
             #{req.memberAccountId},
             #{req.accountNumber},
             #{req.accountType},

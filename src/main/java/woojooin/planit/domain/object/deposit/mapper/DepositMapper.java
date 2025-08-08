@@ -22,18 +22,18 @@ public interface DepositMapper {
 	/**
 	 * 회원의 특정 목적에 대한 예적금 계좌 조회
 	 * @param memberId 회원 ID
-	 * @param objectId 목적 ID
+	 * @param goalId 목적 ID
 	 * @return 예적금 계좌 목록
 	 */
-	List<DepositAccountRes> findAllByMemberIdAndObjectId(@Param("memberId") Long memberId, @Param("objectId") Long objectId);
+	List<DepositAccountRes> findAllByMemberIdAndGoalId(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
 
 	/**
 	 * 회원의 특정 목적에 할당 가능한 예적금 조회
 	 * @param memberId 회원 ID
-	 * @param objectId 목적 ID
+	 * @param goalId 목적 ID
 	 * @return 할당 가능한 예적금 목록
 	 */
-	List<DepositAccountRes> findAvailableAccountsByMemberIdAndObjectId(@Param("memberId") Long memberId, @Param("objectId") Long objectId);
+	List<DepositAccountRes> findAvailableAccountsByMemberIdAndGoalId(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
 
 	/**
 	 * 예적금 계좌 등록
