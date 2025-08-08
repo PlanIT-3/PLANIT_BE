@@ -68,5 +68,16 @@
         delete from `goal`
                where object_id = #{objectId} AND member_id = #{memberId}
     </delete>
+
+    <select id="selectGoalProgressByGoalId" resultType="woojooin.planit.domain.goal.dto.GoalProgressGraphDTO">
+        SELECT
+            progress_date,
+            isa_progress,
+            deposit_progress
+        FROM daily_goal_progress
+        WHERE goal_id = #{goalId}
+        ORDER BY progress_date ASC
+    </select>
+
 </mapper>
 
