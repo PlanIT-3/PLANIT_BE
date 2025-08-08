@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,16 +48,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		log.info("Processing JWT authentication for request: {}", request.getRequestURI());
 
 
-//		if (request.getRequestURI().startsWith("/test") || request.getRequestURI().startsWith("/api/signup")) {
-//			log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
-//			filterChain.doFilter(request, response);
-//			return;
-//		}
+		if ( request.getRequestURI().startsWith("/api")) {
+			log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
+			filterChain.doFilter(request, response);
+			return;
+		}
 
 		String token = resolveToken(request);
 
-		if (token != null && jwtTokenProvider.validateToken(token)) {
+		if (token != null ) {
 			try {
+				jwtTokenProvider.validateToken(token);
+
 				String username = jwtTokenProvider.getUsername(token);
 				String role = jwtTokenProvider.getRole(token);
 				Long userId = jwtTokenProvider.getUserId(token);
@@ -90,9 +93,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
 				SecurityContextHolder.getContext().setAuthentication(auth);
-			} catch (Exception e) {
-				log.error("JWT authentication error: {}", e);
+			} catch (JwtException e) {
+				log.error("JWT authentication error: {}", e.getMessage());
 				sendErrorResponse(response, "JWT_AUTH_ERROR", "JWT 인증 오류가 발생했습니다.");
+				return;
+			} catch (Exception e) {
+				log.error("Unexpected error during JWT authentication: {}", e.getMessage());
+				sendErrorResponse(response, "UNEXPECTED_ERROR", "예상치 못한 오류가 발생했습니다.");
 				return;
 			}
 		}
