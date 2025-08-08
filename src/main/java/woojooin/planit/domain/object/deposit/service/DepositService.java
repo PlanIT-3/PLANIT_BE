@@ -101,15 +101,15 @@ public class DepositService {
     /**
      * 회원의 특정 목적에 대한 예적금 조회
      * @param memberId 회원 ID
-     * @param objectId 목적 ID
+     * @param goalId 목적 ID
      * @return 예적금 목록
      */
-    public List<DepositAccountRes> findAllByMemberIdAndObjectId(Long memberId, Long objectId) {
+    public List<DepositAccountRes> findAllByMemberIdAndGoalId(Long memberId, Long goalId) {
         try {
-            List<DepositAccountRes> accounts = depositMapper.findAllByMemberIdAndObjectId(memberId, objectId);
+            List<DepositAccountRes> accounts = depositMapper.findAllByMemberIdAndGoalId(memberId, goalId);
             return accounts;
         } catch (Exception e) {
-            log.error("[DepositService.findAllByMemberIdAndObjectId()] - failed to retrieve accounts memberId=\"{}\" objectId=\"{}\" error=\"{}\"", memberId, objectId, e.getMessage());
+            log.error("[DepositService.findAllByMemberIdAndGoalId()] - failed to retrieve accounts memberId=\"{}\" goalId=\"{}\" error=\"{}\"", memberId, goalId, e.getMessage());
             throw new BusinessException(ResponseCode.DEPOSIT_ACCOUNT_NOT_FOUND);
         }
     }
@@ -117,15 +117,15 @@ public class DepositService {
     /**
      * 회원의 특정 목적에 할당 가능한 예적금 조회
      * @param memberId 회원 ID
-     * @param objectId 목적 ID
+     * @param goalId 목적 ID
      * @return 할당 가능한 예적금 목록
      */
-    public List<DepositAccountRes> findAvailableAccountsByMemberIdAndObjectId(Long memberId, Long objectId) {
+    public List<DepositAccountRes> findAvailableAccountsByMemberIdAndGoalId(Long memberId, Long goalId) {
         try {
-            List<DepositAccountRes> accounts = depositMapper.findAvailableAccountsByMemberIdAndObjectId(memberId, objectId);
+            List<DepositAccountRes> accounts = depositMapper.findAvailableAccountsByMemberIdAndGoalId(memberId, goalId);
             return accounts;
         } catch (Exception e) {
-            log.error("[DepositService.findAvailableAccountsByMemberIdAndObjectId()] - failed to retrieve available accounts memberId=\"{}\" objectId=\"{}\" error=\"{}\"", memberId, objectId, e.getMessage());
+            log.error("[DepositService.findAvailableAccountsByMemberIdAndGoalId()] - failed to retrieve available accounts memberId=\"{}\" goalId=\"{}\" error=\"{}\"", memberId, goalId, e.getMessage());
             throw new BusinessException(ResponseCode.DEPOSIT_ACCOUNT_NOT_FOUND);
         }
     }

@@ -12,7 +12,7 @@ import woojooin.planit.domain.object.action.domain.ActionType;
 public class DepositAccountRegisterReq {
 
 	@NonNull
-	private Long objectId;
+	private Long goalId;
 
 	@NonNull
 	private Long memberAccountId;
