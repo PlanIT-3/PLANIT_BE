@@ -3,8 +3,8 @@ package woojooin.planit.domain.object.isa.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +22,7 @@ import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductRegisterListRe
 import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.object.isa.service.IsaAccountService;
 import woojooin.planit.global.response.Response;
+import woojooin.planit.global.security.CustomUserDetails;
 
 @RestController
 @RequestMapping("/auth/api/account/isa")
@@ -32,54 +33,50 @@ public class IsaAccountController {
 
 	private final IsaAccountService isaAccountService;
 
-	@GetMapping("/{memberId}")
+	@GetMapping()
 	@ApiOperation(value = "유저의 ISA 계좌 상품 리스트 조회 API",
 		notes = "특정 회원의 모든 상품 정보를 조회합니다.")
 	public ResponseEntity<Response<List<IsaAccountProductRes>>> getIsaAccountProducts(
-		@ApiParam(value = "회원 ID", required = true, example = "1")
-		@PathVariable Long memberId) {
+		@AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-		List<IsaAccountProductRes> products = isaAccountService.getMemberProductsByMemberId(memberId);
+		List<IsaAccountProductRes> products = isaAccountService.getMemberProductsByMemberId(customUserDetails.getId());
 
 		return ResponseEntity.ok(Response.ok(products));
 	}
 
-	@GetMapping("/edit/{memberId}")
+	@GetMapping("/edit")
 	@ApiOperation(value = "유저의 ISA 계좌 상품 리스트 조회 API",
 		notes = "특정 회원의 특정 목적에 대한 상품 정보를 조회합니다.")
 	public ResponseEntity<Response<List<IsaAccountProductRes>>> getIsaAccountProducts(
-		@ApiParam(value = "회원 ID", required = true, example = "1")
-		@PathVariable Long memberId,
+		@AuthenticationPrincipal CustomUserDetails customUserDetails,
 		@ApiParam(value = "목적 ID", required = true, example = "1")
 		@RequestParam("goalId") Long goalId) {
 
-		List<IsaAccountProductRes> products = isaAccountService.findAllByMemberIdAndGoalId(memberId, goalId);
+		List<IsaAccountProductRes> products = isaAccountService.findAllByMemberIdAndGoalId(customUserDetails.getId(), goalId);
 
 		return ResponseEntity.ok(Response.ok(products));
 	}
 
-	@PostMapping("/{memberId}")
+	@PostMapping()
 	@ApiOperation(value = "유저의 ISA 계좌 상품 등록 API",
 		notes = "특정 회원의 ISA 계좌 상품을 등록합니다.")
 	public ResponseEntity<Response<Void>> registerIsaAccountProducts(
-		@ApiParam(value = "회원 ID", required = true, example = "1")
-		@PathVariable Long memberId,
+		@AuthenticationPrincipal CustomUserDetails customUserDetails,
 		@RequestBody IsaAccountProductRegisterListReq isaAccountProductRegisterListReq) {
 
-		isaAccountService.registerMemberProductsByMemberId(memberId, isaAccountProductRegisterListReq);
+		isaAccountService.registerMemberProductsByMemberId(customUserDetails.getId(), isaAccountProductRegisterListReq);
 
 		return ResponseEntity.ok(Response.ok());
 	}
 
-	@PutMapping("/{memberId}")
+	@PutMapping()
 	@ApiOperation(value = "유저의 ISA 계좌 상품 수정 API",
 		notes = "특정 회원의 ISA 계좌 상품을 수정합니다.")
 	public ResponseEntity<Response<Void>> editIsaAccountProducts(
-		@ApiParam(value = "회원 ID", required = true, example = "1")
-		@PathVariable Long memberId,
+		@AuthenticationPrincipal CustomUserDetails customUserDetails,
 		@RequestBody IsaAccountProductEditListReq isaAccountProductEditListReq) {
 
-		isaAccountService.editMemberProductsByMemberId(memberId, isaAccountProductEditListReq);
+		isaAccountService.editMemberProductsByMemberId(customUserDetails.getId(), isaAccountProductEditListReq);
 
 		return ResponseEntity.ok(Response.ok());
 	}
