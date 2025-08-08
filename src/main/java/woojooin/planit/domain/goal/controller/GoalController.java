@@ -3,19 +3,21 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
+import woojooin.planit.domain.goal.service.GoalSettingService;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.Response;
 import lombok.RequiredArgsConstructor;
+import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import woojooin.planit.domain.goal.domain.Goal;
 import woojooin.planit.domain.goal.dto.GoalRequestDto;
-import woojooin.planit.domain.goal.service.GoalSettingService;
 import woojooin.planit.global.response.ResponseCode;
 import woojooin.planit.global.security.CustomUserDetails;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth/api/goals")
@@ -81,4 +83,14 @@ public class GoalController {
 
         return ResponseEntity.ok(Response.ok());
     }
+    @GetMapping("/{goalId}/rate")
+    @ApiOperation(value = "목표 대비 계좌별 진행률", notes = "계좌 잔액과 할당 비율 기준 목표 대비 진행률(%) 반환")
+    public Response<List<GoalAccountRateResponse>> getGoalAccountRates(@PathVariable("goalId") Long goalId) {
+        List<GoalAccountRateResponse> list = goalService.getGoalAccountRates(goalId);
+        return Response.ok(list);
+    }
+
 }
+
+
+

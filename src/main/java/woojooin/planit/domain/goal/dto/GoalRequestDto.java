@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class GoalRequestDto {
     @NotBlank(message = "목표명을 입력하세요")
-    private String objectName;
+    private String goalName;
 
     @NotNull
     @Min(1)
@@ -37,7 +37,7 @@ public class GoalRequestDto {
 
     public Goal toEntity() {
         return Goal.builder()
-                .objectName(objectName)
+                .goalName(goalName)
                 .targetAmount(targetAmount)
                 .startDate(startDate)
                 .endDate(endDate)

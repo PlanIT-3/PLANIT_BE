@@ -5,9 +5,9 @@
 <mapper namespace="woojooin.planit.domain.goal.mapper.GoalMapper">
 
     <resultMap id="GoalResultMap" type="woojooin.planit.domain.goal.domain.Goal">
-        <id property="objectId" column="object_id"/>
+        <id property="goalId" column="goal_id"/>
         <result property="memberId" column="member_id"/>
-        <result property="objectName" column="object_name"/>
+        <result property="goalName" column="goal_name"/>
         <result property="targetAmount" column="target_amount"/>
         <result property="startDate" column="start_date"/>
         <result property="endDate" column="end_date"/>
@@ -17,12 +17,12 @@
         <result property="goalRate" column="goal_rate"/>
     </resultMap>
 
-    <insert id="insertGoal" parameterType="woojooin.planit.domain.goal.domain.Goal" useGeneratedKeys="true" keyProperty="objectId">
-    insert  into `goal`  (member_id, object_name, target_amount, start_date, end_date,
+    <insert id="insertGoal" parameterType="woojooin.planit.domain.goal.domain.Goal" useGeneratedKeys="true" keyProperty="goalId">
+    insert  into `goal`  (member_id, goal_name, target_amount, start_date, end_date,
             deposit_rate, isa_rate, start_amount, goal_rate
         )
     VALUES (
-        #{memberId}, #{objectName}, #{targetAmount}, #{startDate}, #{endDate},
+        #{memberId}, #{goalName}, #{targetAmount}, #{startDate}, #{endDate},
         #{depositRate}, #{isaRate}, #{startAmount}, #{goalRate}
         )
     </insert>
@@ -31,7 +31,7 @@
     <update id="updateGoal" parameterType="woojooin.planit.domain.goal.domain.Goal">
         UPDATE `goal`
         SET
-            object_name = #{objectName},
+            goal_name = #{goalName},
             target_amount = #{targetAmount},
             start_date = #{startDate},
             end_date = #{endDate},
@@ -39,38 +39,32 @@
             deposit_rate = #{depositRate},
             start_amount = #{startAmount},
             goal_rate = #{goalRate}
-        WHERE object_id = #{objectId} AND member_id = #{memberId}
+        WHERE goal_id = #{goalId} AND member_id = #{memberId}
         /*goal.getGoaldID*/
     </update>
 
     <select id="selectGoalById" resultMap="GoalResultMap" >
         SELECT
-            object_id, member_id, object_name, target_amount,
+            goal_id, member_id, goal_id, target_amount,
             start_date, end_date, deposit_rate, isa_rate,
             start_amount, goal_rate
         FROM `goal`
-        WHERE object_id = #{objectId} AND member_id = #{memberId}
+        WHERE goal_id = #{goalId} AND member_id = #{memberId}
     </select>
 
 
 
     <select id="selectAllGoals" resultMap="GoalResultMap" parameterType="Long">
         SELECT
-            object_id, member_id, object_name, target_amount,
+            goal_id, member_id, goal_name, target_amount,
             start_date, end_date, deposit_rate, isa_rate,
             start_amount, goal_rate
         FROM `goal`
         WHERE member_id = #{memberId}
-        ORDER BY object_id DESC
+        ORDER BY goal_id DESC
     </select>
 
-    <delete id="deleteGoal" >
-        delete from `goal`
-               where object_id = #{objectId} AND member_id = #{memberId}
-    </delete>
-
-
-    <select id="findAllocatedIsaByGoal" resultType="woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes">
+    <select id="findAllocatedIsaByGoal" resultType="woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes">
         SELECT
             mp.member_product_id   AS memberProductId,
             mp.item_name           AS itemName,
@@ -86,7 +80,7 @@
         ORDER BY mp.member_product_id DESC
     </select>
 
-    <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes">
+    <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes">
         SELECT
             mp.member_product_id   AS memberAccountId,
             mp.item_name           AS accountName,
@@ -103,5 +97,27 @@
           AND (a.is_deleted IS NULL OR a.is_deleted = false)
         ORDER BY mp.member_product_id DESC
     </select>
+
+    <delete id="deleteGoal" >
+        delete from `goal`
+        where goal_id = #{goalId} AND member_id = #{memberId}
+    </delete>
+
+    <select id="getGoalAccountRates" resultType="java.util.Map">
+        SELECT a.bank_code                AS bankCode,
+               a.account_balance          AS accountBalance,
+               act.account_allocated_rate AS allocatedRate
+        FROM action act
+                 JOIN account a ON act.account_id = a.account_id
+        WHERE act.goal_id = #{goalId}
+          AND act.is_deleted = 0
+          AND a.is_deleted = 0
+    </select>
+    <select id="getTargetAmountByGoalId" resultType="java.lang.Long">
+        SELECT target_amount
+        FROM goal
+        WHERE goal_id = #{goalId}
+    </select>
+
 </mapper>
 

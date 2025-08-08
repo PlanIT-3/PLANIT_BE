@@ -3,26 +3,25 @@ package woojooin.planit.domain.goal.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import woojooin.planit.domain.goal.domain.Goal;
 
+import woojooin.planit.domain.goal.domain.Bank;
+import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
 import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
 import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
-import woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes;
-import woojooin.planit.domain.object.deposit.service.DepositService;
-import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
-import woojooin.planit.domain.object.isa.service.IsaAccountService;
+import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
+import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class GoalSettingService {
-
     private final GoalMapper goalMapper;
 
 
@@ -55,7 +54,7 @@ public class GoalSettingService {
         long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 
         return GoalDetailResponseDto.builder()
-                .objectName(goal.getObjectName())
+                .goalName(goal.getGoalName())
                 .targetAmount(goal.getTargetAmount())
                 .totalAmount(totalCurrentAmount)
                 .goalRate(goal.getGoalRate())
@@ -78,15 +77,15 @@ public class GoalSettingService {
             return Collections.emptyList();
         }
         return goals.stream().map(goal -> {
-            List<IsaAccountProductRes> isaList = goalMapper.findAllocatedIsaByGoal(memberId, goal.getObjectId());
-            List<DepositAccountRes> depositList = goalMapper.findAllocatedDepositByGoal(memberId, goal.getObjectId());
+            List<IsaAccountProductRes> isaList = goalMapper.findAllocatedIsaByGoal(memberId, goal.getGoalId());
+            List<DepositAccountRes> depositList = goalMapper.findAllocatedDepositByGoal(memberId, goal.getGoalId());
 
             long totalIsaAmount = isaList.stream().mapToLong(i -> i.getPresentAmount().longValue()).sum();
             long totalDepositAmount = depositList.stream().mapToLong(DepositAccountRes::getAllocatedAmount).sum();
             long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 
             return GoalDetailResponseDto.builder()
-                    .objectName(goal.getObjectName())
+                    .goalName(goal.getGoalName())
                     .targetAmount(goal.getTargetAmount())
                     .totalAmount(totalCurrentAmount)
                     .goalRate(goal.getGoalRate())
@@ -103,7 +102,7 @@ public class GoalSettingService {
     @Transactional
     public Goal updateGoal(Long memberId, Long goalId, GoalRequestDto requestDto) {
         Goal updatedGoal = requestDto.toEntity();
-        updatedGoal.setObjectId(goalId);
+        updatedGoal.setGoalId(goalId);
         updatedGoal.setMemberId(memberId);
 
         goalMapper.updateGoal(updatedGoal);
@@ -114,6 +113,28 @@ public class GoalSettingService {
     public void deleteGoal(Long goalId, Long memberId) {
         goalMapper.deleteGoal(goalId, memberId);
     }
+    public List<GoalAccountRateResponse> getGoalAccountRates(Long goalId) {
+        Long targetAmount = goalMapper.getTargetAmountByGoalId(goalId);
 
+        if (targetAmount == null) {
+            throw new IllegalArgumentException("해당 goalId의 목표 금액이 존재하지 않습니다: " + goalId);
+        }
+
+        List<Map<String, Object>> rows = goalMapper.getGoalAccountRates(goalId);
+
+        return rows.stream()
+                .map(row -> {
+                    String bankCode = (String) row.get("bankCode");
+                    String bankName = Bank.getNameByCode(bankCode);
+
+                    long accountBalance = ((Number) row.get("accountBalance")).longValue();
+                    int accountAllocatedRate = ((Number) row.get("allocatedRate")).intValue();
+
+                    double progress = (accountBalance * (accountAllocatedRate / 100.0)) / targetAmount * 100;
+
+                    return new GoalAccountRateResponse(bankName, progress);
+                })
+                .collect(Collectors.toList());
+    }
 
 }
