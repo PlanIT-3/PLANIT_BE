@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.isa.service.IsaAccountService;
@@ -104,5 +105,10 @@ public class GoalSettingService {
     //목표 삭제
     public int deleteGoal(Long objectId, Long memberId) {
         return goalMapper.deleteGoal(objectId, memberId);
+    }
+
+
+    public List<GoalProgressGraphDTO> getGoalProgressByGoalId(int goalId) {
+        return goalMapper.selectGoalProgressByGoalId(goalId);
     }
 }
