@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import woojooin.planit.domain.goal.domain.Bank;
 import woojooin.planit.domain.goal.domain.Goal;
-import woojooin.planit.domain.goal.domain.GoalProgress;
 import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;

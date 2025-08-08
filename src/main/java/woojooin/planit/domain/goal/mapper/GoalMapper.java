@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import woojooin.planit.domain.goal.domain.Goal; // 변경된 Goal VO 임포트
-import woojooin.planit.domain.goal.domain.GoalProgress;
 
 import java.util.List;
 import java.util.Map;
