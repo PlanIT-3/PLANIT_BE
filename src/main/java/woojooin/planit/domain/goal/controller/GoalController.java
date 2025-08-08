@@ -3,7 +3,6 @@ package woojooin.planit.domain.goal.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
-import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -78,14 +77,6 @@ public class GoalController {
 			throw new BusinessException(ResponseCode.NOT_FOUND);
 		}
 		return ResponseEntity.ok(Response.ok());
-	}
-
-	@GetMapping("/{goalId}/progress")
-	@ApiOperation(value = "목표 진행 추이", notes = "사용자 목표 진행 추이를 그래프로 나타냄니다.")
-	public Response<List<GoalProgressGraphDTO>> getGoalProgressList(@PathVariable("goalId") Long goalId) {
-		List<GoalProgressGraphDTO> list = goalService.getGoalProgressByGoalId(goalId);
-		return Response.ok(list);
-
 	}
 
 	@GetMapping("/{goalId}/rate")
