@@ -34,6 +34,7 @@ public class IsaAccountService {
 
         try {
             List<IsaAccountProductRes> products = isaAccountMapper.findAllByMemberId(memberId);
+
             return products;
         } catch (Exception e) {
             log.error("[IsaAccountService.getMemberProductsByMemberId()] - failed to retrieve products memberId=\"{}\" error=\"{}\"", memberId, e.getMessage());
@@ -81,13 +82,13 @@ public class IsaAccountService {
         }
     }
 
-    public List<IsaAccountProductRes> findAllByMemberIdAndObjectId(Long memberId, Long objectId) {
+    public List<IsaAccountProductRes> findAllByMemberIdAndGoalId(Long memberId, Long goalId) {
 
         try {
-            List<IsaAccountProductRes> products = isaAccountMapper.findAllByMemberIdAndObjectId(memberId, objectId);
+            List<IsaAccountProductRes> products = isaAccountMapper.findAllByMemberIdAndGoalId(memberId, goalId);
             return products;
         } catch (Exception e) {
-            log.error("[IsaAccountService.findAllByMemberIdAndObjectId()] - failed to retrieve products memberId=\"{}\" objectId=\"{}\" error=\"{}\"", memberId, objectId, e.getMessage());
+            log.error("[IsaAccountService.findAllByMemberIdAndGoalId()] - failed to retrieve products memberId=\"{}\" objectId=\"{}\" error=\"{}\"", memberId, goalId, e.getMessage());
             throw new BusinessException(ResponseCode.ISA_PRODUCT_NOT_FOUND);
         }
     }
@@ -95,7 +96,7 @@ public class IsaAccountService {
     private void validateDuplicateProducts(List<IsaAccountProductRegisterReq> productReqs) {
         Set<Long> memberProductIds = new HashSet<>();
         for (IsaAccountProductRegisterReq req : productReqs) {
-            if (!memberProductIds.add(req.getMemberObjectId())) {
+            if (!memberProductIds.add(req.getMemberProductId())) {
                 throw new BusinessException(ResponseCode.ISA_DUPLICATE_PRODUCT);
             }
         }

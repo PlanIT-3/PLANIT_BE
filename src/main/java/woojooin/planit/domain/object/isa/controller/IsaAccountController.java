@@ -51,9 +51,9 @@ public class IsaAccountController {
 		@ApiParam(value = "회원 ID", required = true, example = "1")
 		@PathVariable Long memberId,
 		@ApiParam(value = "목적 ID", required = true, example = "1")
-		@RequestParam("objectId") Long objectId) {
+		@RequestParam("goalId") Long goalId) {
 
-		List<IsaAccountProductRes> products = isaAccountService.findAllByMemberIdAndObjectId(memberId, objectId);
+		List<IsaAccountProductRes> products = isaAccountService.findAllByMemberIdAndGoalId(memberId, goalId);
 
 		return ResponseEntity.ok(Response.ok(products));
 	}
