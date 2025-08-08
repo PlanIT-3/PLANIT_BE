@@ -29,6 +29,7 @@ public class Account {
 
 	private Boolean isDeleted;              // tinyint(1)
 	private Boolean isIntegrated;           // tinyint(1) - CODEF 연동 여부
+	private int bankCode;
 
 	private LocalDateTime createdAt;        // timestamp
 	private LocalDateTime updatedAt;        // timestamp
