@@ -8,7 +8,6 @@ import woojooin.planit.domain.goal.domain.Goal; // 변경된 Goal VO 임포트
 import java.util.List;
 
 @Mapper
-
 public interface GoalMapper {
     int insertGoal(Goal goal);
     //조회
