@@ -2,6 +2,7 @@ package woojooin.planit.domain.goal.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
 import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.Response;
@@ -86,6 +87,16 @@ public class GoalController {
 		return Response.ok(list);
 
 	}
+
+	@GetMapping("/{goalId}/rate")
+	@ApiOperation(value = "목표 대비 계좌별 진행률", notes = "계좌 잔액과 할당 비율 기준 목표 대비 진행률(%) 반환")
+	public List<GoalAccountRateResponse> getGoalAccountRates(
+		@PathVariable Long goalId,
+		@RequestParam long totalGoalAmount) {  // 전체 목표 금액을 파라미터로 받음
+
+		return goalService.getGoalAccountRates(goalId, totalGoalAmount);
+	}
+
 
 }
 

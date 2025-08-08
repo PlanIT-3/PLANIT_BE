@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import woojooin.planit.domain.goal.domain.Bank;
 import woojooin.planit.domain.goal.domain.Goal;
 import woojooin.planit.domain.goal.domain.GoalProgress;
+import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
 import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
@@ -17,7 +19,9 @@ import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -120,4 +124,23 @@ public class GoalSettingService {
             .map(GoalProgressGraphDTO::fromEntity)
             .toList();
     }
+
+    public List<GoalAccountRateResponse> getGoalAccountRates(Long goalId, long totalGoalAmount) {
+        List<Map<String, Object>> rows = goalMapper.getGoalAccountRates(goalId);
+
+        return rows.stream()
+            .map(row -> {
+                String bankCode = (String) row.get("bankCode");
+                String bankName = Bank.getNameByCode(bankCode);
+
+                long accountActualAmount = ((Number) row.get("accountAmount")).longValue(); // 계좌 잔액
+                int accountAllocatedRate = ((Number) row.get("allocatedRate")).intValue();  // 할당 비율
+
+                double progress = (accountActualAmount * (accountAllocatedRate / 100.0)) / totalGoalAmount * 100;
+
+                return new GoalAccountRateResponse(bankName, progress);
+            })
+            .collect(Collectors.toList());
+    }
+
 }
