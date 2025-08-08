@@ -68,5 +68,40 @@
         delete from `goal`
                where object_id = #{objectId} AND member_id = #{memberId}
     </delete>
+
+
+    <select id="findAllocatedIsaByGoal" resultType="woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes">
+        SELECT
+            mp.member_product_id   AS memberProductId,
+            mp.item_name           AS itemName,
+            mp.present_amount      AS presentAmount,
+            mp.quantity            AS quantity,
+            1                      AS checked
+        FROM action a
+                 JOIN member_product mp ON mp.member_product_id = a.member_product_id
+        WHERE a.goal_id = #{goalId}
+          AND mp.member_id = #{memberId}
+          AND a.account_type = 'ISA'
+          AND (a.is_deleted IS NULL OR a.is_deleted = false)
+        ORDER BY mp.member_product_id DESC
+    </select>
+
+    <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.object.deposit.dto.res.DepositAccountRes">
+        SELECT
+            mp.member_product_id   AS memberAccountId,
+            mp.item_name           AS accountName,
+            mp.item_code           AS accountNumber,
+            mp.present_amount      AS presentAmount,
+            a.amount               AS allocatedAmount, -- action 테이블에 기록된 '할당 금액'
+            1                      AS checked          -- 이미 할당된 상태이므로 checked는 true
+        FROM action a
+                 JOIN member_product mp
+                      ON mp.member_product_id = a.member_product_id
+        WHERE a.goal_id = #{goalId}
+          AND mp.member_id = #{memberId}
+          AND a.account_type = 'DEPOSIT'
+          AND (a.is_deleted IS NULL OR a.is_deleted = false)
+        ORDER BY mp.member_product_id DESC
+    </select>
 </mapper>
 

@@ -34,6 +34,7 @@ public class GoalRequestDto {
     @Min(0) @Max(100)
     private int isaRate;
 
+
     public Goal toEntity() {
         return Goal.builder()
                 .objectName(objectName)
@@ -42,8 +43,8 @@ public class GoalRequestDto {
                 .endDate(endDate)
                 .depositRate(depositRate)
                 .isaRate(isaRate)
-                .startAmount(null)  // 서비스에서 설정
-                .goalRate(null)
+                .startAmount(0L)  // 서비스에서 설정
+                .goalRate(0)
                 .build();
     }
 }

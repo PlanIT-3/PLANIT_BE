@@ -24,4 +24,6 @@ public class Goal {
 
     private Long startAmount;
     private Integer goalRate;      // 목표 달성률
+
+
 }
