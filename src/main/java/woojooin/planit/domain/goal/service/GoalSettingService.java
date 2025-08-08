@@ -25,7 +25,7 @@ public class GoalSettingService {
     //1.  목표 생성
     public void createGoal(Long memberId ,Goal goal) {
         //1. isa 할당한 금액 금액 가져오기
-        List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
+        List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndGoalId(
                 memberId, goal.getObjectId()
         );
 
@@ -73,7 +73,7 @@ public class GoalSettingService {
 
 
     public void updateGoal(Long objectId, Long memberId ,Goal updatedGoal) {
-        List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndObjectId(
+        List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndGoalId(
                 memberId, objectId
         );
         long isaAmount = isaProducts.stream()

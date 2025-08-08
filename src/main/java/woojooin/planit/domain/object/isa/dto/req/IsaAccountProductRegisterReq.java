@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import woojooin.planit.domain.object.action.domain.ActionType;
 
 @Data
 @NoArgsConstructor
@@ -12,24 +11,10 @@ import woojooin.planit.domain.object.action.domain.ActionType;
 public class IsaAccountProductRegisterReq {
 
 	@NonNull
-	private Long objectId;
+	private Long goalId;
 
 	@NonNull
-	private Long memberObjectId;
+	private Long memberProductId;
 
-	@NonNull
-	private String accountNumber;
-
-	private String accountType;
-
-	@NonNull
-	private Integer amount;
-
-	@NonNull
-	private Integer allocatedRate;
-
-	@NonNull
-	private Integer accountAllocatedRate;
-
-	private ActionType actionType = ActionType.ISA;
+	private String accountType = "ISA";
 }
