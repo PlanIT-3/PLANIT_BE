@@ -2,7 +2,7 @@ package woojooin.planit.domain.goal.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
+import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -79,12 +79,11 @@ public class GoalController {
 		return ResponseEntity.ok(Response.ok());
 	}
 
-	@GetMapping("/{goalId}/progress")
-	@ApiOperation(value = "목표 진행 추이", notes = "사용자 목표 진행 추이를 그래프로 나타냄니다.")
-	public Response<List<GoalProgressGraphDTO>> getGoalProgressList(@PathVariable("goalId") Long goalId) {
-		List<GoalProgressGraphDTO> list = goalService.getGoalProgressByGoalId(goalId);
+	@GetMapping("/{goalId}/rate")
+	@ApiOperation(value = "목표 대비 계좌별 진행률", notes = "계좌 잔액과 할당 비율 기준 목표 대비 진행률(%) 반환")
+	public Response<List<GoalAccountRateResponse>> getGoalAccountRates(@PathVariable("goalId") Long goalId) {
+		List<GoalAccountRateResponse> list = goalService.getGoalAccountRates(goalId);
 		return Response.ok(list);
-
 	}
 
 }

@@ -1,14 +1,13 @@
 package woojooin.planit.domain.goal.mapper;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import woojooin.planit.domain.goal.domain.Goal; // 변경된 Goal VO 임포트
-import woojooin.planit.domain.goal.domain.GoalProgress;
-import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 
@@ -23,7 +22,9 @@ public interface GoalMapper {
 
 	int deleteGoal(@Param("objectId") Long objectId, @Param("memberId") Long memberId);
 
-	List<GoalProgress> selectGoalProgressByGoalId(@Param("goalId") Long goalId);
+	@MapKey("bankCode")
+	List<Map<String, Object>> getGoalAccountRates(@Param("goalId")Long goalId);
 
+	Long getTargetAmountByGoalId(Long goalId);
 
 }

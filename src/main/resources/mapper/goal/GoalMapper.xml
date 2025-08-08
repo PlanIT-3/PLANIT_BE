@@ -18,7 +18,7 @@
     </resultMap>
 
     <insert id="insertGoal" parameterType="woojooin.planit.domain.goal.domain.Goal" useGeneratedKeys="true" keyProperty="objectId">
-    insert  into `goal`  (member_id, object_name, target_amount, start_date, end_date,
+    insert  into `goal`  (member_id, goal_name, target_amount, start_date, end_date,
             deposit_rate, isa_rate, start_amount, goal_rate
         )
     VALUES (
@@ -31,7 +31,7 @@
     <update id="updateGoal" parameterType="woojooin.planit.domain.goal.domain.Goal">
         UPDATE `goal`
         SET
-            object_name = #{objectName},
+            goal_name = #{objectName},
             target_amount = #{targetAmount},
             start_date = #{startDate},
             end_date = #{endDate},
@@ -39,43 +39,51 @@
             deposit_rate = #{depositRate},
             start_amount = #{startAmount},
             goal_rate = #{goalRate}
-        WHERE object_id = #{objectId} AND member_id = #{memberId}
+        WHERE goal_id = #{objectId} AND member_id = #{memberId}
         /*goal.getGoaldID*/
     </update>
 
     <select id="selectGoalById" resultMap="GoalResultMap" >
         SELECT
-            object_id, member_id, object_name, target_amount,
+            goal_id, member_id, goal_id, target_amount,
             start_date, end_date, deposit_rate, isa_rate,
             start_amount, goal_rate
         FROM `goal`
-        WHERE object_id = #{objectId} AND member_id = #{memberId}
+        WHERE goal_id = #{objectId} AND member_id = #{memberId}
     </select>
 
 
 
     <select id="selectAllGoals" resultMap="GoalResultMap" parameterType="Long">
         SELECT
-            object_id, member_id, object_name, target_amount,
+            goal_id, member_id, goal_name, target_amount,
             start_date, end_date, deposit_rate, isa_rate,
             start_amount, goal_rate
         FROM `goal`
         WHERE member_id = #{memberId}
-        ORDER BY object_id DESC
+        ORDER BY goal_id DESC
     </select>
 
     <delete id="deleteGoal" >
         delete from `goal`
-               where object_id = #{objectId} AND member_id = #{memberId}
+               where goal_id = #{objectId} AND member_id = #{memberId}
     </delete>
 
-    <select id="selectGoalProgressByGoalId" resultType="woojooin.planit.domain.goal.domain.GoalProgress">
-        SELECT *
-        FROM daily_goal_progress
-        WHERE goal_id = #{goalId}
-        ORDER BY progress_date ASC
+    <select id="getGoalAccountRates" resultType="java.util.Map">
+        SELECT a.bank_code                AS bankCode,
+               a.account_balance          AS accountBalance,
+               act.account_allocated_rate AS allocatedRate
+        FROM action act
+                 JOIN account a ON act.account_id = a.account_id
+        WHERE act.goal_id = #{goalId}
+          AND act.is_deleted = 0
+          AND a.is_deleted = 0
     </select>
-
+    <select id="getTargetAmountByGoalId" resultType="java.lang.Long">
+        SELECT target_amount
+        FROM goal
+        WHERE goal_id = #{goalId}
+    </select>
 
 </mapper>
 
