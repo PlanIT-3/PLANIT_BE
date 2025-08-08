@@ -47,11 +47,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		log.info("Processing JWT authentication for request: {}", request.getRequestURI());
 
 
-		if (request.getRequestURI().startsWith("/test") || request.getRequestURI().startsWith("/api/signup")) {
-			log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
-			filterChain.doFilter(request, response);
-			return;
-		}
+//		if (request.getRequestURI().startsWith("/test") || request.getRequestURI().startsWith("/api/signup")) {
+//			log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
+//			filterChain.doFilter(request, response);
+//			return;
+//		}
 
 		String token = resolveToken(request);
 
@@ -62,9 +62,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				Long userId = jwtTokenProvider.getUserId(token);
 
 				Member member = memberService.findById(userId);
+
 				if (member == null) {
 					log.warn("Member not found for userId: {}", userId);
-					sendErrorResponse(response, "USER_NOT_FOUND", "사용자를 찾을 수 없습니다.");
+					sendErrorResponse(response, "USER_NOT_FOUND", "사용자를 찾을 수 없습니다!!!!!");
 					return;
 				}
 
@@ -83,14 +84,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					return;
 				}
 
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+				UserDetails userDetails = userDetailsService.loadUserByMemberId(userId);
 
 				UsernamePasswordAuthenticationToken auth =
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			} catch (Exception e) {
-				log.error("JWT authentication error: {}", e.getMessage());
+				log.error("JWT authentication error: {}", e);
 				sendErrorResponse(response, "JWT_AUTH_ERROR", "JWT 인증 오류가 발생했습니다.");
 				return;
 			}
