@@ -1,4 +1,4 @@
-package woojooin.planit.domain.object.isa.service;
+package woojooin.planit.domain.goal.isa.service;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,16 +9,16 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductEditListReq;
-import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductEditReq;
-import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductRegisterListReq;
-import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductRegisterReq;
-import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
-import woojooin.planit.domain.object.isa.mapper.IsaAccountMapper;
+import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductEditListReq;
+import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductEditReq;
+import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductRegisterListReq;
+import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductRegisterReq;
+import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
+import woojooin.planit.domain.goal.isa.dto.res.IsaAccountTaxExemptionRes;
+import woojooin.planit.domain.goal.isa.mapper.IsaAccountMapper;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
 
@@ -99,6 +99,24 @@ public class IsaAccountService {
             if (!memberProductIds.add(req.getMemberProductId())) {
                 throw new BusinessException(ResponseCode.ISA_DUPLICATE_PRODUCT);
             }
+        }
+    }
+
+    public IsaAccountTaxExemptionRes getIsaAccountTaxExemptionByMemberId(Long memberId) {
+        try {
+            Long isaProfit = isaAccountMapper.getTotalIsaProfitByMemberId(memberId);
+            
+            long taxSavedAmount = 0L;
+            if (isaProfit != null && isaProfit > 2000000L) {
+                long excessAmount = isaProfit - 2000000L;
+                taxSavedAmount = (long) (excessAmount * 0.099);
+            }
+            
+            return new IsaAccountTaxExemptionRes(taxSavedAmount);
+            
+        } catch (Exception e) {
+            log.error("[IsaAccountService.getIsaAccountTaxExemptionByMemberId()] - failed to calculate tax exemption memberId=\"{}\" error=\"{}\"", memberId, e.getMessage());
+            throw new BusinessException(ResponseCode.ISA_TAX_CALCULATION_FAILED);
         }
     }
 }

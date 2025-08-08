@@ -1,4 +1,4 @@
-package woojooin.planit.domain.object.isa.controller;
+package woojooin.planit.domain.goal.isa.controller;
 
 import java.util.List;
 
@@ -17,10 +17,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductEditListReq;
-import woojooin.planit.domain.object.isa.dto.req.IsaAccountProductRegisterListReq;
-import woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes;
-import woojooin.planit.domain.object.isa.service.IsaAccountService;
+import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductEditListReq;
+import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductRegisterListReq;
+import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
+import woojooin.planit.domain.goal.isa.dto.res.IsaAccountTaxExemptionRes;
+import woojooin.planit.domain.goal.isa.service.IsaAccountService;
 import woojooin.planit.global.response.Response;
 import woojooin.planit.global.security.CustomUserDetails;
 
@@ -79,5 +80,17 @@ public class IsaAccountController {
 		isaAccountService.editMemberProductsByMemberId(customUserDetails.getId(), isaAccountProductEditListReq);
 
 		return ResponseEntity.ok(Response.ok());
+	}
+
+	@GetMapping("/tax")
+	@ApiOperation(value = "유저의 ISA 비과세 조회 API",
+		notes = "특정 회원의 ISA 비과세 조회합니다.")
+	public ResponseEntity<Response<IsaAccountTaxExemptionRes>> getIsaAccountTaxExemption(
+		@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+
+		IsaAccountTaxExemptionRes isaAccountTaxExemptionByMemberId = isaAccountService.getIsaAccountTaxExemptionByMemberId(
+			customUserDetails.getId());
+
+		return ResponseEntity.ok(Response.ok(isaAccountTaxExemptionByMemberId));
 	}
 }
