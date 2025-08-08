@@ -56,12 +56,12 @@
 
     <select id="selectAllGoals" resultMap="GoalResultMap" parameterType="Long">
         SELECT
-            object_id, member_id, object_name, target_amount,
+            goal_id, member_id, goal_name, target_amount,
             start_date, end_date, deposit_rate, isa_rate,
             start_amount, goal_rate
         FROM `goal`
         WHERE member_id = #{memberId}
-        ORDER BY object_id DESC
+        ORDER BY goal_id DESC
     </select>
 
     <delete id="deleteGoal" >

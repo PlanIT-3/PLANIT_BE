@@ -26,7 +26,7 @@ public class GoalSettingService {
     public void createGoal(Long memberId ,Goal goal) {
         //1. isa 할당한 금액 금액 가져오기
         List<IsaAccountProductRes> isaProducts = isaAccountService.findAllByMemberIdAndGoalId(
-                memberId, goal.getObjectId()
+                memberId, goal.getGoaltId()
         );
 
         //2. isa 금액 합산
@@ -83,7 +83,7 @@ public class GoalSettingService {
         long startAmount = isaAmount + savingAmount;
 
         updatedGoal.setStartAmount(startAmount);
-        updatedGoal.setObjectId(objectId);
+        updatedGoal.setGoaltId(objectId);
         updatedGoal.setMemberId(memberId);
 
 
