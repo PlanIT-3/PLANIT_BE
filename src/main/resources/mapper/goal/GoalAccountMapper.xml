@@ -55,4 +55,13 @@
           AND act.account_type = 'Deposit'
     </select>
 
+    <select id="getTargetAmount" parameterType="map"
+            resultType="java.math.BigDecimal">
+        SELECT
+            g.target_amount
+        FROM goal g
+        WHERE g.member_id = #{memberId}
+          AND g.goal_id = #{goalId}
+    </select>
+
 </mapper>

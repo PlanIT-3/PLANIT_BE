@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import woojooin.planit.global.config.GoalAmountRes;
 import woojooin.planit.global.security.CustomUserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,16 @@ public class GoalAccountController {
 
         // 목표 계좌 조회
         GoalAccountRes response = goalAccountService.getGoalAccountsByMemberId(memberId, goalId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{goalId}/goal-amount")
+    public ResponseEntity<GoalAmountRes> getGoalAmount(@PathVariable Long goalId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getId();
+        log.info("[GoalAccountController.getGoalAmount()] - memberId={}, goalId={}", memberId, goalId);
+
+        // 목표 금액 조회
+        GoalAmountRes response = goalAccountService.getGoalAmountsByMemberId(memberId, goalId);
         return ResponseEntity.ok(response);
     }
 

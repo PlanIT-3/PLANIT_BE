@@ -10,7 +10,10 @@ import woojooin.planit.domain.goal.goalAccount.dto.res.GoalAccountRes;
 import woojooin.planit.domain.goal.goalAccount.dto.res.GoalDepositRes;
 import woojooin.planit.domain.goal.goalAccount.dto.res.GoalIsaRes;
 import woojooin.planit.domain.goal.goalAccount.mapper.GoalAccountMapper;
+import woojooin.planit.global.config.GoalAmountRes;
 
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -37,5 +40,16 @@ public class GoalAccountService {
                 .goalIsaList(isaAccounts)
                 .goalDepositList(depositProducts)
                 .build();
+    }
+
+    public GoalAmountRes getGoalAmountsByMemberId(Long memberId, Long goalId) {
+        BigDecimal targetAmount = BigDecimal.ZERO;
+        GoalAmountRes goalAccountRes = new GoalAmountRes();
+        log.info("[GoalAccountService.getGoalAmountsByMemberId()] - memberId={}, goalId={}", memberId, goalId);
+
+        targetAmount= goalAccountMapper.getTargetAmount(memberId, goalId);
+        goalAccountRes.setTargetAmount(targetAmount);
+        return goalAccountRes;
+
     }
 }
