@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import woojooin.planit.domain.goal.dto.Bank;
+import woojooin.planit.domain.goal.domain.Bank;
 
 import java.math.BigDecimal;
 
