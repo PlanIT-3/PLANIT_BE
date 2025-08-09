@@ -10,6 +10,8 @@
 
     <typeAliases>
         <package name="woojooin.planit.domain.member.domain" />
+        <package name="woojooin.planit.domain.goal.deposit.dto.res" />
+        <package name="woojooin.planit.domain.goal.action.domain" />
     </typeAliases>
 
 </configuration>

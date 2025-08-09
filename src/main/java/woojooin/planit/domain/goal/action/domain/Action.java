@@ -11,7 +11,7 @@ public class Action {
 
 	private Long actionId;
 
-	private Long objectId;
+	private Long goalId;
 
 	private String accountNumber;
 
