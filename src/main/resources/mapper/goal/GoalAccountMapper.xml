@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="woojooin.planit.domain.goal.goalAccount.mapper.GoalAccountMapper">
+
+    <!-- GoalIsaRes ResultMap -->
+    <resultMap id="GoalIsaResultMap" type="woojooin.planit.domain.goal.goalAccount.dto.res.GoalIsaRes">
+        <result property="goalName" column="goal_name"/>
+        <result property="memberProductId" column="member_product_id"/>
+        <result property="itemName" column="item_name"/>
+        <result property="presentAmount" column="present_amount"/>
+        <result property="quantity" column="quantity"/>
+    </resultMap>
+
+    <!-- GoalDepositRes ResultMap -->
+    <resultMap id="GoalDepositResultMap" type="woojooin.planit.domain.goal.goalAccount.dto.res.GoalDepositRes">
+        <result property="accountId" column="account_id"/>
+        <result property="accountBalance" column="account_balance"/>
+        <result property="bankCode" column="bank_code"/>
+    </resultMap>
+
+    <!-- ISA Account -->
+    <select id="findIsaByMemberId" parameterType="map"
+            resultType="woojooin.planit.domain.goal.goalAccount.dto.res.GoalIsaRes">
+        SELECT
+            g.member_id,
+            g.goal_name,
+            mp.member_product_id,
+            mp.item_name,
+            mp.present_amount,
+            mp.quantity
+        FROM goal g
+                 INNER JOIN action act ON g.goal_id = act.goal_id
+                 INNER JOIN member_product mp ON act.member_product_id = mp.member_product_id
+        WHERE g.member_id = #{memberId}
+          AND g.goal_id = #{goalId}
+          AND act.account_type = 'ISA'
+    </select>
+
+    <!-- Deposit Account -->
+    <select id="findDepositByMemberId" parameterType="map"
+            resultType="woojooin.planit.domain.goal.goalAccount.dto.res.GoalDepositRes">
+        SELECT
+            g.goal_name,
+            acc.account_id,
+            acc.account_name,
+            acc.account_balance,
+            acc.bank_code
+        FROM goal g
+                 INNER JOIN action act ON g.goal_id = act.goal_id
+                 INNER JOIN account acc ON act.account_id = acc.account_id
+        WHERE g.member_id = #{memberId}
+          AND g.goal_id = #{goalId}
+          AND act.account_type = 'Deposit'
+    </select>
+
+</mapper>
