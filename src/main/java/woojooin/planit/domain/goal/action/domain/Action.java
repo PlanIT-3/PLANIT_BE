@@ -15,9 +15,8 @@ public class Action {
 
 	private String accountNumber;
 
-	private Long memberProductId;
+	private Long accountId;
 
-	private Integer allocatedRate;
 	private Integer accountAllocatedRate;
 
 	private String accountType;

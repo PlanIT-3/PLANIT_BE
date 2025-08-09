@@ -13,7 +13,7 @@
 
     <!-- 예적금 계좌 조회용 ResultMap -->
     <resultMap id="depositAccountResultMap" type="woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes">
-        <id property="memberAccountId" column="member_product_id"/>
+        <id property="memberAccountId" column="account_id"/>
         <result property="accountNumber" column="account_number"/>
         <result property="accountName" column="account_name"/>
         <result property="accountBalance" column="account_balance"/>
@@ -26,9 +26,8 @@
     <resultMap id="actionResultMap" type="woojooin.planit.domain.goal.action.domain.Action">
         <id property="actionId" column="action_id"/>
         <result property="goalId" column="goal_id"/>
+        <result property="accountId" column="account_id"/>
         <result property="accountNumber" column="account_number"/>
-        <result property="memberProductId" column="member_product_id"/>
-        <result property="allocatedRate" column="allocated_rate"/>
         <result property="accountAllocatedRate" column="account_allocated_rate"/>
         <result property="accountType" column="account_type"/>
         <result property="amount" column="amount"/>
@@ -43,10 +42,10 @@
     -->
     <select id="findAllByMemberId" resultMap="depositAccountResultMap">
         SELECT
-            acc.account_id as member_product_id,
+            acc.account_id,
             acc.account_number,
             acc.account_name,
-            acc.account_balance as present_amount,
+            acc.account_balance,
             0 as allocated_amount,
             acc.account_balance as remaining_amount,
             0 as checked
@@ -58,10 +57,10 @@
 
     <select id="findAllByMemberIdAndGoalId" resultMap="depositAccountResultMap">
         SELECT
-            acc.account_id as member_product_id,
+            acc.account_id,
             acc.account_number,
             acc.account_name,
-            acc.account_balance as present_amount,
+            acc.account_balance,
             1 as checked,
             COALESCE(allocated_sum.total_allocated, 0) as allocated_amount,
             (acc.account_balance - COALESCE(allocated_sum.total_allocated, 0)) as remaining_amount
@@ -92,11 +91,12 @@
     -->
     <select id="findAvailableAccountsByMemberIdAndGoalId" resultMap="depositAccountResultMap">
         SELECT
-            acc.account_id as member_product_id,
+            acc.account_id,
             acc.account_number,
             acc.account_name,
-            acc.account_balance as present_amount,
+            acc.account_balance,
             0 as checked,
+            0 as allocated_amount,
             (acc.account_balance - COALESCE(allocated_sum.total_allocated, 0)) as remaining_amount
         FROM account acc
         -- 각 계좌별로 현재 할당된 총액을 계산하는 서브쿼리
@@ -129,7 +129,6 @@
         goal_id,
         account_number,
         account_id,
-        member_product_id,
         account_allocated_rate,
         account_type,
         amount
@@ -139,7 +138,6 @@
             (
             #{req.goalId},
             #{req.accountNumber},
-            #{req.memberAccountId},
             #{req.memberAccountId},
             #{req.accountAllocatedRate},
             #{req.accountType},
@@ -153,17 +151,17 @@
         UPDATE action
         SET is_deleted = CASE
         <foreach collection="requestList" item="req" separator=" ">
-            WHEN goal_id = #{req.goalId} AND member_product_id = #{req.memberAccountId} THEN true
+            WHEN goal_id = #{req.goalId} AND account_id = #{req.memberAccountId} THEN true
         </foreach>
         ELSE is_deleted
         END,
         updated_at = CASE
         <foreach collection="requestList" item="req" separator=" ">
-            WHEN goal_id = #{req.goalId} AND member_product_id = #{req.memberAccountId} THEN NOW()
+            WHEN goal_id = #{req.goalId} AND account_id = #{req.memberAccountId} THEN NOW()
         </foreach>
         ELSE updated_at
         END
-        WHERE (goal_id, member_product_id) IN (
+        WHERE (goal_id, account_id) IN (
         <foreach collection="requestList" item="req" separator=",">
             (#{req.goalId}, #{req.memberAccountId})
         </foreach>
@@ -175,11 +173,10 @@
     <insert id="upsert">
         INSERT INTO action (
         goal_id,
-        member_product_id,
+        account_id,
         account_number,
         account_type,
         amount,
-        allocated_rate,
         account_allocated_rate,
         is_deleted,
         created_at,
@@ -192,7 +189,6 @@
             #{req.accountNumber},
             #{req.accountType},
             #{req.amount},
-            #{req.allocatedRate},
             #{req.accountAllocatedRate},
             false,
             NOW(),
@@ -203,7 +199,6 @@
         account_number = VALUES(account_number),
         account_type = VALUES(account_type),
         amount = VALUES(amount),
-        allocated_rate = VALUES(allocated_rate),
         account_allocated_rate = VALUES(account_allocated_rate),
         is_deleted = false,
         updated_at = NOW()
