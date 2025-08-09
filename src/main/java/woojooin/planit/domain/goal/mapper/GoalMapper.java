@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-
 public interface GoalMapper {
     int insertGoal(Goal goal);
     Goal selectGoalById(@Param("memberId") Long memberId,@Param("goalId") Long goalId);
