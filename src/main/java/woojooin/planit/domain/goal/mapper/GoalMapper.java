@@ -17,10 +17,10 @@ import java.util.Map;
 
 public interface GoalMapper {
     int insertGoal(Goal goal);
-    Goal selectGoalById(@Param("objectId") Long objectId, @Param("memberId") Long memberId);
+    Goal selectGoalById(@Param("memberId") Long memberId,@Param("goalId") Long goalId);
     List<Goal> selectAllGoals(Long memberId);
     int updateGoal(Goal goal);
-    int deleteGoal(@Param("objectId") Long objectId, @Param("memberId") Long memberId);
+    int deleteGoal(@Param("goalId") Long goalId, @Param("memberId") Long memberId);
     List<IsaAccountProductRes> findAllocatedIsaByGoal(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
     List<DepositAccountRes> findAllocatedDepositByGoal(@Param("memberId") Long memberId,@Param("goalId") Long goalId);
     @MapKey("bankCode")

@@ -49,7 +49,7 @@ public class GoalSettingService {
                 .mapToLong(item -> item.getPresentAmount().longValue())
                 .sum();
         long totalDepositAmount = depositAccounts.stream()
-                .mapToLong(DepositAccountRes::getAllocatedAmount)
+                .mapToLong(item -> item.getAllocatedAmount().longValue())
                 .sum();
         long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 
@@ -58,7 +58,10 @@ public class GoalSettingService {
                 .targetAmount(goal.getTargetAmount())
                 .totalAmount(totalCurrentAmount)
                 .goalRate(goal.getGoalRate())
+                .startDate(goal.getStartDate())
                 .endDate(goal.getEndDate())
+                .depositRate(goal.getDepositRate())
+                .isaRate(goal.getIsaRate())
                 .isaProducts(isaItems)
                 .depositAccounts(depositAccounts)
                 .build();
@@ -81,7 +84,9 @@ public class GoalSettingService {
             List<DepositAccountRes> depositList = goalMapper.findAllocatedDepositByGoal(memberId, goal.getGoalId());
 
             long totalIsaAmount = isaList.stream().mapToLong(i -> i.getPresentAmount().longValue()).sum();
-            long totalDepositAmount = depositList.stream().mapToLong(DepositAccountRes::getAllocatedAmount).sum();
+            long totalDepositAmount = depositList.stream()
+                    .mapToLong(item -> item.getAllocatedAmount().longValue())
+                    .sum();
             long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 
             return GoalDetailResponseDto.builder()
@@ -89,7 +94,10 @@ public class GoalSettingService {
                     .targetAmount(goal.getTargetAmount())
                     .totalAmount(totalCurrentAmount)
                     .goalRate(goal.getGoalRate())
+                    .startDate(goal.getStartDate())
                     .endDate(goal.getEndDate())
+                    .depositRate(goal.getDepositRate())
+                    .isaRate(goal.getIsaRate())
                     .isaProducts(isaList)
                     .depositAccounts(depositList)
                     .build();
