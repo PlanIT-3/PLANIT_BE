@@ -24,19 +24,7 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySource({"classpath:/application.properties"})
 @ComponentScan(basePackages = {"woojooin.planit"},
-<<<<<<< Updated upstream
-    excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
-        @ComponentScan.Filter(type = FilterType.ANNOTATION, value = RestController.class)
-    })
-@MapperScan(basePackages  = {
-    "woojooin.planit.domain.member.mapper",
-    "woojooin.planit.domain.account.mapper",  // Account mapper 추가
-    "woojooin.planit.domain.goal.isa.mapper",  // ISA 계좌 mapper 추가
-    "woojooin.planit.domain.goal.deposit.mapper",  // Deposit mapper 추가
-    "woojooin.planit.domain.product.mapper",
-    "woojooin.planit.domain.goal.mapper"  // Goal mapper 추가
-=======
+
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, value = RestController.class)
@@ -47,8 +35,8 @@ import javax.sql.DataSource;
         "woojooin.planit.domain.goal.deposit.mapper",  // Deposit mapper 추가
         "woojooin.planit.domain.product.mapper",
         "woojooin.planit.domain.goal.mapper", // Goal mapper 추가
-        "woojooin.planit.domain.goal.goalAccount.mapper"  // GoalAccount mapper 추가
->>>>>>> Stashed changes
+        "woojooin.planit.domain.goal.goalAccount.mapper",  // GoalAccount mapper 추가
+        "woojooin.planit.domain.account.mapper" // Account mapper 추가
 })
 @Slf4j
 @EnableTransactionManagement
