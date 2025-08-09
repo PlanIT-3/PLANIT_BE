@@ -39,7 +39,8 @@ public class ServletConfig  implements WebMvcConfigurer {
 			.allowedOrigins("http://localhost:5173")
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
 			.allowedHeaders("*")
-			.allowCredentials(true);
+			.allowCredentials(true)
+			.maxAge(3600);
 	}
 
 	@Override
