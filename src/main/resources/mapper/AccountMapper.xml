@@ -43,4 +43,12 @@
         </choose>
     </select>
 
+    <select id="getTotalBalanceByMemberId" parameterType="Long" resultType="java.math.BigDecimal">
+        SELECT 
+            COALESCE(SUM(account_balance), 0) as totalBalance
+        FROM account 
+        WHERE member_id = #{memberId}
+          AND is_deleted = 0
+    </select>
+
 </mapper>

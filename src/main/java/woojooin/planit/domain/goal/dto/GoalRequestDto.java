@@ -36,7 +36,7 @@ public class GoalRequestDto {
 
     public Goal toEntity() {
         return Goal.builder()
-                .objectName(objectName)
+                .goalName(objectName)
                 .targetAmount(targetAmount)
                 .startDate(startDate)
                 .endDate(endDate)

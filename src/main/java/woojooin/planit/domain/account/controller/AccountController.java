@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import woojooin.planit.domain.account.dto.res.BalanceListRes;
 import woojooin.planit.domain.account.service.AccountService;
+import woojooin.planit.domain.goal.dto.res.GoalRatioListRes;
 import woojooin.planit.global.response.Response;
 import woojooin.planit.global.security.CustomUserDetails;
 
@@ -25,10 +26,19 @@ public class AccountController {
 
 	@GetMapping("/{period}")
 	@ApiOperation(value = "기간별 잔고 조회", notes = "사용자의 기간별 잔고를 조회합니다. period: day(일주일), week(6주), month(6개월)")
-	public ResponseEntity<Response<BalanceListRes>> getAccountBalanceForDate(
-		@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable String period) {
+	public ResponseEntity<Response<BalanceListRes>> getAccountBalanceForDate( @PathVariable String period) {
 
-		BalanceListRes balance = accountService.getAccountBalanceForDate(customUserDetails.getId(), period);
+		BalanceListRes balance = accountService.getAccountBalanceForDate(1L, period);
 		return ResponseEntity.ok(Response.ok(balance));
+	}
+
+	@GetMapping("/goal-ratio")
+	@ApiOperation(value = "총 재산에서 목적별 비중 조회", notes = "총 재산에서 목적별 비중을 조회합니다.")
+	public ResponseEntity<Response<GoalRatioListRes>> getGoalRatioBasedOnAccount(
+		@AuthenticationPrincipal CustomUserDetails customUserDetails
+		) {
+
+		GoalRatioListRes goalRatioList = accountService.getGoalRatioBasedOnAccount(customUserDetails.getId());
+		return ResponseEntity.ok(Response.ok(goalRatioList));
 	}
 }
