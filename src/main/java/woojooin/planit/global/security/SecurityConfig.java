@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,14 +31,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.passwordEncoder(passwordEncoder);
 	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
 
-			.authorizeRequests()
-			.antMatchers("/test/**").permitAll()
-			.antMatchers("/api/**").permitAll()
-                .antMatchers("/auth/api/**").permitAll()
+				// ✨ 테스트를 위해 이 한 줄을 추가하세요.
+				.antMatchers("/auth/api/**").permitAll()
+//			.antMatchers("/test/**").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
 
 			.and()

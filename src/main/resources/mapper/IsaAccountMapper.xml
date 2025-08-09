@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="woojooin.planit.domain.object.isa.mapper.IsaAccountMapper">
+<mapper namespace="woojooin.planit.domain.goal.isa.mapper.IsaAccountMapper">
 
     <!-- ISA 계좌 상품 조회용 ResultMap -->
-    <resultMap id="isaAccountProductResultMap" type="woojooin.planit.domain.object.isa.dto.res.IsaAccountProductRes">
+    <resultMap id="isaAccountProductResultMap" type="woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes">
         <id property="memberProductId" column="member_product_id"/>
 
         <result property="presentAmount" column="present_amount"/>
@@ -14,7 +14,7 @@
     </resultMap>
 
     <!-- Action 도메인용 ResultMap -->
-    <resultMap id="actionResultMap" type="woojooin.planit.domain.object.action.domain.Action">
+    <resultMap id="actionResultMap" type="woojooin.planit.domain.goal.action.domain.Action">
         <id property="actionId" column="action_id"/>
         <result property="objectId" column="object_id"/>
         <result property="accountNumber" column="account_number"/>
@@ -24,7 +24,7 @@
         <result property="accountType" column="account_type"/>
         <result property="amount" column="amount"/>
         <result property="actionType" column="action_type"
-                typeHandler="woojooin.planit.domain.object.action.domain.ActionTypeConverter"/>
+                typeHandler="woojooin.planit.domain.goal.action.domain.ActionTypeConverter"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
@@ -143,4 +143,12 @@
         is_deleted = false,
         updated_at = NOW()
     </insert>
+
+    <select id="getTotalIsaProfitByMemberId" resultType="java.lang.Long">
+        SELECT isa_profit
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
 </mapper>
