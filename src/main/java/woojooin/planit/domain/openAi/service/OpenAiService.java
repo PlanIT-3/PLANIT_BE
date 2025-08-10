@@ -64,10 +64,10 @@ public class OpenAiService {
         
         message.append("위 정보를 바탕으로 다음 형식으로 투자 제언을 작성해주세요:\n");
         message.append("{\n");
-        message.append("  \"recommendedInvestmentAmount\": [월별 권장 투자 금액을 숫자 배열로],\n");
+        message.append("  \"recommendedInvestmentAmount\": [6개월의 월별 각각의 권장 투자 금액을 모두 다르게 해서 숫자 배열로],\n");
         message.append("  \"investmentAdvice\": \"구체적인 투자 제언 텍스트\"\n");
         message.append("}\n\n");
-        message.append("JSON 형식으로만 응답해주세요. 제언 텍스트는 2줄 이내로 작성해주세요.\n");
+        message.append("JSON 형식으로만 응답해주세요. 제언 텍스트는 3줄 이내로 작성해주세요.\n");
         
         return message.toString();
     }
@@ -75,7 +75,7 @@ public class OpenAiService {
     private String createAssistantMessage() {
         return "투자자의 위험성향, 과거 투자 성과, 가용 자금을 종합적으로 분석하여 " +
                "개인화된 투자 제언과 월별 권장 투자 금액을 JSON 형식으로 제공해줘. " +
-               "안전성과 수익성의 균형을 고려한 실용적인 조언을 주는데 2줄 이내로 해줘.";
+               "안전성과 수익성의 균형을 고려한 실용적인 조언을 주는데 3줄 이내로 해줘.";
     }
     
     private InvestReportRes parseResponse(String response) {
