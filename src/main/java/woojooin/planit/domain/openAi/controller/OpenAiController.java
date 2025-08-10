@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import woojooin.planit.domain.openAi.dto.res.GoalProgressRes;
 import woojooin.planit.domain.openAi.dto.res.InvestReportRes;
+import woojooin.planit.domain.openAi.dto.res.InvestTypeRes;
 import woojooin.planit.domain.openAi.service.GoalOpenAiService;
 import woojooin.planit.domain.openAi.service.InvestOpenAiService;
+import woojooin.planit.domain.openAi.service.InvestTypeOpenAiService;
 import woojooin.planit.global.security.CustomUserDetails;
 
 @RestController
@@ -23,13 +25,14 @@ import woojooin.planit.global.security.CustomUserDetails;
 public class OpenAiController {
     private final InvestOpenAiService investOpenAiService;
     private final GoalOpenAiService GoalOpenAiService;
+    private final InvestTypeOpenAiService InvestTypeOpenAiService;
 
     @GetMapping("/recommendated-investment")
     public ResponseEntity<InvestReportRes> getInvestmentAdvice(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
 
-        InvestReportRes response = investOpenAiService.getInvestmentAdvice( memberId);
-        
+        InvestReportRes response = investOpenAiService.getInvestmentAdvice(memberId);
+
         log.info("[OpenAiController.getInvestmentAdvice()] - 응답 데이터: {}", response);
         return ResponseEntity.ok(response);
     }
@@ -43,4 +46,13 @@ public class OpenAiController {
         log.info("[OpenAiController.getGoalProgressAdvice()] - 응답 데이터: {}", response);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/invest-type-advice")
+    public ResponseEntity<InvestTypeRes> getInvestTypeAdvice(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getId();
+        InvestTypeRes response = InvestTypeOpenAiService.getInvestTypeAdvice(memberId);
+        log.info("[OpenAiController.getInvestTypeAdvice()] - 응답 데이터: {}", response);
+        return ResponseEntity.ok(response);
+    }
+
 }

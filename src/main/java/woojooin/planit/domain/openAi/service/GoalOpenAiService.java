@@ -69,7 +69,7 @@ public class GoalOpenAiService {
                 "또는 추가적인 투자 전략이 필요한지 등을 포함해주세요.\n" +
                 "그리고, 지금 같은 흐름으로 진행할 경우 목표 달성까지 예상되는 기간과 " +
                 "목표 달성을 위한 추가적인 조언을 포함해주세요.\n" +
-                "5줄 이내로 작성해주세요.\n";
+                "5줄 이내로 작성해주세요. 줄마다 엔터를 쳐서 가독성이 좋게 보여주세요.\n";
     }
 
     private GoalProgressRes parseResponse(String response) {
