@@ -18,6 +18,7 @@ ext {
     javaxVersion = '3.0.0'
     redisVersion = '2.7.18'
     lettuceVersion = '6.1.10.RELEASE'
+    openAiVersion = '2.19.2'
 }
 
 sourceCompatibility = '17'
@@ -117,6 +118,9 @@ dependencies {
     // 레디스
     implementation "org.springframework.data:spring-data-redis:${redisVersion}"
     implementation "io.lettuce:lettuce-core:${lettuceVersion}"
+
+    // OpenAI
+    implementation("com.openai:openai-java:${openAiVersion}")
 }
 
 test {
