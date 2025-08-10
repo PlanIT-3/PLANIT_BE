@@ -29,7 +29,7 @@ public class GoalController {
 
     private Long getCurrentAuthenticatedUserId() {
         // todo 실제 인증 처리 필요
-        return 1L; // 임시 값 사용자 ID
+        return 1L;
     }
 
     @PostMapping
@@ -37,7 +37,7 @@ public class GoalController {
     public ResponseEntity<Response<Goal>> createGoal(
             @Valid @RequestBody GoalRequestDto dto){
             //@AuthenticationPrincipal CustomUserDetails userDetails) {
-//userDetails.getId()
+            //userDetails.getId()
         Long memberId = getCurrentAuthenticatedUserId();
         Goal createdGoal = goalService.createGoal(memberId, dto);
         return ResponseEntity.ok(Response.ok(createdGoal));
@@ -55,7 +55,7 @@ public class GoalController {
     @ApiOperation(value = "목표 조회 ", notes = "사용자의 특정 목표를 조회합니다")
     public ResponseEntity<Response<GoalDetailResponseDto>> getGoalDetail(
             @PathVariable Long goalId){
-//    @AuthenticationPrincipal CustomUserDetails userDetails)
+            //@AuthenticationPrincipal CustomUserDetails userDetails)
         Long memberId = getCurrentAuthenticatedUserId();
         GoalDetailResponseDto response = goalService.getGoalDetail(memberId, goalId);
         return ResponseEntity.ok(Response.ok(response));
@@ -83,6 +83,7 @@ public class GoalController {
 
         return ResponseEntity.ok(Response.ok());
     }
+
     @GetMapping("/{goalId}/rate")
     @ApiOperation(value = "목표 대비 계좌별 진행률", notes = "계좌 잔액과 할당 비율 기준 목표 대비 진행률(%) 반환")
     public Response<List<GoalAccountRateResponse>> getGoalAccountRates(@PathVariable("goalId") Long goalId) {

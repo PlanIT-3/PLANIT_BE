@@ -53,7 +53,6 @@
     </select>
 
 
-
     <select id="selectAllGoals" resultMap="GoalResultMap" parameterType="Long">
         SELECT
             goal_id, member_id, goal_name, target_amount,
@@ -82,7 +81,7 @@
 
     <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes">
         select
-acc.account_id as member_product_id,
+            acc.account_id as member_product_id,
             acc.account_number,
             acc.account_name,
             acc.account_balance as present_amount,
@@ -123,6 +122,7 @@ acc.account_id as member_product_id,
           AND act.is_deleted = 0
           AND a.is_deleted = 0
     </select>
+
     <select id="getTargetAmountByGoalId" resultType="java.lang.Long">
         SELECT target_amount
         FROM goal

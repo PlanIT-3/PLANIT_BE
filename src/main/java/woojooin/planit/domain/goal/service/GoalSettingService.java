@@ -14,6 +14,8 @@ import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
 import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
+
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -46,18 +48,26 @@ public class GoalSettingService {
         List<DepositAccountRes> depositAccounts = goalMapper.findAllocatedDepositByGoal(memberId, goalId);
 
         long totalIsaAmount = isaItems.stream()
-                .mapToLong(item -> item.getPresentAmount().longValue())
+                .mapToLong(item -> item.getPresentAmount().multiply(item.getQuantity()!=null? BigDecimal.valueOf(item.getQuantity()):BigDecimal.ONE)
+                        .longValue())
                 .sum();
+
         long totalDepositAmount = depositAccounts.stream()
                 .mapToLong(item -> item.getAllocatedAmount().longValue())
                 .sum();
+
         long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
+
+        int goalRate = 0;
+        if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
+            goalRate = (int) Math.floor((double) totalCurrentAmount * 100 / goal.getTargetAmount());
+        }
 
         return GoalDetailResponseDto.builder()
                 .goalName(goal.getGoalName())
                 .targetAmount(goal.getTargetAmount())
                 .totalAmount(totalCurrentAmount)
-                .goalRate(goal.getGoalRate())
+                .goalRate(goalRate)
                 .startDate(goal.getStartDate())
                 .endDate(goal.getEndDate())
                 .depositRate(goal.getDepositRate())
@@ -83,17 +93,31 @@ public class GoalSettingService {
             List<IsaAccountProductRes> isaList = goalMapper.findAllocatedIsaByGoal(memberId, goal.getGoalId());
             List<DepositAccountRes> depositList = goalMapper.findAllocatedDepositByGoal(memberId, goal.getGoalId());
 
-            long totalIsaAmount = isaList.stream().mapToLong(i -> i.getPresentAmount().longValue()).sum();
+            long totalIsaAmount =
+                    isaList.stream()
+                            .map(i -> {
+                                BigDecimal price = i.getPresentAmount(); // 단가
+                                BigDecimal qty   = i.getQuantity() != null
+                                        ? BigDecimal.valueOf(i.getQuantity())  // Integer → BigDecimal
+                                        : BigDecimal.ONE;
+                                return price.multiply(qty);                    // 총액
+                            })
+                            .reduce(BigDecimal.ZERO, BigDecimal::add)
+                            .longValue();
+
             long totalDepositAmount = depositList.stream()
                     .mapToLong(item -> item.getAllocatedAmount().longValue())
                     .sum();
             long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
-
+            int goalRate = 0;
+            if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
+                goalRate = (int) Math.floor((double) totalCurrentAmount * 100 / goal.getTargetAmount());
+            }
             return GoalDetailResponseDto.builder()
                     .goalName(goal.getGoalName())
                     .targetAmount(goal.getTargetAmount())
                     .totalAmount(totalCurrentAmount)
-                    .goalRate(goal.getGoalRate())
+                    .goalRate(goalRate)
                     .startDate(goal.getStartDate())
                     .endDate(goal.getEndDate())
                     .depositRate(goal.getDepositRate())
@@ -121,6 +145,9 @@ public class GoalSettingService {
     public void deleteGoal(Long goalId, Long memberId) {
         goalMapper.deleteGoal(goalId, memberId);
     }
+
+
+
     public List<GoalAccountRateResponse> getGoalAccountRates(Long goalId) {
         Long targetAmount = goalMapper.getTargetAmountByGoalId(goalId);
 
@@ -144,5 +171,7 @@ public class GoalSettingService {
                 })
                 .collect(Collectors.toList());
     }
+
+
 
 }

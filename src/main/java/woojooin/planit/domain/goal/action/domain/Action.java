@@ -18,15 +18,16 @@ public class Action {
 	private Long memberProductId;
 
 	private Integer allocatedRate;
+
 	private Integer accountAllocatedRate;
 
 	private String accountType;
 
 	private Integer amount;
 
-
 	private ActionType actionType;
 
 	private LocalDateTime createdAt;
+
 	private LocalDateTime updatedAt;
 }
