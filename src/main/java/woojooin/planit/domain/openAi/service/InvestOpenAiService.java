@@ -13,7 +13,7 @@ import woojooin.planit.global.util.openAi.OpenAiUtil;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OpenAiService {
+public class InvestOpenAiService {
     
     private final OpenAiUtil openAiUtil;
     private final InvestReportMapper investReportMapper;

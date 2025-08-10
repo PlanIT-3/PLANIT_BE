@@ -6,11 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import woojooin.planit.domain.openAi.dto.req.InvestReportReq;
+import woojooin.planit.domain.openAi.dto.res.GoalProgressRes;
 import woojooin.planit.domain.openAi.dto.res.InvestReportRes;
-import woojooin.planit.domain.openAi.service.OpenAiService;
+import woojooin.planit.domain.openAi.service.GoalOpenAiService;
+import woojooin.planit.domain.openAi.service.InvestOpenAiService;
 import woojooin.planit.global.security.CustomUserDetails;
 
 @RestController
@@ -19,15 +21,26 @@ import woojooin.planit.global.security.CustomUserDetails;
 @Slf4j
 @RequiredArgsConstructor
 public class OpenAiController {
-    private final OpenAiService openAiService;
+    private final InvestOpenAiService investOpenAiService;
+    private final GoalOpenAiService GoalOpenAiService;
 
     @GetMapping("/recommendated-investment")
     public ResponseEntity<InvestReportRes> getInvestmentAdvice(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
 
-        InvestReportRes response = openAiService.getInvestmentAdvice( memberId);
+        InvestReportRes response = investOpenAiService.getInvestmentAdvice( memberId);
         
         log.info("[OpenAiController.getInvestmentAdvice()] - 응답 데이터: {}", response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{goalId}/goal-progress")
+    public ResponseEntity<GoalProgressRes> getGoalProgressAdvice(@PathVariable Long goalId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getId();
+
+        GoalProgressRes response = GoalOpenAiService.getGoalProgressAdvice(memberId, goalId);
+
+        log.info("[OpenAiController.getGoalProgressAdvice()] - 응답 데이터: {}", response);
         return ResponseEntity.ok(response);
     }
 }
