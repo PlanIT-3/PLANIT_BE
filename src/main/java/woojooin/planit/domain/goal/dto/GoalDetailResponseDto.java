@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GoalDetailResponseDto {
+    private Long goalId;
     private String goalName;
     private Long targetAmount;
     private Long totalAmount;
