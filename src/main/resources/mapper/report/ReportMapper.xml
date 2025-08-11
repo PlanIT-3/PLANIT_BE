@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "woojooin.planit.domain.report.mapper.ReportMapper">
+
+<select id="findReturnRateByType" resultType="woojooin.planit.domain.report.domain.ReturnRateDto">
+    select
+        return_date AS date,
+        return_rate AS rate
+    from investment_return
+    where member_id=#{memberId}
+      AND return_type = #{returnType}
+    <if test="startDate != null">
+        AND return_date &lt;= #{startDate}
+    </if>
+    ORDER BY return_date DESC
+        LIMIT 7
+</select>
+</mapper>
