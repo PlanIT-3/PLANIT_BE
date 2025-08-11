@@ -13,8 +13,8 @@
                     updated_at as updatedAt
                 FROM daily_balance 
                 WHERE member_id = #{memberId}
-                  AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-                ORDER BY created_at
+                  AND created_at >= #{startDate}
+                ORDER BY member_id, created_at
             </when>
             <when test="period == 'week'">
                 SELECT 
@@ -24,7 +24,7 @@
                     MAX(updated_at) as updatedAt
                 FROM daily_balance 
                 WHERE member_id = #{memberId}
-                  AND created_at >= DATE_SUB(NOW(), INTERVAL 6 WEEK)
+                  AND created_at >= #{startDate}
                 GROUP BY member_id, YEAR(created_at), WEEK(created_at, 1)
                 ORDER BY createdAt
             </when>
@@ -36,7 +36,7 @@
                     MAX(updated_at) as updatedAt
                 FROM daily_balance 
                 WHERE member_id = #{memberId}
-                  AND created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                  AND created_at >= #{startDate}
                 GROUP BY member_id, YEAR(created_at), MONTH(created_at)
                 ORDER BY createdAt
             </when>

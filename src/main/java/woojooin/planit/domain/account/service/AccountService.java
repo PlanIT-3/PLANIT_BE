@@ -2,6 +2,8 @@ package woojooin.planit.domain.account.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +29,8 @@ public class AccountService {
 	private final GoalMapper goalMapper;
 
 	public BalanceListRes getAccountBalanceForDate(Long memberId, String period) {
-		List<BalanceData> balanceDataList = accountMapper.getBalanceByMemberIdAndPeriod(memberId, period);
+		String startDate = calculateStartDate(period);
+		List<BalanceData> balanceDataList = accountMapper.getBalanceByMemberIdAndPeriod(memberId, period, startDate);
 		
 		List<BalanceRes> balanceRes = balanceDataList.stream()
 				.map(balance -> new BalanceRes(
@@ -36,6 +39,28 @@ public class AccountService {
 				.collect(Collectors.toList());
 		
 		return new BalanceListRes(balanceRes);
+	}
+	
+	private String calculateStartDate(String period) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime startDateTime;
+		
+		switch (period) {
+			case "day":
+				startDateTime = now.minusDays(7);
+				break;
+			case "week":
+				startDateTime = now.minusWeeks(6);
+				break;
+			case "month":
+				startDateTime = now.minusMonths(6);
+				break;
+			default:
+				startDateTime = now.minusDays(7);
+				break;
+		}
+		
+		return startDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 	public GoalRatioListRes getGoalRatioBasedOnAccount(Long memberId) {
