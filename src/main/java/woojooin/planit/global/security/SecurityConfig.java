@@ -65,17 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
       
         return source;
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-//			.antMatchers("/test/**").permitAll()
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/auth/api/**").permitAll()
-                .anyRequest().authenticated()
-
-                .and()
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
