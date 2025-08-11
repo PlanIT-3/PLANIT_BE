@@ -48,9 +48,9 @@ public class AuthService {
 			Long userId = userDetails.getId();
 			String role = userDetails.getRole();
 
+
 			String accessToken = jwtTokenProvider.createValidatedAccessToken(userId, role);
 			String refreshToken =   jwtTokenProvider.createValidatedRefreshToken(userId, role);
-
 			// Redis에 Refresh Token 저장
 			tokenRepository.saveToken(refreshToken, userId, refreshTokenExpirationMillis/ 1000);
 
