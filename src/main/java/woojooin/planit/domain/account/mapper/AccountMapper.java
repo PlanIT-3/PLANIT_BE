@@ -11,7 +11,7 @@ import woojooin.planit.domain.account.domain.BalanceData;
 @Mapper
 public interface AccountMapper {
 
-	List<BalanceData> getBalanceByMemberIdAndPeriod(@Param("memberId") Long memberId, @Param("period") String period);
+	List<BalanceData> getBalanceByMemberIdAndPeriod(@Param("memberId") Long memberId, @Param("period") String period, @Param("startDate") String startDate);
 	
 	BigDecimal getTotalBalanceByMemberId(@Param("memberId") Long memberId);
 }

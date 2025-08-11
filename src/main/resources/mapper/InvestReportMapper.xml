@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="woojooin.planit.domain.openAi.mapper.InvestReportMapper">
+
+    <!-- 멤버의 월별 투자 금액 조회 (최근 6개월) -->
+    <select id="getMonthlyInvestmentAmount" parameterType="Long" resultType="java.math.BigDecimal">
+        SELECT monthly_total_amount 
+        FROM monthly_report 
+        WHERE member_id = #{memberId} 
+        AND is_deleted = 0 
+        ORDER BY created_at DESC 
+        LIMIT 6
+    </select>
+
+    <!-- 멤버의 월별 평가 금액 조회 (최근 6개월) -->
+    <select id="getMonthlyEvaluationAmount" parameterType="Long" resultType="java.math.BigDecimal">
+        SELECT monthly_valuation_total 
+        FROM monthly_report 
+        WHERE member_id = #{memberId} 
+        AND is_deleted = 0 
+        ORDER BY created_at DESC 
+        LIMIT 6
+    </select>
+
+    <!-- 멤버의 ETF 수익률 조회 -->
+    <select id="getEtfReturnRate" parameterType="Long" resultType="java.math.BigDecimal">
+        SELECT return_rate
+        FROM investment_return
+        WHERE member_id = #{memberId}
+        AND return_type = "MONTHLY"
+        ORDER BY return_date DESC
+        LIMIT 6
+    </select>
+
+    <!-- 멤버의 위험성향 조회 -->
+    <select id="getRiskProfile" parameterType="Long" resultType="String">
+        SELECT invest_type 
+        FROM member 
+        WHERE member_id = #{memberId}
+    </select>
+
+    <!-- JSON 문자열을 InvestReportRes 객체로 파싱하는 쿼리 -->
+    <select id="parseJsonToInvestReportRes" parameterType="String" resultType="woojooin.planit.domain.openAi.dto.res.InvestReportRes">
+        SELECT 
+            JSON_EXTRACT(#{jsonString}, '$.recommendedInvestmentAmount') as recommendedInvestmentAmount,
+            JSON_EXTRACT(#{jsonString}, '$.investmentAdvice') as investmentAdvice
+        FROM DUAL
+    </select>
+
+</mapper>

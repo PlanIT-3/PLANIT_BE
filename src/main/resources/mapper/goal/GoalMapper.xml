@@ -112,6 +112,13 @@
         where goal_id = #{goalId} AND member_id = #{memberId}
     </delete>
 
+    <select id="selectGoalProgressByGoalId" resultType="woojooin.planit.domain.goal.domain.GoalProgress">
+        SELECT *
+        FROM daily_goal_progress
+        WHERE goal_id = #{goalId}
+        ORDER BY progress_date ASC
+    </select>
+
     <select id="getGoalAccountRates" resultType="java.util.Map">
         SELECT a.bank_code                AS bankCode,
                a.account_balance          AS accountBalance,

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import woojooin.planit.domain.goal.domain.Goal; // 변경된 Goal VO 임포트
+import woojooin.planit.domain.goal.domain.GoalProgress;
 
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
@@ -34,5 +35,6 @@ public interface GoalMapper {
 
     Long getTargetAmountByGoalId(Long goalId);
 
+	  List<GoalProgress> selectGoalProgressByGoalId(@Param("goalId") Long goalId);
 
 }
