@@ -6,9 +6,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.member.domain.Member;
 import woojooin.planit.domain.member.service.MemberService;
+import woojooin.planit.global.response.Response;
 import woojooin.planit.global.security.CustomUserDetails;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/member")
@@ -29,16 +34,13 @@ public class MemberApiController {
         return "Member API OK";
     }
 
-
     @PostMapping("/invest-type")
     @ApiOperation(value = "회원 투자 성향 저장", notes = "로그인 유저의 투자 성향 저장")
-    public ResponseEntity<Void> saveInvestType(
+    public ResponseEntity<Response<Void>> saveInvestType(
             @RequestParam String type,
-            @AuthenticationPrincipal CustomUserDetails user // 네 프로젝트의 Principal 타입
-    ) {
+            @AuthenticationPrincipal CustomUserDetails user) {
         Long memberId = user.getId();
         memberService.updateInvestType(memberId, type);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Response.ok());
     }
-
 }
