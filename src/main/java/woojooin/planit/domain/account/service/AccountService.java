@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import woojooin.planit.domain.account.domain.BalanceData;
@@ -22,7 +21,6 @@ import woojooin.planit.domain.goal.mapper.GoalMapper;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AccountService {
 
 	private final AccountMapper accountMapper;

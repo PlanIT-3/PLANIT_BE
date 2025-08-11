@@ -40,4 +40,18 @@ public class DefaultInvestTypeReq {
         // 공격형: 안정성 10, 수익성 35, 유동성 10, 성장성 35, 분산투자 10
         return new DefaultInvestTypeReq("공격형", 10.0, 35.0, 10.0, 35.0, 10.0);
     }
+
+    public static DefaultInvestTypeReq getInvestType(String investType){
+        if (investType.equals("GROWTH")) {
+            return growth();
+        } else if (investType.equals("NEUTRAL")) {
+            return neutral();
+        } else if (investType.equals("STABLE")) {
+            return stable();
+        } else if (investType.equals("CONSERVATIVE")) {
+            return conservative();
+        }else{
+            return aggressive();
+        }
+    }
 }
