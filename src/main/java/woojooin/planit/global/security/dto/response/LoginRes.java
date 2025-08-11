@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class LoginRes {
+    private String email;
+    private String password;
+    private String username;
     private String accessToken;
     private String refreshToken;
 
