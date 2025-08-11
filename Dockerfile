@@ -11,7 +11,7 @@ RUN rm -rf /usr/local/tomcat/webapps/*
 
 COPY build/libs/PlanIT-Batch-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
-EXPOSE 8081
+EXPOSE 8080
 
 
 ######### container 자체 빌드 ###############
