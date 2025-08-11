@@ -65,7 +65,7 @@ public class IsaAccountController {
 		@AuthenticationPrincipal CustomUserDetails customUserDetails,
 		@RequestBody IsaAccountProductRegisterListReq isaAccountProductRegisterListReq) {
 
-		isaAccountService.registerMemberProductsByMemberId(customUserDetails.getId(), isaAccountProductRegisterListReq);
+		isaAccountService.registerMemberProductsByMemberId(1L, isaAccountProductRegisterListReq);
 
 		return ResponseEntity.ok(Response.ok());
 	}

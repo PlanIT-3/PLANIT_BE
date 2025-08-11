@@ -21,7 +21,7 @@ public class DepositAccountRes {
 
 	private boolean checked;
 
-	private Integer allocatedAmount;  // 현재 할당된 총액
+	private BigDecimal  allocatedAmount;  // 현재 할당된 총액
 	
-	private Integer remainingAmount;  // 할당 가능한 잔여액
+	private BigDecimal  remainingAmount;  // 할당 가능한 잔여액
 }

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Builder
 
 public class Goal {
-    private Long goaltId;
+    private Long goalId;
     private Long memberId;
 
     private String goalName;
