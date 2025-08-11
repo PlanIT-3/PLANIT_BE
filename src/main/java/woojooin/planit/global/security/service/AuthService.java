@@ -47,6 +47,7 @@ public class AuthService {
 			CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
 			Long userId = userDetails.getId();
 			String role = userDetails.getRole();
+			String username = userDetails.getUsername();
 
 
 			String accessToken = jwtTokenProvider.createValidatedAccessToken(userId, role);
@@ -55,7 +56,7 @@ public class AuthService {
 			tokenRepository.saveToken(refreshToken, userId, refreshTokenExpirationMillis/ 1000);
 
 
-			return new LoginRes(accessToken, refreshToken);
+			return new LoginRes(email, password, username, accessToken, refreshToken);
 		} catch (AuthenticationException e) {
 			throw new BusinessException(ResponseCode.INVALID_LOGIN);
 		}
