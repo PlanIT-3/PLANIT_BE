@@ -29,4 +29,8 @@ public class MemberServiceImpl implements MemberService {
     public void update(Member member) {
         memberRepository.update(member);
     }
+    @Override
+    public void updateInvestType(Long memberId, String type) {
+        memberRepository.updateInvestType(memberId, type);
+    }
 }

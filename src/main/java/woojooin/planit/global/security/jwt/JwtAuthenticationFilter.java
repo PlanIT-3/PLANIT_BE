@@ -48,11 +48,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		log.info("Processing JWT authentication for request: {}", request.getRequestURI());
 
 
-		if ( request.getRequestURI().startsWith("/api")) {
-			log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
-			filterChain.doFilter(request, response);
-			return;
-		}
+//		if ( request.getRequestURI().startsWith("/api")) {
+//			log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
+//			filterChain.doFilter(request, response);
+//			return;
+//		}
 
 		String token = resolveToken(request);
 

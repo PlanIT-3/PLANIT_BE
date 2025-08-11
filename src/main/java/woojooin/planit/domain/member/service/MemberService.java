@@ -8,4 +8,5 @@ public interface MemberService {
     Member findByEmail(String email);
     void save(Member member);
     void update(Member member);
+    void updateInvestType(Long memberId, String type);
 }

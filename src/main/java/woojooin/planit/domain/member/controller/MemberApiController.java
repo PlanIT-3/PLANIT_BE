@@ -1,16 +1,22 @@
 package woojooin.planit.domain.member.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import woojooin.planit.domain.member.domain.Member;
+import woojooin.planit.domain.member.service.MemberService;
+import woojooin.planit.global.security.CustomUserDetails;
 
 @RestController
 @RequestMapping("/api/member")
+@RequiredArgsConstructor
 @Api(value = "회원 API", description = "회원 관련 API")
 public class MemberApiController {
-    
+    private final MemberService memberService;
+
     @GetMapping("/test")
     @ApiOperation(value = "회원 테스트 API", notes = "회원 API 테스트")
     public String memberTest() {
@@ -22,4 +28,17 @@ public class MemberApiController {
     public String health() {
         return "Member API OK";
     }
+
+
+    @PostMapping("/invest-type")
+    @ApiOperation(value = "회원 투자 성향 저장", notes = "로그인 유저의 투자 성향 저장")
+    public ResponseEntity<Void> saveInvestType(
+            @RequestParam String type,
+            @AuthenticationPrincipal CustomUserDetails user // 네 프로젝트의 Principal 타입
+    ) {
+        Long memberId = user.getId();
+        memberService.updateInvestType(memberId, type);
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -58,4 +58,10 @@
     <select id="findByEmail" resultMap="MemberResultMap" parameterType="String">
         SELECT * FROM member WHERE email = #{email}
     </select>
+
+    <update id="updateInvestType">
+        UPDATE member
+        SET invest_type = #{type}
+        WHERE member_id = #{memberId}
+    </update>
 </mapper>

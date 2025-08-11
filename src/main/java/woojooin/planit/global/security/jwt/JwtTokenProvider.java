@@ -192,4 +192,3 @@ public class JwtTokenProvider {
         tokenRepository.deleteToken(userId);
     }
 }
-

@@ -28,25 +28,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService)
-			.passwordEncoder(passwordEncoder);
+				.passwordEncoder(passwordEncoder);
 	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-
-				// ✨ 테스트를 위해 이 한 줄을 추가하세요.
-				.antMatchers("/auth/api/**").permitAll()
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				.authorizeRequests()
 //			.antMatchers("/test/**").permitAll()
-                .antMatchers("/api/**").permitAll()
-                .anyRequest().authenticated()
+				.antMatchers("/api/**").permitAll()
+				.antMatchers("/auth/api/**").permitAll()
+				.anyRequest().authenticated()
 
-			.and()
-			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+				.and()
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean

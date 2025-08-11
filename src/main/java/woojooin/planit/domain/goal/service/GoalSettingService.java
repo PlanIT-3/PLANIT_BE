@@ -36,7 +36,7 @@ public class GoalSettingService {
     }
 
 
-    @Transactional(readOnly = true)
+
     public GoalDetailResponseDto getGoalDetail(Long memberId, Long goalId) {
         // goal 테이블에서 목표 기본 정보 조회
         Goal goal = goalMapper.selectGoalById(memberId, goalId);
@@ -62,7 +62,11 @@ public class GoalSettingService {
         if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
             goalRate = (int) Math.floor((double) totalCurrentAmount * 100 / goal.getTargetAmount());
         }
+        goal.setGoalRate(goalRate);
 
+         goal.setStartAmount(totalCurrentAmount);
+
+        goalMapper.updateGoal(goal);
         return GoalDetailResponseDto.builder()
                 .goalName(goal.getGoalName())
                 .targetAmount(goal.getTargetAmount())
