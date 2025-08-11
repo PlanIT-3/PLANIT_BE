@@ -1,17 +1,23 @@
 package woojooin.planit.domain.member.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import woojooin.planit.domain.member.domain.Member;
+import lombok.RequiredArgsConstructor;
+import woojooin.planit.domain.member.dto.res.InvestScoreRes;
 import woojooin.planit.domain.member.service.MemberService;
+import woojooin.planit.global.response.Response;
 import woojooin.planit.global.security.CustomUserDetails;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/auth/api/member")
 @RequiredArgsConstructor
 @Api(value = "회원 API", description = "회원 관련 API")
 public class MemberApiController {
@@ -34,11 +40,19 @@ public class MemberApiController {
     @ApiOperation(value = "회원 투자 성향 저장", notes = "로그인 유저의 투자 성향 저장")
     public ResponseEntity<Void> saveInvestType(
             @RequestParam String type,
-            @AuthenticationPrincipal CustomUserDetails user // 네 프로젝트의 Principal 타입
+            @AuthenticationPrincipal CustomUserDetails user
     ) {
         Long memberId = user.getId();
         memberService.updateInvestType(memberId, type);
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/invest-score")
+    @ApiOperation(value = "회원 투자 성향 점수 조회", notes = "회원 투자 성향 점수 조회")
+    public ResponseEntity<Response<InvestScoreRes>> getInvestScore(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        InvestScoreRes investScore = memberService.getInvestScore(customUserDetails.getId());
+        return ResponseEntity.ok(Response.ok(investScore));
+    }
 }
