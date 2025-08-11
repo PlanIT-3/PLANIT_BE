@@ -45,8 +45,10 @@
 
             @GetMapping
             @ApiOperation(value = "목표리스트 조회", notes = "사용자의 모든 목표(ISA 포함)를 상세 조회합니다")
-            public ResponseEntity<Response<List<GoalDetailResponseDto>>> getAllGoals() {
-                Long userID = getCurrentAuthenticatedUserId();
+            public ResponseEntity<Response<List<GoalDetailResponseDto>>> getAllGoals(
+                @AuthenticationPrincipal CustomUserDetails customUserDetails
+                ) {
+                Long userID = customUserDetails.getId();
                 List<GoalDetailResponseDto> goals = goalService.getAllGoals(userID);
                 return ResponseEntity.ok(Response.ok(goals));
             }
