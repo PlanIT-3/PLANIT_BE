@@ -45,11 +45,12 @@ public class MemberApiController {
     public ResponseEntity<Response<Void>> saveInvestType(
             @RequestParam String type,
             @AuthenticationPrincipal CustomUserDetails user) {
-    
-    {
-        Long memberId = user.getId();
-        memberService.updateInvestType(memberId, type);
-        return ResponseEntity.ok(Response.ok());
+
+        {
+            Long memberId = user.getId();
+            memberService.updateInvestType(memberId, type);
+            return ResponseEntity.ok(Response.ok());
+        }
     }
 
     @GetMapping("/invest-score")

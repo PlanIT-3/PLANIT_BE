@@ -27,18 +27,12 @@
 
             private final GoalSettingService goalService;
 
-            private Long getCurrentAuthenticatedUserId() {
-                // todo 실제 인증 처리 필요
-                return 1L;
-            }
-
             @PostMapping
             @ApiOperation(value = "목표 생성" , notes = "사용자의 새로운 목표를 생성합니다." )
             public ResponseEntity<Response<Goal>> createGoal(
-                    @Valid @RequestBody GoalRequestDto dto){
-                    //@AuthenticationPrincipal CustomUserDetails userDetails) {
-                    //userDetails.getId()
-                Long memberId = getCurrentAuthenticatedUserId();
+                    @Valid @RequestBody GoalRequestDto dto,
+                    @AuthenticationPrincipal CustomUserDetails userDetails) {
+                Long memberId = userDetails.getId();
                 Goal createdGoal = goalService.createGoal(memberId, dto);
                 return ResponseEntity.ok(Response.ok(createdGoal));
             }
@@ -56,9 +50,9 @@
             @GetMapping("/{goalId}")
             @ApiOperation(value = "목표 조회 ", notes = "사용자의 특정 목표를 조회합니다")
             public ResponseEntity<Response<GoalDetailResponseDto>> getGoalDetail(
-                    @PathVariable Long goalId){
-                    //@AuthenticationPrincipal CustomUserDetails userDetails)
-                Long memberId = getCurrentAuthenticatedUserId();
+                    @PathVariable Long goalId,
+                    @AuthenticationPrincipal CustomUserDetails userDetails){
+                Long memberId = userDetails.getId();
                 GoalDetailResponseDto response = goalService.getGoalDetail(memberId, goalId);
                 return ResponseEntity.ok(Response.ok(response));
 
@@ -68,9 +62,9 @@
             @ApiOperation(value = "목표 수정",notes = "사용자의 목표를 수정합니다")
             public ResponseEntity<Response<Goal>> updateGoal(
                     @PathVariable Long goalId,
-                    @RequestBody GoalRequestDto dto){
-        //       @AuthenticationPrincipal CustomUserDetails userDetails) {
-                Long memberId = getCurrentAuthenticatedUserId();
+                    @RequestBody GoalRequestDto dto,
+               @AuthenticationPrincipal CustomUserDetails userDetails) {
+                Long memberId = userDetails.getId();
                 Goal updatedGoal = goalService.updateGoal(memberId, goalId, dto);
                 return ResponseEntity.ok(Response.ok(updatedGoal));
             }
@@ -78,9 +72,9 @@
             @DeleteMapping("/{goalId}")
             @ApiOperation(value = "목표 삭제", notes = "사용자의 목표를 삭제합니다")
             public ResponseEntity<Response<Void>> deleteGoal(
-                    @PathVariable Long goalId){
-        //            @AuthenticationPrincipal CustomUserDetails userDetails) {
-                Long memberId = getCurrentAuthenticatedUserId();
+                    @PathVariable Long goalId,
+                    @AuthenticationPrincipal CustomUserDetails userDetails){
+                Long memberId = userDetails.getId();
                 goalService.deleteGoal(goalId,  memberId);
 
                 return ResponseEntity.ok(Response.ok());
