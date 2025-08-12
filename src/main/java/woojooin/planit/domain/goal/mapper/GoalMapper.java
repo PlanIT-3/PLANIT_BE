@@ -37,4 +37,6 @@ public interface GoalMapper {
 
 	  List<GoalProgress> selectGoalProgressByGoalId(@Param("goalId") Long goalId);
 
+	  List<GoalProgress> selectDailyGoalProgressLast6Months(@Param("goalId") Long goalId);
+
 }
