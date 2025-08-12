@@ -37,7 +37,8 @@ import javax.sql.DataSource;
         "woojooin.planit.domain.goal.goalAccount.mapper",  // GoalAccount mapper 추가
         "woojooin.planit.domain.account.mapper",// Account mapper 추가
         "woojooin.planit.domain.openAi.mapper" ,// OpenAI mapper 추가
-        "woojooin.planit.domain.report.mapper" // report mapper 추가
+        "woojooin.planit.domain.report.mapper", // report mapper 추가
+        "woojooin.planit.domain.tax.mapper" // tax mapper 추가
 })
 @Slf4j
 @EnableTransactionManagement
