@@ -40,25 +40,27 @@ public class MemberApiController {
         return "Member API OK";
     }
 
-    @PostMapping("/invest-type")
-    @ApiOperation(value = "회원 투자 성향 저장", notes = "로그인 유저의 투자 성향 저장")
-    public ResponseEntity<Response<Void>> saveInvestType(
-            @RequestParam String type,
-            @AuthenticationPrincipal CustomUserDetails user) {
+	@PostMapping("/invest-type")
+	@ApiOperation(value = "회원 투자 성향 저장", notes = "로그인 유저의 투자 성향 저장")
+	public ResponseEntity<Response<Void>> saveInvestType(
+		@RequestParam String type,
+		@AuthenticationPrincipal CustomUserDetails user) {
 
-        {
-            Long memberId = user.getId();
-            memberService.updateInvestType(memberId, type);
-            return ResponseEntity.ok(Response.ok());
-        }
-    }
+		{
+			Long memberId = user.getId();
+			memberService.updateInvestType(memberId, type);
+			return ResponseEntity.ok(Response.ok());
+		}
 
-    @GetMapping("/invest-score")
-    @ApiOperation(value = "회원 투자 성향 점수 조회", notes = "회원 투자 성향 점수 조회")
-    public ResponseEntity<Response<InvestScoreRes>> getInvestScore(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        InvestScoreRes investScore = memberService.getInvestScore(customUserDetails.getId());
-        return ResponseEntity.ok(Response.ok(investScore));
-    }
+	}
+	@GetMapping("/invest-score")
+	@ApiOperation(value = "회원 투자 성향 점수 조회", notes = "회원 투자 성향 점수 조회")
+	public ResponseEntity<Response<InvestScoreRes>> getInvestScore (
+		@AuthenticationPrincipal CustomUserDetails customUserDetails
+	){
+		InvestScoreRes investScore = memberService.getInvestScore(customUserDetails.getId());
+		return ResponseEntity.ok(Response.ok(investScore));
+
+	}
+
 }

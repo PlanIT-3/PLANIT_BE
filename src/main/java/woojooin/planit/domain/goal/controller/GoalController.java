@@ -14,7 +14,7 @@
         import woojooin.planit.domain.goal.dto.GoalRequestDto;
         import woojooin.planit.global.response.ResponseCode;
         import woojooin.planit.global.security.CustomUserDetails;
-
+        import woojooin.planit.domain.goal.dto.DailyGoalProgressResponse;
         import javax.validation.Valid;
         import java.util.List;
         import java.util.Optional;
@@ -24,6 +24,7 @@
         @RequiredArgsConstructor
         @Api(value = "목표 API" ,description = "목표 설정 및 조회 관련 API ")
         public class GoalController {
+
 
             private final GoalSettingService goalService;
 
@@ -40,8 +41,8 @@
             @GetMapping
             @ApiOperation(value = "목표리스트 조회", notes = "사용자의 모든 목표(ISA 포함)를 상세 조회합니다")
             public ResponseEntity<Response<List<GoalDetailResponseDto>>> getAllGoals(
-                @AuthenticationPrincipal CustomUserDetails customUserDetails
-                ) {
+                    @AuthenticationPrincipal CustomUserDetails customUserDetails
+            ) {
                 Long userID = customUserDetails.getId();
                 List<GoalDetailResponseDto> goals = goalService.getAllGoals(userID);
                 return ResponseEntity.ok(Response.ok(goals));
@@ -63,7 +64,7 @@
             public ResponseEntity<Response<Goal>> updateGoal(
                     @PathVariable Long goalId,
                     @RequestBody GoalRequestDto dto,
-               @AuthenticationPrincipal CustomUserDetails userDetails) {
+                    @AuthenticationPrincipal CustomUserDetails userDetails) {
                 Long memberId = userDetails.getId();
                 Goal updatedGoal = goalService.updateGoal(memberId, goalId, dto);
                 return ResponseEntity.ok(Response.ok(updatedGoal));
@@ -80,11 +81,18 @@
                 return ResponseEntity.ok(Response.ok());
             }
 
-            @GetMapping("/{goalId}/rate")
-            @ApiOperation(value = "목표 대비 계좌별 진행률", notes = "계좌 잔액과 할당 비율 기준 목표 대비 진행률(%) 반환")
-            public Response<List<GoalAccountRateResponse>> getGoalAccountRates(@PathVariable("goalId") Long goalId) {
-                List<GoalAccountRateResponse> list = goalService.getGoalAccountRates(goalId);
-                return Response.ok(list);
-            }
 
-        }
+	@GetMapping("/{goalId}/rate")
+	@ApiOperation(value = "목표 대비 계좌별 진행률", notes = "계좌 잔액과 할당 비율 기준 목표 대비 진행률(%) 반환")
+	public Response<List<GoalAccountRateResponse>> getGoalAccountRates(@PathVariable("goalId") Long goalId) {
+		List<GoalAccountRateResponse> list = goalService.getGoalAccountRates(goalId);
+		return Response.ok(list);
+	}
+
+    @GetMapping("/{goalId}/progress")
+    @ApiOperation(value = "목표 일별 진행률 조회", notes = "특정 목표의 최근 6개월 일별 ISA/예적금 진행률 조회 (goal_id, isa_progress, deposit_progress, created_at)")
+    public Response<List<DailyGoalProgressResponse>> getGoalProgress(@PathVariable("goalId") Long goalId) {
+        List<DailyGoalProgressResponse> progressList = goalService.getGoalProgress(goalId);
+        return Response.ok(progressList);
+    }
+}

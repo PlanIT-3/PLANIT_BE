@@ -19,6 +19,8 @@ import org.springframework.web.servlet.view.JstlView;
 	"woojooin.planit.domain.goal.controller",
 	"woojooin.planit.domain.goal.deposit.controller",
 	"woojooin.planit.domain.product.controller",
+	"woojooin.planit.domain.tax.controller",  // tax 컨트롤러 추가
+	"woojooin.planit.domain.report.controller",
 	"woojooin.planit.global.exception"
 })
 public class ServletConfig  implements WebMvcConfigurer {
