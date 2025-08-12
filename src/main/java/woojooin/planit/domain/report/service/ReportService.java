@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import woojooin.planit.domain.report.domain.IsaTaxSavingStatusDTO;
 import woojooin.planit.domain.report.domain.ReturnRateDto;
 import woojooin.planit.domain.report.domain.ReturnType;
 import woojooin.planit.domain.report.domain.res.*;
@@ -55,6 +57,17 @@ public class ReportService {
         );
     }
 
+    public IsaTaxSavingStatusDTO getTaxSavingStatus(Long memberId) {
+        String isaType = reportMapper.getIsaType(memberId);
+        int maxTaxSavingLimit = "RURAL".equals(isaType) ? 400 : 200;
+        int currentTaxSaving = reportMapper.getCurrentTaxSaving(memberId);
 
+        IsaTaxSavingStatusDTO dto = new IsaTaxSavingStatusDTO();
+        dto.setMaxTaxSavingLimit(maxTaxSavingLimit);
+        dto.setCurrentTaxSaving(currentTaxSaving);
+        dto.setRemainingTaxSaving(maxTaxSavingLimit - currentTaxSaving);
+
+        return dto;
+    }
 
 }

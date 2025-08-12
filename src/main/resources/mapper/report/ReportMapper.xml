@@ -47,6 +47,18 @@
         ORDER BY updated_at DESC
             LIMIT 7
     </select>
+    <select id="getIsaType" resultType="java.lang.String">
+        SELECT isa_type
+        FROM member
+        WHERE member_id = #{member_id}
+    </select>
+    <select id="getCurrentTaxSaving" resultType="java.lang.Integer">
+        SELECT isa_profit
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC
+            LIMIT 1
+    </select>
 
 
 </mapper>
