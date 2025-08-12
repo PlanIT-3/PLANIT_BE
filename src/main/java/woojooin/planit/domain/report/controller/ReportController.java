@@ -30,7 +30,7 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    @GetMapping("returns")
+    @GetMapping("/returns")
     @ApiOperation(value = "수익률 막대그래프 조회" , notes = "일별 , 주간 , 월별 수익률 데이터를 조회합니다.")
     public  ResponseEntity<Response<List<ReturnRateDto>>> getReturnRateByType(
             @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -43,7 +43,7 @@ public class ReportController {
         return ResponseEntity.ok(Response.ok(returnRates));
     }
 
-    @GetMapping("returns/total/daily")
+    @GetMapping("/returns/total/daily")
     @ApiOperation(value = "일별 투자금 조회" , notes = "일별 투자금을 조회합니다.")
     public ResponseEntity<DailyTotalInvestRes> getDailyTotalInvestment(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -52,7 +52,7 @@ public class ReportController {
         return ResponseEntity.ok(totalInvestment);
     }
 
-    @GetMapping("returns/total/weekly")
+    @GetMapping("/returns/total/weekly")
     @ApiOperation(value = "주간 투자금 조회" , notes = "주간 투자금을 조회합니다.")
     public ResponseEntity<WeeklyTotalInvestRes> getWeeklyTotalInvestment(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -61,7 +61,7 @@ public class ReportController {
         return ResponseEntity.ok(totalInvestment);
     }
 
-    @GetMapping("returns/total/monthly")
+    @GetMapping("/returns/total/monthly")
     @ApiOperation(value = "월간 투자금 조회" , notes = "월간 투자금을 조회합니다.")
     public ResponseEntity<MonthlyTotalInvestRes> getMonthlyTotalInvestment(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -69,6 +69,8 @@ public class ReportController {
         MonthlyTotalInvestRes totalInvestment = reportService.getMonthlyTotalInvestment(memberId);
         return ResponseEntity.ok(totalInvestment);
     }
+
+
 }
 
 

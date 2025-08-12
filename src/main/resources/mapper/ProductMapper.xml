@@ -3,43 +3,28 @@
 
 <mapper namespace="woojooin.planit.domain.product.mapper.ProductMapper">
 
-    <resultMap id="productResultMap" type="woojooin.planit.domain.product.domain.Product">
-        <result property="srtnCd" column="srtn_cd"/>
-        <result property="isinCd" column="isin_cd"/>
-        <result property="itmsNm" column="itms_nm"/>
-        <result property="basDt" column="bas_dt"/>
-        <result property="clpr" column="clpr"/>
-        <result property="vs" column="vs"/>
-        <result property="fltRt" column="flt_rt"/>
-        <result property="mkp" column="mkp"/>
-        <result property="hipr" column="hipr"/>
-        <result property="lopr" column="lopr"/>
-        <result property="trqu" column="trqu"/>
-        <result property="trPrc" column="tr_prc"/>
-        <result property="lstgStCnt" column="lstg_st_cnt"/>
-        <result property="mrktTotAmt" column="mrkt_tot_amt"/>
-        <result property="riskLevel" column="risk_level"/>
-    </resultMap>
-
-    <select id="selectByRiskLevel" resultMap="productResultMap">
+    <select id="selectByRiskLevel" resultType="woojooin.planit.domain.product.domain.Product">
         SELECT p.*
         FROM product p
-                 INNER JOIN (SELECT srtn_cd, MAX(bas_dt) AS max_bas_dt
-                             FROM product
-                             WHERE risk_level = #{riskLevel}
-                             GROUP BY srtn_cd) sub ON p.srtn_cd = sub.srtn_cd AND p.bas_dt = sub.max_bas_dt
-        WHERE p.risk_level = #{riskLevel}
-        ORDER BY CAST(p.flt_rt AS DECIMAL(10, 4)) DESC
+                 INNER JOIN (
+            SELECT shorten_code, MAX(base_date) AS max_base_date
+            FROM product
+            WHERE invest_type = #{riskLevel}
+            GROUP BY shorten_code
+        ) sub ON p.shorten_code = sub.shorten_code
+            AND p.base_date = sub.max_base_date
+        WHERE p.invest_type = #{riskLevel}
+        ORDER BY CAST(p.fluctuation_rate AS DECIMAL(20, 3)) DESC
     </select>
 
     <select id="selectBySrtnCd" resultType="woojooin.planit.domain.product.domain.Product">
         SELECT *
         FROM product
-        WHERE srtn_cd = #{srtnCd}
-          AND bas_dt = (
-            SELECT MAX(bas_dt)
+        WHERE shorten_code = #{shortenCode}
+          AND base_date = (
+            SELECT MAX(base_date)
             FROM product
-            WHERE srtn_cd = #{srtnCd}
+            WHERE shorten_code = #{shortenCode}
         )
     </select>
 
