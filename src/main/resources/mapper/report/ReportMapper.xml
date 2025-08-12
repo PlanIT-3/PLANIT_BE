@@ -59,6 +59,13 @@
         ORDER BY quarter DESC
             LIMIT 1
     </select>
-
+    <select id="getCumulativeTaxSavingByMemberId"
+            resultType="woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO">
+        SELECT quarter,
+               SUM(tax_saved) OVER (ORDER BY quarter) AS cumulativeTaxSaved
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter
+    </select>
 
 </mapper>

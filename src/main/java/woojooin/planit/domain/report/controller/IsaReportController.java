@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO;
 import woojooin.planit.domain.report.domain.IsaTaxSavingStatusDTO;
 import woojooin.planit.domain.report.domain.ReturnRateDto;
 import woojooin.planit.domain.report.domain.ReturnType;
@@ -29,12 +30,22 @@ public class IsaReportController {
 	private final ReportService reportService;
 
 	@GetMapping("/tax-saving-status")
-	@ApiOperation(value = "수익률 막대그래프 조회" , notes = "일별 , 주간 , 월별 수익률 데이터를 조회합니다.")
+	@ApiOperation(value = "절세 현황 그래프" , notes = "사용자의 유형에 따라 절세 형황응 나타냅니다.")
 	public Response<IsaTaxSavingStatusDTO> getTaxSavingStatus(
 		@AuthenticationPrincipal CustomUserDetails customUserDetails
 	) {
 		Long memberId = customUserDetails.getId();
 		IsaTaxSavingStatusDTO dto = reportService.getTaxSavingStatus(memberId);
 		return Response.ok(dto);
+	}
+
+	@GetMapping("/cumulative-tax-saving")
+	@ApiOperation(value = "누적 절세 그래프" , notes = "분기별로 누적되는 절세량을 그래프로 나타냅니다.")
+	public Response<List<IsaCumulativeTaxSavingDTO>> getCumulativeTaxSaving(
+		@AuthenticationPrincipal CustomUserDetails customUserDetails
+	) {
+		Long memberId = customUserDetails.getId();
+		List<IsaCumulativeTaxSavingDTO> list = reportService.getCumulativeTaxSaving(memberId);
+		return Response.ok(list);
 	}
 }
