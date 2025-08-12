@@ -17,4 +17,36 @@
     ORDER BY return_date DESC
         LIMIT 7
 </select>
+
+    <select id="findDailyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.DailyRowRes">
+        SELECT updated_at AS date,
+           daily_invest_total,
+           daily_valuation_total
+        FROM daily_report
+        WHERE member_id = #{memberId}
+        ORDER BY updated_at DESC
+            LIMIT 7
+    </select>
+
+    <select id="findWeeklyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.WeeklyRowRes">
+        SELECT updated_at AS date,
+            weekly_total_amount AS weekly_invest_total,
+           weekly_valuation_total AS weekly_valuation_total
+        FROM weekly_report
+        WHERE member_id = #{memberId}
+        ORDER BY updated_at DESC
+            LIMIT 7
+    </select>
+
+    <select id="findMonthlyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.MonthlyRowRes">
+        SELECT updated_at AS date,
+            monthly_total_amount AS monthly_invest_total,
+            monthly_valuation_total AS monthly_valuation_total
+        FROM monthly_report
+        WHERE member_id = #{memberId}
+        ORDER BY updated_at DESC
+            LIMIT 7
+    </select>
+
+
 </mapper>

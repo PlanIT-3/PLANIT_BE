@@ -64,7 +64,7 @@ public class InvestTypeOpenAiService {
     private String createAssistantMessage() {
         return "유저가 선택한 투자 유형과 실제 투자 행동을 비교하여 앞으로의 투자에 대한 제언을 작성해주세요. " +
                 "제언은 유저가 선택한 투자 유형에 맞춰서 작성되어야 합니다. " +
-                "제언은 3가지로 나누어 작성해주세요. 각 제언은 1문장으로 간결하게 작성해주세요." +
+                "제언은 3가지로 나누어 작성해주세요. 각 제언은 1문장으로 짧게 작성해주세요." +
                 "제언은 다음과 같은 형식으로 작성해주세요: " +
                 "investTypeAdvice1: [제언 내용 String], " +
                 "investTypeAdvice2: [제언 내용 String], " +
