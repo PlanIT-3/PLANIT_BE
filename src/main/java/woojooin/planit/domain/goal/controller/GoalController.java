@@ -3,6 +3,7 @@
         import io.swagger.annotations.ApiOperation;
         import org.springframework.security.core.annotation.AuthenticationPrincipal;
         import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
+        import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
         import woojooin.planit.domain.goal.service.GoalSettingService;
         import woojooin.planit.global.exception.BusinessException;
         import woojooin.planit.global.response.Response;
@@ -56,9 +57,9 @@
             @GetMapping("/{goalId}")
             @ApiOperation(value = "목표 조회 ", notes = "사용자의 특정 목표를 조회합니다")
             public ResponseEntity<Response<GoalDetailResponseDto>> getGoalDetail(
-                    @PathVariable Long goalId){
-                    //@AuthenticationPrincipal CustomUserDetails userDetails)
-                Long memberId = getCurrentAuthenticatedUserId();
+                    @PathVariable Long goalId,
+                    @AuthenticationPrincipal CustomUserDetails userDetails){
+                Long memberId = userDetails.getId();
                 GoalDetailResponseDto response = goalService.getGoalDetail(memberId, goalId);
                 return ResponseEntity.ok(Response.ok(response));
 
@@ -84,6 +85,14 @@
                 goalService.deleteGoal(goalId,  memberId);
 
                 return ResponseEntity.ok(Response.ok());
+            }
+
+            @GetMapping("/{goalId}/progress")
+            @ApiOperation(value = "목표 진행 추이", notes = "사용자 목표 진행 추이를 그래프로 나타냄니다.")
+            public Response<List<GoalProgressGraphDTO>> getGoalProgressList(@PathVariable("goalId") Long goalId) {
+                List<GoalProgressGraphDTO> list = goalService.getGoalProgressByGoalId(goalId);
+                return Response.ok(list);
+
             }
 
             @GetMapping("/{goalId}/rate")

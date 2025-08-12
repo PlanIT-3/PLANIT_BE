@@ -26,38 +26,40 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Api(value = "회원 API", description = "회원 관련 API")
 public class MemberApiController {
-    private final MemberService memberService;
+	private final MemberService memberService;
 
-    @GetMapping("/test")
-    @ApiOperation(value = "회원 테스트 API", notes = "회원 API 테스트")
-    public String memberTest() {
-        return "Member API is working!";
-    }
-    
-    @GetMapping("/health")
-    @ApiOperation(value = "회원 API태 확인", notes = "회원 API 서버 상태를 확인합니다.")
-    public String health() {
-        return "Member API OK";
-    }
+	@GetMapping("/test")
+	@ApiOperation(value = "회원 테스트 API", notes = "회원 API 테스트")
+	public String memberTest() {
+		return "Member API is working!";
+	}
 
-    @PostMapping("/invest-type")
-    @ApiOperation(value = "회원 투자 성향 저장", notes = "로그인 유저의 투자 성향 저장")
-    public ResponseEntity<Response<Void>> saveInvestType(
-            @RequestParam String type,
-            @AuthenticationPrincipal CustomUserDetails user) {
-    
-    {
-        Long memberId = user.getId();
-        memberService.updateInvestType(memberId, type);
-        return ResponseEntity.ok(Response.ok());
-    }
+	@GetMapping("/health")
+	@ApiOperation(value = "회원 API태 확인", notes = "회원 API 서버 상태를 확인합니다.")
+	public String health() {
+		return "Member API OK";
+	}
 
-    @GetMapping("/invest-score")
-    @ApiOperation(value = "회원 투자 성향 점수 조회", notes = "회원 투자 성향 점수 조회")
-    public ResponseEntity<Response<InvestScoreRes>> getInvestScore(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        InvestScoreRes investScore = memberService.getInvestScore(customUserDetails.getId());
-        return ResponseEntity.ok(Response.ok(investScore));
-    }
+	@PostMapping("/invest-type")
+	@ApiOperation(value = "회원 투자 성향 저장", notes = "로그인 유저의 투자 성향 저장")
+	public ResponseEntity<Response<Void>> saveInvestType(
+		@RequestParam String type,
+		@AuthenticationPrincipal CustomUserDetails user) {
+
+		{
+			Long memberId = user.getId();
+			memberService.updateInvestType(memberId, type);
+			return ResponseEntity.ok(Response.ok());
+		}
+
+	}
+	@GetMapping("/invest-score")
+	@ApiOperation(value = "회원 투자 성향 점수 조회", notes = "회원 투자 성향 점수 조회")
+	public ResponseEntity<Response<InvestScoreRes>> getInvestScore (
+		@AuthenticationPrincipal CustomUserDetails customUserDetails
+	){
+		InvestScoreRes investScore = memberService.getInvestScore(customUserDetails.getId());
+		return ResponseEntity.ok(Response.ok(investScore));
+
+	}
 }
