@@ -12,6 +12,7 @@ import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
 import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
 import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
+import woojooin.planit.domain.goal.dto.DailyGoalProgressResponse;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
@@ -184,4 +185,13 @@ public class GoalSettingService {
 			.collect(Collectors.toList());
 	}
 
+	public List<DailyGoalProgressResponse> getGoalProgress(Long goalId) {
+		List<GoalProgress> goalProgresses = goalMapper.selectDailyGoalProgressLast6Months(goalId);
+		if (goalProgresses == null || goalProgresses.isEmpty()) {
+			throw new BusinessException(ResponseCode.GOAL_NOT_FOUND);
+		}
+		return goalProgresses.stream()
+			.map(DailyGoalProgressResponse::fromEntity)
+			.toList();
+	}
 }
