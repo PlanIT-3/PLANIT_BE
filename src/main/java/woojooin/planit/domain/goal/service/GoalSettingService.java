@@ -69,6 +69,7 @@ public class GoalSettingService {
 
 		goalMapper.updateGoal(goal);
 		return GoalDetailResponseDto.builder()
+			.goalId(goal.getGoalId())
 			.goalName(goal.getGoalName())
 			.targetAmount(goal.getTargetAmount())
 			.totalAmount(totalCurrentAmount)
