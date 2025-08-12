@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import woojooin.planit.domain.report.domain.AccountComparisonDTO;
 import woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO;
+import woojooin.planit.domain.report.domain.IsaTaxSavingHistory;
 import woojooin.planit.domain.report.domain.IsaTaxSavingStatusDTO;
 import woojooin.planit.domain.report.domain.ReturnRateDto;
 import woojooin.planit.domain.report.domain.ReturnType;
@@ -73,6 +75,38 @@ public class ReportService {
 
     public List<IsaCumulativeTaxSavingDTO> getCumulativeTaxSaving(Long memberId) {
         return reportMapper.getCumulativeTaxSavingByMemberId(memberId);
+    }
+
+    public AccountComparisonDTO getAccountComparison(Long memberId) {
+        BigDecimal isaPrincipalDecimal = reportMapper.getIsaPrincipal(memberId);
+        BigDecimal generalPrincipalDecimal = reportMapper.getGeneralPrincipal(memberId);
+        IsaTaxSavingHistory taxHistory = reportMapper.getLatestIsaTaxSavingHistory(memberId);
+
+        long isaPrincipal = isaPrincipalDecimal == null ? 0L : isaPrincipalDecimal.longValue();
+        long generalPrincipal = generalPrincipalDecimal == null ? 0L : generalPrincipalDecimal.longValue();
+
+        long generalTax = taxHistory != null ? taxHistory.getGeneralTax() : 0L;
+        long taxSaved = taxHistory != null ? taxHistory.getTaxSaved() : 0L;
+
+        long isaTax = generalTax - taxSaved;
+
+        long isaTotalAmount = isaPrincipal + taxSaved;
+        long generalTotalAmount = generalPrincipal;
+
+        double taxSavingRate = generalTax == 0 ? 0.0 : ((double) taxSaved / generalTax) * 100;
+
+        long totalPrincipal = isaPrincipal + generalPrincipal;
+
+        AccountComparisonDTO dto = new AccountComparisonDTO();
+        dto.setPrincipal(totalPrincipal);
+        dto.setIsaTax(isaTax);
+        dto.setIsaTotalAmount(isaTotalAmount);
+        dto.setGeneralTax(generalTax);
+        dto.setGeneralTotalAmount(generalTotalAmount);
+        dto.setTaxSaved(taxSaved);
+        dto.setTaxSavingRate(taxSavingRate);
+
+        return dto;
     }
 
 }

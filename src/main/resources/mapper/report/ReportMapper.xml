@@ -72,5 +72,22 @@
              ) sub
         ORDER BY quarter ASC;
     </select>
+    <select id="getIsaPrincipal" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(present_amount * quantity), 0)
+        FROM member_product
+        WHERE member_id = #{memberId} AND product_type_code = 'ISA'
+    </select>
+    <select id="getGeneralPrincipal" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(present_amount * quantity), 0)
+        FROM member_product
+        WHERE member_id = #{memberId} AND product_type_code != 'ISA'
+    </select>
+    <select id="getLatestIsaTaxSavingHistory"
+            resultType="woojooin.planit.domain.report.domain.IsaTaxSavingHistory">
+        SELECT general_tax, tax_saved
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC LIMIT 1
+    </select>
 
 </mapper>
