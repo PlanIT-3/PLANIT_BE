@@ -59,13 +59,13 @@ public class ReportService {
 
     public IsaTaxSavingStatusDTO getTaxSavingStatus(Long memberId) {
         String isaType = reportMapper.getIsaType(memberId);
-        int maxTaxSavingLimit = "RURAL".equals(isaType) ? 4000000 : 2000000;
+        int maxTaxSavingLimit = "RURAL".equals(isaType) ? 400 : 200;
         int currentTaxSaving = reportMapper.getCurrentTaxSaving(memberId);
 
         IsaTaxSavingStatusDTO dto = new IsaTaxSavingStatusDTO();
         dto.setMaxTaxSavingLimit(maxTaxSavingLimit);
         dto.setCurrentTaxSaving(currentTaxSaving);
-        dto.setRemainingTaxSaving(maxTaxSavingLimit - currentTaxSaving);
+        dto.calculateFields();
 
         return dto;
     }
