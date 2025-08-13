@@ -8,53 +8,52 @@ import woojooin.planit.domain.product.domain.Product;
 @Builder
 public class ProductDetailDto {
 	// Header
-	private String itmsNm;        // 종목명
-	private String isinCd;        // ISIN 코드
-	private String srtnCd;        // 단축 코드
-	private String basDt;         // 기준일자
-	private String clpr;          // 종가
-	private String vs;            // 전일 대비
-	private String fltRt;         // 등락률
+	private String itemName;        // 종목명
+	private String isinCode;        // ISIN 코드
+	private String shortenCode;     // 단축 코드
+	private String baseDate;        // 기준일자
+	private String closingPrice;    // 종가
+	private String difference;      // 전일 대비
+	private String fluctuationRate; // 등락률
 
 	// 요약 정보
-	private String mkp;           // 시가
-	private String hipr;          // 고가
-	private String lopr;          // 저가
+	private String marketOpenPrice; // 시가
+	private String highPrice;       // 고가
+	private String lowPrice;        // 저가
 
 	// 계산 정보
-	private String changeRange;   // 가격 변동폭 (고가 - 저가)
+	private String changeRange;     // 가격 변동폭 (고가 - 저가)
 
 	// 거래 정보
-	private String trqu;          // 거래량
-	private String trPrc;         // 거래대금
+	private String tradeQuantity;   // 거래량
+	private String tradePrice;      // 거래대금
 
 	// 위험 정보
-	private String riskLevel;     // 투자위험성
+	private String investType;      // 투자위험성
 
 	public static ProductDetailDto from(Product product) {
 		String changeRange = "-";
 		try {
-			int high = Integer.parseInt(product.getHipr());
-			int low = Integer.parseInt(product.getLopr());
+			int high = Integer.parseInt(product.getHighPrice());
+			int low = Integer.parseInt(product.getLowPrice());
 			changeRange = String.valueOf(high - low);
 		} catch (NumberFormatException ignored) {}
 
 		return ProductDetailDto.builder()
-			.itmsNm(product.getItmsNm())
-			.isinCd(product.getIsinCd())
-			.srtnCd(product.getSrtnCd())
-			.basDt(product.getBasDt())
-			.clpr(product.getClpr())
-			.vs(product.getVs())
-			.fltRt(product.getFltRt())
-			.mkp(product.getMkp())
-			.hipr(product.getHipr())
-			.lopr(product.getLopr())
+			.itemName(product.getItemName())
+			.isinCode(product.getIsinCode())
+			.shortenCode(product.getShortenCode())
+			.baseDate(product.getBaseDate())
+			.closingPrice(product.getClosingPrice())
+			.difference(product.getDifference())
+			.fluctuationRate(product.getFluctuationRate())
+			.marketOpenPrice(product.getMarketOpenPrice())
+			.highPrice(product.getHighPrice())
+			.lowPrice(product.getLowPrice())
 			.changeRange(changeRange)
-			.trqu(product.getTrqu())
-			.trPrc(product.getTrPrc())
-			.riskLevel(product.getRiskLevel())
+			.tradeQuantity(product.getTradeQuantity())
+			.tradePrice(product.getTradePrice())
+			.investType(product.getInvestType())
 			.build();
 	}
-
 }

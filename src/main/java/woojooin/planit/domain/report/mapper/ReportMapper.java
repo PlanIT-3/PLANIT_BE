@@ -38,4 +38,5 @@ public interface ReportMapper {
 
     List<IsaCumulativeTaxSavingDTO> getCumulativeTaxSavingByMemberId(Long memberId);
 
+
 }

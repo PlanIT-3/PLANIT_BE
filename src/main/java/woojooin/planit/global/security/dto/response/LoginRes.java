@@ -11,6 +11,7 @@ public class LoginRes {
     private String email;
     private String password;
     private String username;
+    private String role;
     private String accessToken;
     private String refreshToken;
 

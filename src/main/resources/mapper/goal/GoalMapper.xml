@@ -136,5 +136,27 @@
         WHERE goal_id = #{goalId}
     </select>
 
+    <select id="selectDailyGoalProgressLast6Months" resultType="woojooin.planit.domain.goal.domain.GoalProgress">
+        SELECT 
+            daily_goal_progress_id,
+            goal_id,
+            isa_progress,
+            deposit_progress,
+            progress_date,
+            created_at,
+            updated_at
+        FROM daily_goal_progress
+        WHERE goal_id = #{goalId}
+            AND DATE(created_at) IN (
+                CURDATE(),
+                DATE_SUB(CURDATE(), INTERVAL 1 MONTH),
+                DATE_SUB(CURDATE(), INTERVAL 2 MONTH),
+                DATE_SUB(CURDATE(), INTERVAL 3 MONTH),
+                DATE_SUB(CURDATE(), INTERVAL 4 MONTH),
+                DATE_SUB(CURDATE(), INTERVAL 5 MONTH)
+            )
+        ORDER BY created_at DESC
+    </select>
+
 </mapper>
 
