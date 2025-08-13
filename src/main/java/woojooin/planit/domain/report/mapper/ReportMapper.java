@@ -2,6 +2,8 @@ package woojooin.planit.domain.report.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO;
 import woojooin.planit.domain.report.domain.ReturnRateDto;
 import woojooin.planit.domain.report.domain.ReturnType;
 import woojooin.planit.domain.report.domain.res.*;
@@ -33,4 +35,8 @@ public interface ReportMapper {
     String getIsaType(@Param("memberId")Long memberId);
 
     int getCurrentTaxSaving(@Param("memberId")Long memberId);
+
+    List<IsaCumulativeTaxSavingDTO> getCumulativeTaxSavingByMemberId(Long memberId);
+
+
 }

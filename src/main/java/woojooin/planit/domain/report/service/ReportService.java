@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO;
 import woojooin.planit.domain.report.domain.IsaTaxSavingStatusDTO;
 import woojooin.planit.domain.report.domain.ReturnRateDto;
 import woojooin.planit.domain.report.domain.ReturnType;
@@ -68,6 +69,10 @@ public class ReportService {
         dto.calculateFields();
 
         return dto;
+    }
+
+    public List<IsaCumulativeTaxSavingDTO> getCumulativeTaxSaving(Long memberId) {
+        return reportMapper.getCumulativeTaxSavingByMemberId(memberId);
     }
 
 }
