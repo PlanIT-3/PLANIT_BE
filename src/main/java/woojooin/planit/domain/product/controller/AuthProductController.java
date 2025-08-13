@@ -28,7 +28,7 @@ public class AuthProductController {
 	public Response<List<ProductRecommendationDto>> getRecommendedProducts(
 		@AuthenticationPrincipal CustomUserDetails customUserDetails
 	) {
-		String userRiskLevel = "AGGRESSIVE"; // 임시 하드코딩
+		String userRiskLevel = customUserDetails.getRiskLevel(); // 임시 하드코딩
 		List<ProductRecommendationDto> recommendedProducts = productService.recommendProduct(userRiskLevel);
 		return Response.ok(recommendedProducts);
 	}
