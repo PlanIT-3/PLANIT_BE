@@ -63,8 +63,8 @@ public class ReportService {
     public IsaTaxSavingStatusDTO getTaxSavingStatus(Long memberId) {
         String isaType = reportMapper.getIsaType(memberId);
         int maxTaxSavingLimit = "RURAL".equals(isaType) ? 4000000 : 2000000;
-        int currentTaxSaving = reportMapper.getCurrentTaxSaving(memberId);
-
+        Long result = reportMapper.getLatestIsaProfitByMemberId(memberId);
+        int currentTaxSaving = (result != null) ? result.intValue() : 0;
         IsaTaxSavingStatusDTO dto = new IsaTaxSavingStatusDTO();
         dto.setMaxTaxSavingLimit(maxTaxSavingLimit);
         dto.setCurrentTaxSaving(currentTaxSaving);
@@ -78,35 +78,35 @@ public class ReportService {
     }
 
     public AccountComparisonDTO getAccountComparison(Long memberId) {
-        BigDecimal isaPrincipalDecimal = reportMapper.getIsaPrincipal(memberId);
-        BigDecimal generalPrincipalDecimal = reportMapper.getGeneralPrincipal(memberId);
+        BigDecimal principalDecimal = reportMapper.getPrincipal(memberId);
         IsaTaxSavingHistory taxHistory = reportMapper.getLatestIsaTaxSavingHistory(memberId);
 
-        long isaPrincipal = isaPrincipalDecimal == null ? 0L : isaPrincipalDecimal.longValue();
-        long generalPrincipal = generalPrincipalDecimal == null ? 0L : generalPrincipalDecimal.longValue();
+        String isaType = reportMapper.getIsaType(memberId);
 
-        long generalTax = taxHistory != null ? taxHistory.getGeneralTax() : 0L;
-        long taxSaved = taxHistory != null ? taxHistory.getTaxSaved() : 0L;
+        long generalTaxLong = taxHistory != null ? taxHistory.getGeneralTax() : 0L;
+        long taxSavedLong = taxHistory != null ? taxHistory.getTaxSaved() : 0L;
 
-        long isaTax = generalTax - taxSaved;
+        BigDecimal generalTax = BigDecimal.valueOf(generalTaxLong);
+        BigDecimal taxSaved = BigDecimal.valueOf(taxSavedLong);
 
-        long isaTotalAmount = isaPrincipal + taxSaved;
-        long generalTotalAmount = generalPrincipal;
+        BigDecimal isaTax = generalTax.subtract(taxSaved);
 
-        double taxSavingRate = generalTax == 0 ? 0.0 : ((double) taxSaved / generalTax) * 100;
+        long isaTotalAmount = principalDecimal.subtract(isaTax).longValue();
+        long generalTotalAmount = principalDecimal.subtract(generalTax).longValue();
 
-        long totalPrincipal = isaPrincipal + generalPrincipal;
+        double taxSavingRate = generalTaxLong == 0 ? 0.0 : ((double) taxSavedLong / generalTaxLong) * 100;
 
         AccountComparisonDTO dto = new AccountComparisonDTO();
-        dto.setPrincipal(totalPrincipal);
-        dto.setIsaTax(isaTax);
+        dto.setPrincipal(principalDecimal.longValue());  // 만약 DTO에 long 타입이라면 longValue()로 변환
+        dto.setIsaTax(isaTax.longValue());
         dto.setIsaTotalAmount(isaTotalAmount);
-        dto.setGeneralTax(generalTax);
+        dto.setGeneralTax(generalTaxLong);
         dto.setGeneralTotalAmount(generalTotalAmount);
-        dto.setTaxSaved(taxSaved);
+        dto.setTaxSaved(taxSavedLong);
         dto.setTaxSavingRate(taxSavingRate);
 
         return dto;
     }
+
 
 }

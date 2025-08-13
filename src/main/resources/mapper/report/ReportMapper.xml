@@ -52,13 +52,7 @@
         FROM member
         WHERE member_id = #{memberId}
     </select>
-    <select id="getCurrentTaxSaving" resultType="java.lang.Integer">
-        SELECT isa_profit
-        FROM isa_tax_saving_history
-        WHERE member_id = #{memberId}
-        ORDER BY quarter DESC
-            LIMIT 1
-    </select>
+
     <select id="getCumulativeTaxSavingByMemberId"
             resultType="woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO">
         SELECT quarter, cumulativeTaxSaved
@@ -72,22 +66,39 @@
              ) sub
         ORDER BY quarter ASC;
     </select>
-    <select id="getIsaPrincipal" resultType="java.math.BigDecimal">
+    <select id="getPrincipal" resultType="java.math.BigDecimal">
         SELECT IFNULL(SUM(present_amount * quantity), 0)
         FROM member_product
-        WHERE member_id = #{memberId} AND product_type_code = 'ISA'
+        WHERE member_id = #{memberId} AND product_type = 'ETF'
     </select>
-    <select id="getGeneralPrincipal" resultType="java.math.BigDecimal">
-        SELECT IFNULL(SUM(present_amount * quantity), 0)
-        FROM member_product
-        WHERE member_id = #{memberId} AND product_type_code != 'ISA'
-    </select>
+
     <select id="getLatestIsaTaxSavingHistory"
             resultType="woojooin.planit.domain.report.domain.IsaTaxSavingHistory">
         SELECT general_tax, tax_saved
         FROM isa_tax_saving_history
         WHERE member_id = #{memberId}
         ORDER BY quarter DESC LIMIT 1
+    </select>
+    <select id="getLatestIsaProfitByMemberId" resultType="java.lang.Long">
+        SELECT isa_profit
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC
+            LIMIT 1
+    </select>
+    <select id="getLatestGeneralTaxByMemberId" resultType="java.lang.Long">
+        SELECT general_tax
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC
+            LIMIT 1
+    </select>
+    <select id="getLatestTaxSavedByMemberId" resultType="java.lang.Long">
+        SELECT tax_saved
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC
+            LIMIT 1
     </select>
 
 </mapper>
