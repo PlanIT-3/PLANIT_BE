@@ -4,7 +4,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO;
+
 import woojooin.planit.domain.report.domain.IsaTaxSavingHistory;
+
 import woojooin.planit.domain.report.domain.ReturnRateDto;
 import woojooin.planit.domain.report.domain.ReturnType;
 import woojooin.planit.domain.report.domain.res.*;
@@ -37,6 +39,7 @@ public interface ReportMapper {
     String getIsaType(@Param("memberId")Long memberId);
 
 
+
     List<IsaCumulativeTaxSavingDTO> getCumulativeTaxSavingByMemberId(Long memberId);
 
     BigDecimal getPrincipal(Long memberId);
@@ -45,4 +48,5 @@ public interface ReportMapper {
     Long getLatestIsaProfitByMemberId(@Param("memberId")Long memberId);
     Long getLatestGeneralTaxByMemberId(@Param("memberId")Long memberId);
     Long getLatestTaxSavedByMemberId(@Param("memberId")Long memberId);
+
 }

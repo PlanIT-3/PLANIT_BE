@@ -99,6 +99,7 @@
         WHERE member_id = #{memberId}
         ORDER BY quarter DESC
             LIMIT 1
+
     </select>
 
 </mapper>

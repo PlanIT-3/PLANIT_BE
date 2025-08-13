@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+
 import woojooin.planit.domain.report.domain.AccountComparisonDTO;
+
 import woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO;
 import woojooin.planit.domain.report.domain.IsaTaxSavingStatusDTO;
 import woojooin.planit.domain.report.domain.ReturnRateDto;
@@ -50,6 +52,7 @@ public class IsaReportController {
 		return Response.ok(list);
 	}
 
+
 	@GetMapping("/account-comparison")
 	@ApiOperation(value = "ISA vs 일반 계좌 세금 비교", notes = "회원별 원금, ISA 세금, 일반 계좌 세금, 절세 효과 및 절세율을 제공합니다.")
 	public Response<AccountComparisonDTO> getAccountComparison(
@@ -59,4 +62,5 @@ public class IsaReportController {
 		AccountComparisonDTO dto = reportService.getAccountComparison(memberId);
 		return Response.ok(dto);
 	}
+
 }

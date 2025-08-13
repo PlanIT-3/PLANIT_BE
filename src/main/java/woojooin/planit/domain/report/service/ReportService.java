@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import woojooin.planit.domain.report.domain.AccountComparisonDTO;
 import woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO;
 import woojooin.planit.domain.report.domain.IsaTaxSavingHistory;
+
 import woojooin.planit.domain.report.domain.IsaTaxSavingStatusDTO;
 import woojooin.planit.domain.report.domain.ReturnRateDto;
 import woojooin.planit.domain.report.domain.ReturnType;
@@ -107,6 +108,4 @@ public class ReportService {
 
         return dto;
     }
-
-
 }
