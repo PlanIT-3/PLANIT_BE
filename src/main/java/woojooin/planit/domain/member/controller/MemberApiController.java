@@ -26,6 +26,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Api(value = "회원 API", description = "회원 관련 API")
 public class MemberApiController {
+
 	private final MemberService memberService;
 
 	@GetMapping("/test")
@@ -62,5 +63,4 @@ public class MemberApiController {
 		return ResponseEntity.ok(Response.ok(investScore));
 
 	}
-
 }

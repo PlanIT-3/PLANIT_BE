@@ -33,5 +33,4 @@ public interface ReportMapper {
     String getIsaType(@Param("memberId")Long memberId);
 
     int getCurrentTaxSaving(@Param("memberId")Long memberId);
-
 }
