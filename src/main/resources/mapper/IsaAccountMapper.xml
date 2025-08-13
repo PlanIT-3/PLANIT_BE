@@ -16,7 +16,7 @@
     <!-- Action 도메인용 ResultMap -->
     <resultMap id="actionResultMap" type="woojooin.planit.domain.goal.action.domain.Action">
         <id property="actionId" column="action_id"/>
-        <result property="objectId" column="object_id"/>
+        <result property="goalId" column="goal_id"/>
         <result property="accountNumber" column="account_number"/>
         <result property="memberProductId" column="member_product_id"/>
         <result property="allocatedRate" column="allocated_rate"/>

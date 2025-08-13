@@ -25,7 +25,6 @@
         @Api(value = "목표 API" ,description = "목표 설정 및 조회 관련 API ")
         public class GoalController {
 
-
             private final GoalSettingService goalService;
 
             @PostMapping
@@ -60,7 +59,7 @@
             }
 
             @PutMapping("/{goalId}")
-            @ApiOperation(value = "목표 수정",notes = "사용자의 목표를 수정합니다")
+            @ApiOperation(value = "목표 ",notes = "사용자의 목표를 수정합니다")
             public ResponseEntity<Response<Goal>> updateGoal(
                     @PathVariable Long goalId,
                     @RequestBody GoalRequestDto dto,

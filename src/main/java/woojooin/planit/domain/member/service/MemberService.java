@@ -12,4 +12,6 @@ public interface MemberService {
     void updateInvestType(Long memberId, String type);
 
 	InvestScoreRes getInvestScore(Long id);
+
+    String getInvestmentType(Long memberId);
 }

@@ -34,7 +34,7 @@ public class IsaAccountController {
 
 	private final IsaAccountService isaAccountService;
 
-	@GetMapping()
+	@GetMapping
 	@ApiOperation(value = "유저의 ISA 계좌 상품 리스트 조회 API",
 		notes = "특정 회원의 모든 상품 정보를 조회합니다.")
 	public ResponseEntity<Response<List<IsaAccountProductRes>>> getIsaAccountProducts(
@@ -65,7 +65,7 @@ public class IsaAccountController {
 		@AuthenticationPrincipal CustomUserDetails customUserDetails,
 		@RequestBody IsaAccountProductRegisterListReq isaAccountProductRegisterListReq) {
 
-		isaAccountService.registerMemberProductsByMemberId(1L, isaAccountProductRegisterListReq);
+		isaAccountService.registerMemberProductsByMemberId(customUserDetails.getId(), isaAccountProductRegisterListReq);
 
 		return ResponseEntity.ok(Response.ok());
 	}

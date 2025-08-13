@@ -15,6 +15,7 @@ import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import woojooin.planit.domain.member.dto.res.InvestScoreRes;
+import woojooin.planit.domain.member.dto.res.InvestType;
 import woojooin.planit.domain.member.service.MemberService;
 import woojooin.planit.global.response.Response;
 import woojooin.planit.global.security.CustomUserDetails;
@@ -45,14 +46,22 @@ public class MemberApiController {
 	public ResponseEntity<Response<Void>> saveInvestType(
 		@RequestParam String type,
 		@AuthenticationPrincipal CustomUserDetails user) {
-
 		{
 			Long memberId = user.getId();
 			memberService.updateInvestType(memberId, type);
 			return ResponseEntity.ok(Response.ok());
 		}
-
 	}
+	@GetMapping("/invest-type")
+	@ApiOperation(value = "회원 투자 성향 조회", notes = "로그인 유저의 투자 성향 조회")
+	public ResponseEntity<Response<InvestType>> getInvestType(
+			@AuthenticationPrincipal CustomUserDetails user
+	){
+		String type =memberService.getInvestmentType(user.getId());
+		return ResponseEntity.ok(Response.ok(new InvestType(type)));
+	}
+
+
 	@GetMapping("/invest-score")
 	@ApiOperation(value = "회원 투자 성향 점수 조회", notes = "회원 투자 성향 점수 조회")
 	public ResponseEntity<Response<InvestScoreRes>> getInvestScore (

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import woojooin.planit.domain.member.domain.Member;
 import woojooin.planit.domain.member.dto.req.RealInvestTypeReq;
 import woojooin.planit.domain.member.dto.res.InvestScoreRes;
+import woojooin.planit.domain.member.mapper.MemberMapper;
 import woojooin.planit.domain.member.repository.MemberRepository;
 import woojooin.planit.domain.openAi.dto.req.DefaultInvestTypeReq;
 
@@ -12,6 +13,8 @@ import woojooin.planit.domain.openAi.dto.req.DefaultInvestTypeReq;
 public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberMapper memberMapper;
 
     @Override
     public Member findById(Long memberId) {
@@ -55,5 +58,11 @@ public class MemberServiceImpl implements MemberService {
         );
 
         return new InvestScoreRes(id, surveyInvestmentType, realInvestType);
+    }
+
+
+    @Override
+    public String getInvestmentType(Long memberId) {
+        return memberRepository.findInvestTypeById(memberId);
     }
 }
