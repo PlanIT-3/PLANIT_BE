@@ -62,5 +62,4 @@ public class MemberApiController {
 		return ResponseEntity.ok(Response.ok(investScore));
 
 	}
-
 }
