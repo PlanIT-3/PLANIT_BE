@@ -11,4 +11,8 @@ public interface MemberMapper {
     void delete(Long memberId);
 
     void updateInvestType(@Param("memberId") Long memberId, @Param("type") String type);
+
+    String findByConnectedIdString(@Param("memberId") Long memberId);
+    
+    void updateConnectedId(@Param("memberId") Long memberId, @Param("connectedId") String connectedId);
 }
