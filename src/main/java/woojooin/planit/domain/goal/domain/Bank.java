@@ -2,8 +2,8 @@ package woojooin.planit.domain.goal.domain;
 
 public enum Bank {
 	INDUSTRIAL("002", "한국산업은행"),
-	IBK("003", "기업은행"),
-	KOOKMIN("004", "국민은행"),
+	IBK("003", "IBK기업은행"),
+	KOOKMIN("004", "KB국민은행"),
 	SUHYUP("007", "수협은행"),
 	NONGHYEOP("011", "농협은행"),
 	WOORI("020", "우리은행"),
