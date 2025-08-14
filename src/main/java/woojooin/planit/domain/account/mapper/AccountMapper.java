@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import woojooin.planit.domain.account.domain.Account;
 import woojooin.planit.domain.account.domain.BalanceData;
+import woojooin.planit.domain.account.dto.res.AccountBankRes;
 
 @Mapper
 public interface AccountMapper {
@@ -17,4 +18,6 @@ public interface AccountMapper {
 	BigDecimal getTotalBalanceByMemberId(@Param("memberId") Long memberId);
 	
 	void insertAccount(Account account);
+	
+	List<AccountBankRes> selectAccountsByMemberId(@Param("memberId") Long memberId);
 }

@@ -14,10 +14,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import woojooin.planit.domain.account.domain.Account;
 import woojooin.planit.domain.account.domain.BalanceData;
+import woojooin.planit.domain.account.dto.res.AccountBankRes;
+import woojooin.planit.domain.account.dto.res.AccountsRes;
+import woojooin.planit.domain.account.dto.res.AccountListRes;
 import woojooin.planit.domain.account.dto.res.BalanceListRes;
 import woojooin.planit.domain.account.dto.res.BalanceRes;
 import woojooin.planit.domain.account.mapper.AccountMapper;
 import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.domain.Bank;
 import woojooin.planit.domain.goal.dto.res.GoalRatioListRes;
 import woojooin.planit.domain.goal.dto.res.GoalRatioRes;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
@@ -98,19 +102,34 @@ public class AccountService {
 	}
 
 	public AccountConnectionRes register(AccountDto accountDto, boolean isLast, Long memberId) {
+
 		String connectedId = memberMapper.findByConnectedIdString(memberId);
-		List<AccountDto> singleAccount = List.of(accountDto);
+		Boolean isRural = accountDto.getIsRural();
+
+		AccountDto apiAccountDto = AccountDto.builder()
+			.countryCode(accountDto.getCountryCode())
+			.businessType(accountDto.getBusinessType())
+			.clientType(accountDto.getClientType())
+			.organization(accountDto.getOrganization())
+			.loginType(accountDto.getLoginType())
+			.id(accountDto.getId())
+			.password(accountDto.getPassword())
+			.birthDate(accountDto.getBirthDate())
+			.build();
+
+		List<AccountDto> singleAccount = List.of(apiAccountDto);
 		ConntectedIdCreateRes result = null;
-		
+
 		if (connectedId == null) {
-			// connectedId가 없는 경우 - 첫 번째 계좌이므로 registerConnectedId 호출
 			result = codefAccountUtil.registerConnectedId(singleAccount);
-			// connectedId를 얻어서 member 테이블 업데이트
 			String newConnectedId = result.getConnectedId();
 
 			memberMapper.updateConnectedId(memberId, newConnectedId);
+
+			updateIsaType(memberId, isRural);
+
 			connectAccount(newConnectedId, accountDto.getOrganization(), memberId, accountDto.getBusinessType());
-			// connectedId가 새로 생성된 경우에서 isLast가 true일 때만 토큰 재발급
+
 			if (isLast) {
 				String newAccessToken = jwtTokenProvider.createValidatedAccessToken(memberId, "SEMI_USER");
 				String newRefreshToken = jwtTokenProvider.createValidatedRefreshToken(memberId, "SEMI_USER");
@@ -120,9 +139,9 @@ public class AccountService {
 				return new AccountConnectionRes(result, "", "");
 			}
 		} else {
-			// connectedId가 존재하는 경우 - addAccount 호출 (토큰 재발급 없음)
 			result = codefAccountUtil.addAccount(singleAccount, connectedId);
-			log.info("result:{}", result);
+
+			updateIsaType(memberId, isRural);
 			connectAccount(connectedId, accountDto.getOrganization(), memberId, accountDto.getBusinessType());
 			return new AccountConnectionRes(result, "", "");
 		}
@@ -198,11 +217,7 @@ public class AccountService {
 		account.setAccountInvestedCost(BigDecimal.ZERO);
 		account.setIsDeleted(false);
 		account.setIsIntegrated(true);
-		try {
-			account.setBankCode(Integer.parseInt(organization));
-		} catch (NumberFormatException e) {
-			account.setBankCode(0);
-		}
+		account.setBankCode(organization);
 		account.setCreatedAt(LocalDateTime.now());
 		account.setUpdatedAt(LocalDateTime.now());
 		
@@ -239,11 +254,7 @@ public class AccountService {
 		
 		account.setIsDeleted(false);
 		account.setIsIntegrated(true);
-		try {
-			account.setBankCode(Integer.parseInt(organization));
-		} catch (NumberFormatException e) {
-			account.setBankCode(0);
-		}
+		account.setBankCode(organization);
 		account.setCreatedAt(LocalDateTime.now());
 		account.setUpdatedAt(LocalDateTime.now());
 		
@@ -259,6 +270,32 @@ public class AccountService {
 		} catch (Exception e) {
 			log.warn("날짜 파싱 실패: {}", dateStr, e);
 			return null;
+		}
+	}
+
+	public AccountsRes getAccountList(Long memberId) {
+		List<AccountBankRes> accounts = accountMapper.selectAccountsByMemberId(memberId);
+		
+		List<AccountListRes> accountListRes = accounts.stream()
+				.map(account -> {
+					String organization = Bank.getNameByCode(account.getBankCode());
+					if (organization == null) {
+						organization = "알 수 없는 은행";
+					}
+					return new AccountListRes(organization, account.getAccountNumber());
+				})
+				.collect(Collectors.toList());
+		
+		return new AccountsRes(accountListRes);
+	}
+	
+	private void updateIsaType(Long memberId, Boolean isRural) {
+		if (isRural == null) {
+			return;
+		} else if (isRural) {
+			memberMapper.updateIsaType(memberId, "RURAL");
+		} else {
+			memberMapper.updateIsaType(memberId, "GENERAL");
 		}
 	}
 }

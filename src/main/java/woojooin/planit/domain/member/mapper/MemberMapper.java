@@ -16,4 +16,6 @@ public interface MemberMapper {
     
     void updateConnectedId(@Param("memberId") Long memberId, @Param("connectedId") String connectedId);
     String findInvestTypeById(@Param("memberId") Long memberId);
+    
+    void updateIsaType(@Param("memberId") Long memberId, @Param("isaType") String isaType);
 }

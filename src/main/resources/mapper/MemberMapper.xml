@@ -78,4 +78,10 @@
         select invest_type from member
         where member_id=#{memberId}
     </select>
+    
+    <update id="updateIsaType">
+        UPDATE member
+        SET isa_type = #{isaType}
+        WHERE member_id = #{memberId}
+    </update>
 </mapper>

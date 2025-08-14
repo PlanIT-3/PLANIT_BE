@@ -35,4 +35,6 @@ public class AccountDto {
 	private String password;
 
 	private String birthDate;
+
+	private Boolean isRural;
 }
