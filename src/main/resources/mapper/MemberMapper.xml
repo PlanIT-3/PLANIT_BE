@@ -67,6 +67,12 @@
         SET invest_type = #{type}
         WHERE member_id = #{memberId}
     </update>
+    
+    <update id="updateConnectedId">
+        UPDATE member
+        SET connected_id = #{connectedId}
+        WHERE member_id = #{memberId}
+    </update>
 
     <update id="updateConnectedId">
         UPDATE member

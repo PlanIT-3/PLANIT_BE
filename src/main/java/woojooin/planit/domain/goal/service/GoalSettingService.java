@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +66,8 @@ public class GoalSettingService {
 			.sum();
 
 		long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
+		log.info("Total ISA Amount: {}, Total Deposit Amount: {}, Total Current Amount: {}",
+			totalIsaAmount, totalDepositAmount, totalCurrentAmount);
 
 		int goalRate = 0;
 		if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
