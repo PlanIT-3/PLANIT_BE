@@ -52,6 +52,7 @@
             public ResponseEntity<Response<GoalDetailResponseDto>> getGoalDetail(
                     @PathVariable Long goalId,
                     @AuthenticationPrincipal CustomUserDetails userDetails){
+
                 Long memberId = userDetails.getId();
                 GoalDetailResponseDto response = goalService.getGoalDetail(memberId, goalId);
                 return ResponseEntity.ok(Response.ok(response));

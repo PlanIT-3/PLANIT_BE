@@ -2,6 +2,7 @@ package woojooin.planit.domain.goal.service;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
 import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.domain.goal.dto.DailyGoalProgressResponse;
+import woojooin.planit.domain.goal.dto.res.GoalDepositResponse;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GoalSettingService {
 	private final GoalMapper goalMapper;
 
@@ -46,7 +49,7 @@ public class GoalSettingService {
 		}
 		//  isa , 예적금 상품 목록 조회
 		List<IsaAccountProductRes> isaItems = goalMapper.findAllocatedIsaByGoal(memberId, goalId);
-		List<DepositAccountRes> depositAccounts = goalMapper.findAllocatedDepositByGoal(memberId, goalId);
+		List<GoalDepositResponse> depositAccounts = goalMapper.findAllocatedDepositByGoal(memberId, goalId);
 
 		long totalIsaAmount = isaItems.stream()
 			.mapToLong(item -> item.getPresentAmount()
@@ -61,12 +64,17 @@ public class GoalSettingService {
 		long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 
 		int goalRate = 0;
+
 		if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
 			goalRate = (int)Math.floor((double)totalCurrentAmount * 100 / goal.getTargetAmount());
 		}
+
 		goal.setGoalRate(goalRate);
 
 		goal.setStartAmount(totalCurrentAmount);
+
+
+
 
 		goalMapper.updateGoal(goal);
 		return GoalDetailResponseDto.builder()
@@ -97,7 +105,7 @@ public class GoalSettingService {
 		}
 		return goals.stream().map(goal -> {
 			List<IsaAccountProductRes> isaList = goalMapper.findAllocatedIsaByGoal(memberId, goal.getGoalId());
-			List<DepositAccountRes> depositList = goalMapper.findAllocatedDepositByGoal(memberId, goal.getGoalId());
+			List<GoalDepositResponse> depositList = goalMapper.findAllocatedDepositByGoal(memberId, goal.getGoalId());
 
 			long totalIsaAmount =
 				isaList.stream()
@@ -116,6 +124,7 @@ public class GoalSettingService {
 				.sum();
 			long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 			int goalRate = 0;
+
 			if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
 				goalRate = (int)Math.floor((double)totalCurrentAmount * 100 / goal.getTargetAmount());
 			}
