@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import woojooin.planit.domain.account.dto.req.AccountListRequest;
+import woojooin.planit.domain.account.dto.res.AccountsRes;
 import woojooin.planit.domain.account.dto.res.BalanceListRes;
 import woojooin.planit.domain.account.service.AccountService;
 import woojooin.planit.domain.goal.dto.res.GoalRatioListRes;
@@ -61,5 +62,14 @@ public class AccountController {
 	) {
 		AccountConnectionRes result = accountService.register(request.getAccountDto(), request.isLast(), customUserDetails.getId());
 		return ResponseEntity.ok(Response.ok(result));
+	}
+
+	@GetMapping()
+	@ApiOperation(value = "계좌 리스트 조회", notes = "사용자의 계좌들을 조회합니다.")
+	public ResponseEntity<Response<AccountsRes>> getAccountList(
+		@AuthenticationPrincipal CustomUserDetails customUserDetails
+	) {
+		AccountsRes accountList = accountService.getAccountList(customUserDetails.getId());
+		return ResponseEntity.ok(Response.ok(accountList));
 	}
 }
