@@ -3,6 +3,9 @@ package woojooin.planit.domain.goal.service;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +32,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class GoalSettingService {
+	private static final Logger log = LoggerFactory.getLogger(GoalSettingService.class);
 	private final GoalMapper goalMapper;
 
 	@Transactional
@@ -64,17 +67,12 @@ public class GoalSettingService {
 		long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 
 		int goalRate = 0;
-
 		if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
 			goalRate = (int)Math.floor((double)totalCurrentAmount * 100 / goal.getTargetAmount());
 		}
-
 		goal.setGoalRate(goalRate);
 
 		goal.setStartAmount(totalCurrentAmount);
-
-
-
 
 		goalMapper.updateGoal(goal);
 		return GoalDetailResponseDto.builder()
@@ -122,11 +120,8 @@ public class GoalSettingService {
 			long totalDepositAmount = depositList.stream()
 				.mapToLong(item -> item.getMyAmount().longValue())
 				.sum();
-
 			long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
-
 			int goalRate = 0;
-
 			if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
 				goalRate = (int)Math.floor((double)totalCurrentAmount * 100 / goal.getTargetAmount());
 			}

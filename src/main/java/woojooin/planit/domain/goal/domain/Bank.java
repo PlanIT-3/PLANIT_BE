@@ -16,7 +16,7 @@ public enum Bank {
 	JEONBUK("037", "전북은행"),
 	GYEONGNAM("039", "경남은행"),
 	SAEMAUL("045", "새마을금고"),
-	SHINHYUP("048", "신협"),
+	SHINHYUP("048", "신협은행"),
 	POST("071", "우체국"),
 	HANA("081", "하나은행"),
 	SHINHAN("088", "신한은행"),
