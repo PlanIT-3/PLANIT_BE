@@ -65,21 +65,20 @@
 
     <select id="findAllocatedIsaByGoal" resultType="woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes">
         SELECT
-            mp.member_product_id   AS memberProductId,
-            mp.item_name           AS itemName,
-            mp.present_amount      AS presentAmount,
-            mp.quantity            AS quantity,
-            1                      AS checked
-        FROM action a
-                 JOIN member_product mp ON mp.member_product_id = a.member_product_id
-        WHERE a.goal_id = #{goalId}
-          AND mp.member_id = #{memberId}
-          AND a.account_type = 'ISA'
-          AND (a.is_deleted IS NULL OR a.is_deleted = false)
-        ORDER BY mp.member_product_id DESC
-    </select>
+            mp.member_product_id,
+            mp.present_amount,
+            mp.quantity,
+            mp.item_name,
+            1 as checked
+        FROM member_product mp
+                 INNER JOIN action a ON mp.member_product_id = a.member_product_id
+        WHERE mp.member_id = #{memberId}
+          AND mp.is_deleted = false
+          AND a.goal_id = #{goalId}
+          AND a.is_deleted = false
 
-    <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes">
+    </select>
+    <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.goal.dto.res.GoalDepositResponse">
         select
             acc.account_id as member_product_id,
             acc.account_number,
@@ -87,7 +86,10 @@
             acc.account_balance as present_amount,
             1 as checked,
             COALESCE(allocated_sum.total_allocated, 0) as allocated_amount,
-            (acc.account_balance - COALESCE(allocated_sum.total_allocated, 0)) as remaining_amount
+            (acc.account_balance - COALESCE(allocated_sum.total_allocated, 0)) as remaining_amount,
+            ( COALESCE(acc.account_balance, 0)
+                  * CAST(COALESCE(a.account_allocated_rate, 0) AS DECIMAL(5,2)) / 100.0
+                )                                                                  AS myAmount
         FROM account acc
                  -- 각 계좌별로 현재 할당된 총액을 계산하는 서브쿼리
                  LEFT JOIN (
@@ -137,7 +139,7 @@
     </select>
 
     <select id="selectDailyGoalProgressLast6Months" resultType="woojooin.planit.domain.goal.domain.GoalProgress">
-        SELECT 
+        SELECT
             daily_goal_progress_id,
             goal_id,
             isa_progress,
