@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
+import woojooin.planit.domain.goal.dto.res.GoalDepositResponse;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 
 import javax.validation.constraints.Max;
@@ -27,5 +28,5 @@ public class GoalDetailResponseDto {
     private int depositRate;
     private int isaRate;
     private List<IsaAccountProductRes> isaProducts; // 변수명 통일 (isaAccounts -> isaProducts)
-    private List<DepositAccountRes> depositAccounts; // 예적금 목록 추가
+    private List<GoalDepositResponse> depositAccounts; // 예적금 목록 추가
 }
