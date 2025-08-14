@@ -73,6 +73,10 @@ public enum ResponseCode {
 	GOAL_UPDATE_FAILED("GOAL-003", "목표 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 	GOAL_DELETE_FAILED("GOAL-004", "목표 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
+	// Account Connection
+	ACCOUNT_CONNECTION_FAILED("ACC-001", "계좌 연동에 실패했습니다.", HttpStatus.BAD_REQUEST),
+	ACCOUNT_ALREADY_REGISTERED("ACC-002", "이미 계정이 등록된 기관입니다. 기존 계정을 먼저 삭제하세요.", HttpStatus.BAD_REQUEST),
+
 
   // 5xx
 	INTERNAL_ERROR("GEN-999", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);

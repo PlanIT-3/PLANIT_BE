@@ -58,10 +58,19 @@
     <select id="findByEmail" resultMap="MemberResultMap" parameterType="String">
         SELECT * FROM member WHERE email = #{email}
     </select>
+    <select id="findByConnectedIdString" resultType="java.lang.String">
+        select connected_id from member where member_id = #{memberId}
+    </select>
 
     <update id="updateInvestType">
         UPDATE member
         SET invest_type = #{type}
+        WHERE member_id = #{memberId}
+    </update>
+    
+    <update id="updateConnectedId">
+        UPDATE member
+        SET connected_id = #{connectedId}
         WHERE member_id = #{memberId}
     </update>
 
