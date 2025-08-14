@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import woojooin.planit.domain.goal.domain.Goal; // 변경된 Goal VO 임포트
 import woojooin.planit.domain.goal.domain.GoalProgress;
 
+import woojooin.planit.domain.goal.dto.DepositAccountDto;
+import woojooin.planit.domain.goal.dto.IsaProductDto;
 import woojooin.planit.domain.goal.dto.res.GoalDepositResponse;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
@@ -31,10 +33,12 @@ public interface GoalMapper {
 
     List<GoalDepositResponse> findAllocatedDepositByGoal(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
 
-    @MapKey("bankCode")
-    List<Map<String, Object>> getGoalAccountRates(@Param("goalId")Long goalId);
+    List<DepositAccountDto> selectDepositAccountsByGoalId(Long goalId);
 
-    Long getTargetAmountByGoalId(Long goalId);
+    List<IsaProductDto> selectIsaProductsByGoalId(Long goalId);
+
+    // 목표 금액 조회
+    Long selectGoalTargetAmount(Long goalId);
 
 	  List<GoalProgress> selectGoalProgressByGoalId(@Param("goalId") Long goalId);
 

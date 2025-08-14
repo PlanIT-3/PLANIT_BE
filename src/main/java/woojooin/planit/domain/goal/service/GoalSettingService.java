@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import woojooin.planit.domain.goal.domain.Bank;
 import woojooin.planit.domain.goal.domain.Goal;
 import woojooin.planit.domain.goal.domain.GoalProgress;
+import woojooin.planit.domain.goal.dto.DepositAccountDto;
 import woojooin.planit.domain.goal.dto.GoalAccountRateResponse;
 import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
 import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.domain.goal.dto.DailyGoalProgressResponse;
+import woojooin.planit.domain.goal.dto.IsaProductDto;
 import woojooin.planit.domain.goal.dto.res.GoalDepositResponse;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
@@ -24,6 +26,8 @@ import woojooin.planit.global.exception.BusinessException;
 import woojooin.planit.global.response.ResponseCode;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -169,34 +173,66 @@ public class GoalSettingService {
 	}
 
 	public List<GoalAccountRateResponse> getGoalAccountRates(Long goalId) {
-		Long targetAmount = goalMapper.getTargetAmountByGoalId(goalId);
-
-		if (targetAmount == null) {
-			throw new IllegalArgumentException("해당 goalId의 목표 금액이 존재하지 않습니다: " + goalId);
+		Long targetAmount = goalMapper.selectGoalTargetAmount(goalId);
+		if (targetAmount == null || targetAmount <= 0) {
+			throw new IllegalArgumentException("목표 금액이 없습니다: " + goalId);
 		}
 
-		List<Map<String, Object>> rows = goalMapper.getGoalAccountRates(goalId);
+		List<GoalAccountRateResponse> result = new ArrayList<>();
 
-		return rows.stream()
-			.map(row -> {
-				String bankCode = (String) row.get("bankCode");
-				String bankName = Bank.getNameByCode(bankCode);
+		// 1. 예적금 계좌별 비율
+		List<DepositAccountDto> depositAccounts = goalMapper.selectDepositAccountsByGoalId(goalId);
+		for (DepositAccountDto acc : depositAccounts) {
+			BigDecimal balance = acc.getAccountBalance() != null ? acc.getAccountBalance() : BigDecimal.ZERO;
+			BigDecimal rate = acc.getAllocatedRate() != null ? BigDecimal.valueOf(acc.getAllocatedRate()) : BigDecimal.ZERO;
 
-				long accountBalance = row.get("accountBalance") != null
-					? ((Number) row.get("accountBalance")).longValue()
-					: 0L;
+			BigDecimal progress = balance
+				.multiply(rate.divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP))
+				.divide(BigDecimal.valueOf(targetAmount), 6, RoundingMode.HALF_UP)
+				.multiply(BigDecimal.valueOf(100))
+				.setScale(2, RoundingMode.HALF_UP);
 
-				int accountAllocatedRate = row.get("allocatedRate") != null
-					? ((Number) row.get("allocatedRate")).intValue()
-					: 0;
+			// bankCode -> 한글 이름 변환
+			String bankName = Bank.getNameByCode(acc.getBankCode());
+			if (bankName == null) bankName = acc.getBankCode(); // 못 찾으면 코드 그대로
 
-				double progress = (accountBalance * (accountAllocatedRate / 100.0)) / targetAmount * 100;
+			result.add(new GoalAccountRateResponse(bankName, progress.doubleValue()));
+		}
 
-				return new GoalAccountRateResponse(bankName, progress);
+		// 2. ISA 계좌 전체 금액 합산
+		List<IsaProductDto> isaProducts = goalMapper.selectIsaProductsByGoalId(goalId);
+		BigDecimal totalIsaAmount = isaProducts.stream()
+			.map(p -> {
+				BigDecimal presentAmount = p.getPresentAmount() != null ? p.getPresentAmount() : BigDecimal.ZERO;
+				BigDecimal quantity = p.getQuantity() != null ? p.getQuantity() : BigDecimal.ZERO;
+				return presentAmount.multiply(quantity);
 			})
-			.collect(Collectors.toList());
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 
+		BigDecimal isaProgress = totalIsaAmount
+			.divide(BigDecimal.valueOf(targetAmount), 6, RoundingMode.HALF_UP)
+			.multiply(BigDecimal.valueOf(100))
+			.setScale(2, RoundingMode.HALF_UP);
+
+		result.add(new GoalAccountRateResponse("ISA", isaProgress.doubleValue()));
+
+		return result;
 	}
+
+
+
+	private String safeString(Map<String, Object> row, String key) {
+		Object val = row.get(key);
+		return val != null ? val.toString() : "";
+	}
+
+	private BigDecimal safeBigDecimal(Map<String, Object> row, String key) {
+		Object val = row.get(key);
+		if (val instanceof BigDecimal) return (BigDecimal) val;
+		if (val instanceof Number) return BigDecimal.valueOf(((Number) val).doubleValue());
+		return BigDecimal.ZERO;
+	}
+
 
 	public List<DailyGoalProgressResponse> getGoalProgress(Long goalId) {
 		List<GoalProgress> goalProgresses = goalMapper.selectDailyGoalProgressLast6Months(goalId);
