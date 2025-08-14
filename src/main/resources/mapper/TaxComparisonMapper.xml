@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="woojooin.planit.domain.tax.mapper.TaxComparisonMapper">
+
+    <!-- QuarterlyTaxData ResultMap -->
+    <resultMap id="quarterlyTaxDataResultMap" type="woojooin.planit.domain.tax.dto.TaxComparisonRes$QuarterlyTaxData">
+        <result property="quarter" column="quarter"/>
+        <result property="isaProfit" column="isa_profit"/>
+        <result property="isaGeneralTax" column="general_tax"/>
+        <result property="isaTaxSaved" column="tax_saved"/>
+        <result property="depositInterest" column="interest_income"/>
+        <result property="depositTax" column="total_tax"/>
+        <result property="depositNetIncome" column="net_income"/>
+        <result property="totalTaxDifference" column="tax_difference"/>
+        <result property="taxSavingRate" column="tax_saving_rate"/>
+    </resultMap>
+
+    <!-- 최근 N분기 시계열 세금 비교 데이터 조회 (created_at 기준) -->
+    <select id="getTaxTrendByQuarters" resultMap="quarterlyTaxDataResultMap">
+        SELECT 
+            quarter_year,
+            quarter_num,
+            CONCAT(quarter_year, '-Q', quarter_num) as quarter,
+            SUM(isa_profit) as isa_profit,
+            SUM(general_tax) as general_tax,
+            SUM(tax_saved) as tax_saved,
+            SUM(interest_income) as interest_income,
+            SUM(total_tax) as total_tax,
+            SUM(net_income) as net_income,
+            SUM(total_tax) - SUM(general_tax) + SUM(tax_saved) as tax_difference,
+            CASE 
+                WHEN SUM(total_tax) > 0 
+                THEN (SUM(tax_saved) / SUM(total_tax)) * 100
+                ELSE 0 
+            END as tax_saving_rate
+        FROM (
+            SELECT 
+                YEAR(created_at) as quarter_year,
+                QUARTER(created_at) as quarter_num,
+                isa_profit, 
+                general_tax, 
+                tax_saved,
+                0 as interest_income,
+                0 as total_tax,
+                0 as net_income
+            FROM isa_tax_saving_history 
+            WHERE member_id = #{memberId}
+            AND created_at >= DATE_SUB(NOW(), INTERVAL #{quarters} QUARTER)
+            
+            UNION ALL
+            
+            SELECT 
+                YEAR(created_at) as quarter_year,
+                QUARTER(created_at) as quarter_num,
+                0 as isa_profit,
+                0 as general_tax,
+                0 as tax_saved,
+                interest_income,
+                total_tax,
+                net_income
+            FROM deposit_tax_saving_history 
+            WHERE member_id = #{memberId}
+            AND created_at >= DATE_SUB(NOW(), INTERVAL #{quarters} QUARTER)
+        ) combined_data
+        GROUP BY quarter_year, quarter_num
+        ORDER BY quarter_year ASC, quarter_num ASC
+    </select>
+
+</mapper>

@@ -73,4 +73,9 @@
         SET connected_id = #{connectedId}
         WHERE member_id = #{memberId}
     </update>
+
+    <select id="findInvestTypeById" parameterType="long" resultType="string">
+        select invest_type from member
+        where member_id=#{memberId}
+    </select>
 </mapper>

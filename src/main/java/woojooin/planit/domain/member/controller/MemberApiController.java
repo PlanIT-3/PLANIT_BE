@@ -15,6 +15,7 @@ import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import woojooin.planit.domain.member.dto.res.InvestScoreRes;
+import woojooin.planit.domain.member.dto.res.InvestType;
 import woojooin.planit.domain.member.service.MemberService;
 import woojooin.planit.global.response.Response;
 import woojooin.planit.global.security.CustomUserDetails;
@@ -26,33 +27,41 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Api(value = "회원 API", description = "회원 관련 API")
 public class MemberApiController {
-	private final MemberService memberService;
+    private final MemberService memberService;
 
-	@GetMapping("/test")
-	@ApiOperation(value = "회원 테스트 API", notes = "회원 API 테스트")
-	public String memberTest() {
-		return "Member API is working!";
-	}
-
-	@GetMapping("/health")
-	@ApiOperation(value = "회원 API태 확인", notes = "회원 API 서버 상태를 확인합니다.")
-	public String health() {
-		return "Member API OK";
-	}
+    @GetMapping("/test")
+    @ApiOperation(value = "회원 테스트 API", notes = "회원 API 테스트")
+    public String memberTest() {
+        return "Member API is working!";
+    }
+    
+    @GetMapping("/health")
+    @ApiOperation(value = "회원 API태 확인", notes = "회원 API 서버 상태를 확인합니다.")
+    public String health() {
+        return "Member API OK";
+    }
 
 	@PostMapping("/invest-type")
 	@ApiOperation(value = "회원 투자 성향 저장", notes = "로그인 유저의 투자 성향 저장")
 	public ResponseEntity<Response<Void>> saveInvestType(
 		@RequestParam String type,
 		@AuthenticationPrincipal CustomUserDetails user) {
-
 		{
 			Long memberId = user.getId();
 			memberService.updateInvestType(memberId, type);
 			return ResponseEntity.ok(Response.ok());
 		}
-
 	}
+	@GetMapping("/invest-type")
+	@ApiOperation(value = "회원 투자 성향 조회", notes = "로그인 유저의 투자 성향 조회")
+	public ResponseEntity<Response<InvestType>> getInvestType(
+			@AuthenticationPrincipal CustomUserDetails user
+	){
+		String type =memberService.getInvestmentType(user.getId());
+		return ResponseEntity.ok(Response.ok(new InvestType(type)));
+	}
+
+
 	@GetMapping("/invest-score")
 	@ApiOperation(value = "회원 투자 성향 점수 조회", notes = "회원 투자 성향 점수 조회")
 	public ResponseEntity<Response<InvestScoreRes>> getInvestScore (
@@ -62,5 +71,4 @@ public class MemberApiController {
 		return ResponseEntity.ok(Response.ok(investScore));
 
 	}
-
 }
