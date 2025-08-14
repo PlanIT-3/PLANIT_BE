@@ -2,6 +2,9 @@ package woojooin.planit.domain.goal.service;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GoalSettingService {
+	private static final Logger log = LoggerFactory.getLogger(GoalSettingService.class);
 	private final GoalMapper goalMapper;
 
 	@Transactional
@@ -59,6 +63,8 @@ public class GoalSettingService {
 			.sum();
 
 		long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
+		log.info("Total ISA Amount: {}, Total Deposit Amount: {}, Total Current Amount: {}",
+			totalIsaAmount, totalDepositAmount, totalCurrentAmount);
 
 		int goalRate = 0;
 		if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
