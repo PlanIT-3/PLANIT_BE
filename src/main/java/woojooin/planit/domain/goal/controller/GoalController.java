@@ -93,7 +93,10 @@
 
     @GetMapping("/{goalId}/progress")
     @ApiOperation(value = "목표 일별 진행률 조회", notes = "특정 목표의 최근 6개월 일별 ISA/예적금 진행률 조회 (goal_id, isa_progress, deposit_progress, created_at)")
-    public Response<List<DailyGoalProgressResponse>> getGoalProgress(@PathVariable("goalId") Long goalId) {
+    public Response<List<DailyGoalProgressResponse>> getGoalProgress(
+        @PathVariable("goalId") Long goalId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
         List<DailyGoalProgressResponse> progressList = goalService.getGoalProgress(goalId);
         return Response.ok(progressList);
     }

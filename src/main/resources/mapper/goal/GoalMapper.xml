@@ -147,14 +147,7 @@
             updated_at
         FROM daily_goal_progress
         WHERE goal_id = #{goalId}
-            AND DATE(created_at) IN (
-                CURDATE(),
-                DATE_SUB(CURDATE(), INTERVAL 1 MONTH),
-                DATE_SUB(CURDATE(), INTERVAL 2 MONTH),
-                DATE_SUB(CURDATE(), INTERVAL 3 MONTH),
-                DATE_SUB(CURDATE(), INTERVAL 4 MONTH),
-                DATE_SUB(CURDATE(), INTERVAL 5 MONTH)
-            )
+          AND created_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
         ORDER BY created_at DESC
     </select>
 
