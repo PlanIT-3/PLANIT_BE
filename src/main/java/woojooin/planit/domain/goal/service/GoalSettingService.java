@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,7 @@ import woojooin.planit.domain.goal.dto.GoalDetailResponseDto;
 import woojooin.planit.domain.goal.dto.GoalRequestDto;
 import woojooin.planit.domain.goal.dto.GoalProgressGraphDTO;
 import woojooin.planit.domain.goal.dto.DailyGoalProgressResponse;
+import woojooin.planit.domain.goal.dto.res.GoalDepositResponse;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
 import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
@@ -50,7 +53,7 @@ public class GoalSettingService {
 		}
 		//  isa , 예적금 상품 목록 조회
 		List<IsaAccountProductRes> isaItems = goalMapper.findAllocatedIsaByGoal(memberId, goalId);
-		List<DepositAccountRes> depositAccounts = goalMapper.findAllocatedDepositByGoal(memberId, goalId);
+		List<GoalDepositResponse> depositAccounts = goalMapper.findAllocatedDepositByGoal(memberId, goalId);
 
 		long totalIsaAmount = isaItems.stream()
 			.mapToLong(item -> item.getPresentAmount()
@@ -59,7 +62,7 @@ public class GoalSettingService {
 			.sum();
 
 		long totalDepositAmount = depositAccounts.stream()
-			.mapToLong(item -> item.getAllocatedAmount().longValue())
+			.mapToLong(item -> item.getMyAmount().longValue())
 			.sum();
 
 		long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
@@ -103,7 +106,7 @@ public class GoalSettingService {
 		}
 		return goals.stream().map(goal -> {
 			List<IsaAccountProductRes> isaList = goalMapper.findAllocatedIsaByGoal(memberId, goal.getGoalId());
-			List<DepositAccountRes> depositList = goalMapper.findAllocatedDepositByGoal(memberId, goal.getGoalId());
+			List<GoalDepositResponse> depositList = goalMapper.findAllocatedDepositByGoal(memberId, goal.getGoalId());
 
 			long totalIsaAmount =
 				isaList.stream()
@@ -118,7 +121,7 @@ public class GoalSettingService {
 					.longValue();
 
 			long totalDepositAmount = depositList.stream()
-				.mapToLong(item -> item.getAllocatedAmount().longValue())
+				.mapToLong(item -> item.getMyAmount().longValue())
 				.sum();
 			long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 			int goalRate = 0;
