@@ -17,6 +17,7 @@ public class Account {
 	private String accountName;       // varchar(255)
 	private String accountNumber;     // varchar(50)
 	private String accountCurrency;   // varchar(10)
+	private String accountType;       // varchar(20)
 
 	private BigDecimal accountBalance;      // decimal(20,2)
 	private BigDecimal accountDeposit;      // decimal(20,2)

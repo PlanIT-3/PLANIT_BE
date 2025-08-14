@@ -6,7 +6,9 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.validation.Valid;
@@ -28,8 +30,16 @@ import com.github.benmanes.caffeine.cache.Cache;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import woojooin.planit.domain.account.domain.Account;
+import woojooin.planit.domain.account.mapper.AccountMapper;
+import woojooin.planit.global.exception.BusinessException;
+import woojooin.planit.global.response.ResponseCode;
 import woojooin.planit.global.util.ConnectionUtil;
 import woojooin.planit.global.util.codef.dto.CodefResponse;
+import woojooin.planit.global.util.codef.dto.account.CodefAccountData;
+import woojooin.planit.global.util.codef.dto.account.CodefAccountResponse;
+import woojooin.planit.global.util.codef.dto.account.CodefSecuritiesAccountData;
+import woojooin.planit.global.util.codef.dto.account.ResDepositTrust;
 import woojooin.planit.global.util.codef.dto.connectedId.AccountDto;
 import woojooin.planit.global.util.codef.dto.connectedId.add.ConnectedIdAddReq;
 import woojooin.planit.global.util.codef.dto.connectedId.create.ConnectedIdCreateReq;
@@ -42,6 +52,7 @@ import woojooin.planit.global.util.codef.dto.token.CodefTokenRes;
 public class CodefAccountUtil {
 
 	private final Cache<String, CodefTokenRes> localCache;
+	private final AccountMapper accountMapper;
 
 	@Qualifier("snakeRestTemplate")
 	private final RestTemplate snakeRestTemplate;
@@ -68,6 +79,64 @@ public class CodefAccountUtil {
 	private final static String BEARER_PREFIX = "Bearer ";
 	private final static String AUTHORIZATION_HEADER = "Authorization";
 	private static final String TOKEN_CACHE_KEY = "codef_access_token";
+
+	public CodefAccountData getAccountData(String connectedId, String organization) {
+
+		String url = CODEF_API_URL + "/v1/kr/bank/p/account/account-list";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add(AUTHORIZATION_HEADER, BEARER_PREFIX + getAccessToken().accessToken());
+
+		Map<String, Object> body = new HashMap<>();
+		body.put("organization", organization);
+		body.put("connectedId", connectedId);
+
+		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+		ResponseEntity<String> responseEntity = camelRestTemplate.exchange(
+			url,
+			HttpMethod.POST,
+			entity,
+			String.class
+		);
+
+		String resString = responseEntity.getBody();
+
+		TypeReference<CodefAccountResponse> type = new TypeReference<CodefAccountResponse>() {
+		};
+
+		CodefAccountResponse response = ConnectionUtil.decodeUrlStringToDto(resString, type,
+			ConnectionUtil.CAMEL);
+
+		return response.getData();
+	}
+
+	public CodefSecuritiesAccountData getSecuritiesAccountData(String connectedId, String organization) {
+		String url = CODEF_API_URL + "/v1/kr/stock/a/account/account-list";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add(AUTHORIZATION_HEADER, BEARER_PREFIX + getAccessToken().accessToken());
+
+		Map<String, Object> body = new HashMap<>();
+		body.put("organization", organization);
+		body.put("connectedId", connectedId);
+
+		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+		ResponseEntity<String> responseEntity = camelRestTemplate.exchange(
+			url,
+			HttpMethod.POST,
+			entity,
+			String.class
+		);
+
+		String resString = responseEntity.getBody();
+
+		TypeReference<CodefSecuritiesAccountData> type = new TypeReference<CodefSecuritiesAccountData>() {
+		};
+
+		return ConnectionUtil.decodeUrlStringToDto(resString, type, ConnectionUtil.CAMEL);
+	}
 
 	/**
 	 * codef_path : /oauth/token
@@ -185,7 +254,22 @@ public class CodefAccountUtil {
 		CodefResponse<ConntectedIdCreateRes> res = ConnectionUtil.decodeUrlStringToDto(resString, type,
 			ConnectionUtil.CAMEL);
 
-		return res.getData();
+		ConntectedIdCreateRes result = res.getData();
+		
+		// errorList가 존재하는지 확인하고 예외 발생
+		if (result.getErrorList() != null && !result.getErrorList().isEmpty()) {
+			ConntectedIdCreateRes.SuccessItem firstError = result.getErrorList().get(0);
+			log.error("계좌 연동 실패: {}", firstError.getMessage());
+			
+			// 특정 에러 코드에 따른 구분된 예외 처리
+			if ("CF-04004".equals(firstError.getCode())) {
+				throw new BusinessException(ResponseCode.ACCOUNT_ALREADY_REGISTERED);
+			} else {
+				throw new BusinessException(ResponseCode.ACCOUNT_CONNECTION_FAILED);
+			}
+		}
+
+		return result;
 	}
 
 	// 공개 키 정보 확인 메서드 추가
@@ -254,7 +338,22 @@ public class CodefAccountUtil {
 		CodefResponse<ConntectedIdCreateRes> response = ConnectionUtil.decodeUrlStringToDto(encodedBody, type,
 			ConnectionUtil.CAMEL);
 
-		return response.getData();
+		ConntectedIdCreateRes result = response.getData();
+		
+		// errorList가 존재하는지 확인하고 예외 발생
+		if (result.getErrorList() != null && !result.getErrorList().isEmpty()) {
+			ConntectedIdCreateRes.SuccessItem firstError = result.getErrorList().get(0);
+			log.error("계좌 추가 실패: {}", firstError.getMessage());
+			
+			// 특정 에러 코드에 따른 구분된 예외 처리
+			if ("CF-04004".equals(firstError.getCode())) {
+				throw new BusinessException(ResponseCode.ACCOUNT_ALREADY_REGISTERED);
+			} else {
+				throw new BusinessException(ResponseCode.ACCOUNT_CONNECTION_FAILED);
+			}
+		}
+
+		return result;
 	}
 
 	/**

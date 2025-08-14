@@ -51,4 +51,44 @@
           AND is_deleted = 0
     </select>
 
+    <insert id="insertAccount" parameterType="woojooin.planit.domain.account.domain.Account">
+        INSERT INTO account (
+            member_id,
+            account_name,
+            account_number,
+            account_currency,
+            account_type,
+            account_balance,
+            account_deposit,
+            earnings_rate,
+            account_invested_cost,
+            last_tran_date,
+            account_start_date,
+            account_end_date,
+            is_deleted,
+            is_integrated,
+            bank_code,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{memberId},
+            #{accountName},
+            #{accountNumber},
+            #{accountCurrency},
+            #{accountType},
+            #{accountBalance},
+            #{accountDeposit},
+            #{earningsRate},
+            #{accountInvestedCost},
+            #{lastTranDate},
+            #{accountStartDate},
+            #{accountEndDate},
+            #{isDeleted},
+            #{isIntegrated},
+            #{bankCode},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
 </mapper>

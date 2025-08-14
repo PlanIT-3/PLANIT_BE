@@ -35,9 +35,11 @@ public class AccountController {
 
 	@GetMapping("/{period}")
 	@ApiOperation(value = "기간별 잔고 조회", notes = "사용자의 기간별 잔고를 조회합니다. period: day(일주일), week(6주), month(6개월)")
-	public ResponseEntity<Response<BalanceListRes>> getAccountBalanceForDate( @PathVariable String period) {
+	public ResponseEntity<Response<BalanceListRes>> getAccountBalanceForDate(
+		@AuthenticationPrincipal CustomUserDetails customUserDetails,
+		@PathVariable String period) {
 
-		BalanceListRes balance = accountService.getAccountBalanceForDate(1L, period);
+		BalanceListRes balance = accountService.getAccountBalanceForDate(customUserDetails.getId(), period);
 		return ResponseEntity.ok(Response.ok(balance));
 	}
 
