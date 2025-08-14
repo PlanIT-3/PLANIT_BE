@@ -181,17 +181,23 @@ public class GoalSettingService {
 
 		return rows.stream()
 			.map(row -> {
-				String bankCode = (String)row.get("bankCode");
+				String bankCode = (String) row.get("bankCode");
 				String bankName = Bank.getNameByCode(bankCode);
 
-				long accountBalance = ((Number)row.get("accountBalance")).longValue();
-				int accountAllocatedRate = ((Number)row.get("allocatedRate")).intValue();
+				long accountBalance = row.get("accountBalance") != null
+					? ((Number) row.get("accountBalance")).longValue()
+					: 0L;
+
+				int accountAllocatedRate = row.get("allocatedRate") != null
+					? ((Number) row.get("allocatedRate")).intValue()
+					: 0;
 
 				double progress = (accountBalance * (accountAllocatedRate / 100.0)) / targetAmount * 100;
 
 				return new GoalAccountRateResponse(bankName, progress);
 			})
 			.collect(Collectors.toList());
+
 	}
 
 	public List<DailyGoalProgressResponse> getGoalProgress(Long goalId) {

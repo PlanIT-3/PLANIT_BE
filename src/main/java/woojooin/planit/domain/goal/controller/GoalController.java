@@ -84,7 +84,10 @@
 
 	@GetMapping("/{goalId}/rate")
 	@ApiOperation(value = "목표 대비 계좌별 진행률", notes = "계좌 잔액과 할당 비율 기준 목표 대비 진행률(%) 반환")
-	public Response<List<GoalAccountRateResponse>> getGoalAccountRates(@PathVariable("goalId") Long goalId) {
+	public Response<List<GoalAccountRateResponse>> getGoalAccountRates(
+        @PathVariable("goalId") Long goalId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
 		List<GoalAccountRateResponse> list = goalService.getGoalAccountRates(goalId);
 		return Response.ok(list);
 	}
