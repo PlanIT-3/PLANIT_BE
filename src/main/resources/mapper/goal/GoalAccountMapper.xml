@@ -45,7 +45,7 @@
             g.goal_name,
             acc.account_id,
             acc.account_name,
-            acc.account_balance * act.account_allocated_rate AS account_balance,
+            acc.account_balance * act.account_allocated_rate / 100 AS account_balance,
             acc.bank_code
         FROM goal g
                  INNER JOIN action act ON g.goal_id = act.goal_id
