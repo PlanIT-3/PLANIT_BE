@@ -9,7 +9,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # 3. 기존 webapps 디렉토리 제거 (불필요한 기본 앱 제거)
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY build/libs/PlanIT-Batch-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY build/libs/plan-it-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
