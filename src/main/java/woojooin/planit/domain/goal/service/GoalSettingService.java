@@ -58,7 +58,7 @@ public class GoalSettingService {
 			.sum();
 
 		long totalDepositAmount = depositAccounts.stream()
-			.mapToLong(item -> item.getAllocatedAmount().longValue())
+			.mapToLong(item -> item.getMyAmount().longValue())
 			.sum();
 
 		long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
@@ -120,9 +120,11 @@ public class GoalSettingService {
 					.longValue();
 
 			long totalDepositAmount = depositList.stream()
-				.mapToLong(item -> item.getAllocatedAmount().longValue())
+				.mapToLong(item -> item.getMyAmount().longValue())
 				.sum();
+
 			long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
+
 			int goalRate = 0;
 
 			if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {

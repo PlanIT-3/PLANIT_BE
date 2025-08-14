@@ -24,5 +24,5 @@ public class GoalDepositResponse {
 
     private BigDecimal  remainingAmount;  // 할당 가능한 잔여액
 
-    private BigDecimal  myAmount;
+    private BigDecimal  myAmount; // 진짜로 할당된 값
 }

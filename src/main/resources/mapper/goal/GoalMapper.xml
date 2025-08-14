@@ -78,6 +78,7 @@
           AND a.is_deleted = false
 
     </select>
+
     <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.goal.dto.res.GoalDepositResponse">
         select
             acc.account_id as member_product_id,
@@ -87,9 +88,10 @@
             1 as checked,
             COALESCE(allocated_sum.total_allocated, 0) as allocated_amount,
             (acc.account_balance - COALESCE(allocated_sum.total_allocated, 0)) as remaining_amount,
-            acc.account_balance*a.account_allocated_rate*0.01 as myAmount
+            ( COALESCE(acc.account_balance, 0)
+                    * CAST(COALESCE(a.account_allocated_rate, 0) AS DECIMAL(5,2)) / 100.0
+                )                                                                  AS myAmount
         FROM account acc
-                 -- 각 계좌별로 현재 할당된 총액을 계산하는 서브쿼리
                  LEFT JOIN (
             SELECT
                 a.account_id,
