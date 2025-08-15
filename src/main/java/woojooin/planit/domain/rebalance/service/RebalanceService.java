@@ -26,26 +26,21 @@ public class RebalanceService {
 
 		List<RebalancingInfo> infoList = new ArrayList<>();
 
-		log.info("getRebalanceInfo 3");
 		for (Goal goal : goals) {
-			log.info("getRebalanceInfo goal={} 3-1", goal.getGoalId());
 			List<Rebalance> rebalanceList = rebalanceMapper.findLatestRebalanceByGoalId(goal.getGoalId());
-			log.info("getRebalanceInfo goal={} 3-2", goal.getGoalId());
 
 			RebalancingInfo rebalancingInfo = new RebalancingInfo();
 			rebalancingInfo.setGoalName(goal.getGoalName());
 			for (Rebalance rebalance : rebalanceList) {
-				log.info("getRebalanceInfo rebalanceId={} 3-3", rebalance.getRebalanceId());
 				if (rebalance == null) {
 					continue;
 				}
-				log.info("getRebalanceInfo rebalance={} 3-4", rebalance);
+
 				rebalancingInfo.addInfo(rebalance);
 			}
 
 			infoList.add(rebalancingInfo);
 		}
-		log.info("getRebalanceInfo 4");
 
 		return infoList;
 	}

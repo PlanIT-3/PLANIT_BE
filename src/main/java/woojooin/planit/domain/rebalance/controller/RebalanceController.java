@@ -25,11 +25,7 @@ public class RebalanceController {
 	public ResponseEntity<?> getRebalanceInfo(@AuthenticationPrincipal CustomUserDetails member) {
 
 		List<RebalancingInfo> infos = new ArrayList<>();
-		try {
-			infos = rebalanceService.reqCurrentRebalancing(member.getId());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		infos = rebalanceService.reqCurrentRebalancing(member.getId());
 
 		RebalanceRes rebalanceRes = new RebalanceRes(infos);
 
