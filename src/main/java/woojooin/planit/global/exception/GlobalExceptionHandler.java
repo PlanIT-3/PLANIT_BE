@@ -35,14 +35,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(response.getStatus()).body(response);
 	}
 
-	/* ======= 일반 Exception ======= */
-	@ExceptionHandler(Exception.class)
-	protected ResponseEntity<Object> handleGenericException(Exception ex) {
-
-		final Response response = Response.error(ResponseCode.INTERNAL_ERROR);
-
-		return ResponseEntity.status(response.getStatus()).body(response);
-	}
+	// /* ======= 일반 Exception ======= */
+	// @ExceptionHandler(Exception.class)
+	// protected ResponseEntity<Object> handleGenericException(Exception ex) {
+	//
+	// 	final Response response = Response.error(ResponseCode.INTERNAL_ERROR);
+	//
+	// 	return ResponseEntity.status(response.getStatus()).body(response);
+	// }
 
 	/* ======= Validation / Binding 계열 ======= */
 
