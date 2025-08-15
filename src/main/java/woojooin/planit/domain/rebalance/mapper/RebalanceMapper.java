@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import woojooin.planit.domain.rebalance.dto.res.RebalanceInvestInfoRes;
 import woojooin.planit.domain.rebalance.vo.Rebalance;
 
 @Mapper
@@ -20,4 +21,6 @@ public interface RebalanceMapper {
 	List<Rebalance> selectByGoalId(@Param("goalId") Long goalId);
 
 	List<Rebalance> findLatestRebalanceByGoalId(@Param("goalId") Long goalId);
+
+	List<RebalanceInvestInfoRes> findRebalanceInvestInfoByMemberId(@Param("memberId") Long memberId);
 }

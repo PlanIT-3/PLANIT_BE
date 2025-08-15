@@ -92,4 +92,14 @@
         ORDER BY created_at LIMIT 3
     </select>
 
+    <select id="findRebalanceInvestInfoByMemberId" parameterType="long" resultType="woojooin.planit.domain.rebalance.dto.res.RebalanceInvestInfoRes">
+        select item_name,
+               quantity,
+               valuation_amount,
+               earnings_rate,
+               valuation_amount * quantity as total_valuation_amount
+        from member_product
+        where member_id = #{memberId}
+    </select>
+
 </mapper>
