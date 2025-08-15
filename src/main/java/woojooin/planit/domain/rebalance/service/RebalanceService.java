@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import woojooin.planit.domain.goal.domain.Goal;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
+import woojooin.planit.domain.rebalance.dto.res.RebalanceInvestInfoRes;
 import woojooin.planit.domain.rebalance.dto.res.RebalancingInfo;
 import woojooin.planit.domain.rebalance.mapper.RebalanceMapper;
 import woojooin.planit.domain.rebalance.vo.Rebalance;
@@ -39,5 +40,14 @@ public class RebalanceService {
 		}
 
 		return infoList;
+	}
+
+	public List<RebalanceInvestInfoRes> getRebalanceInvestInfo(Long memberId) {
+		List<RebalanceInvestInfoRes> investInfoList = rebalanceMapper.findRebalanceInvestInfoByMemberId(memberId);
+		if (investInfoList == null || investInfoList.isEmpty()) {
+			log.warn("No rebalance invest info found for memberId: {}", memberId);
+			return new ArrayList<>();
+		}
+		return investInfoList;
 	}
 }
