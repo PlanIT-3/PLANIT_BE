@@ -121,22 +121,7 @@
         ORDER BY progress_date ASC
     </select>
 
-    <select id="getGoalAccountRates" resultType="java.util.Map">
-        SELECT a.bank_code                AS bankCode,
-               a.account_balance          AS accountBalance,
-               act.account_allocated_rate AS allocatedRate
-        FROM action act
-                 JOIN account a ON act.account_id = a.account_id
-        WHERE act.goal_id = #{goalId}
-          AND act.is_deleted = 0
-          AND a.is_deleted = 0
-    </select>
 
-    <select id="getTargetAmountByGoalId" resultType="java.lang.Long">
-        SELECT target_amount
-        FROM goal
-        WHERE goal_id = #{goalId}
-    </select>
 
     <select id="selectDailyGoalProgressLast6Months" resultType="woojooin.planit.domain.goal.domain.GoalProgress">
         SELECT
@@ -151,6 +136,36 @@
         WHERE goal_id = #{goalId}
           AND created_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
         ORDER BY created_at DESC
+    </select>
+    <select id="selectDepositAccountsByGoalId" resultType="woojooin.planit.domain.goal.dto.DepositAccountDto">
+        SELECT a.bank_code AS bankCode,
+               a.account_balance AS accountBalance,
+               act.account_allocated_rate AS allocatedRate
+        FROM action act
+                 JOIN account a ON act.account_id = a.account_id
+        WHERE act.goal_id = #{goalId}
+          AND act.account_type = 'Deposit'
+          AND act.is_deleted = 0
+          AND a.is_deleted = 0
+    </select>
+
+    <select id="selectIsaProductsByGoalId" resultType="woojooin.planit.domain.goal.dto.IsaProductDto">
+        SELECT mp.present_amount AS presentAmount,
+               mp.quantity AS quantity
+        FROM member_product mp
+                 JOIN action act ON mp.member_product_id = act.member_product_id
+                 JOIN account a ON act.account_id = a.account_id
+        WHERE act.goal_id = #{goalId}
+          AND act.account_type = 'ISA'
+          AND mp.is_deleted = 0
+          AND act.is_deleted = 0
+          AND a.is_deleted = 0
+    </select>
+
+    <select id="selectGoalTargetAmount" resultType="java.lang.Long">
+        SELECT target_amount
+        FROM goal
+        WHERE goal_id = #{goalId}
     </select>
 
 </mapper>
