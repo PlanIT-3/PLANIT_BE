@@ -32,10 +32,6 @@ public class RebalanceService {
 			RebalancingInfo rebalancingInfo = new RebalancingInfo();
 			rebalancingInfo.setGoalName(goal.getGoalName());
 			for (Rebalance rebalance : rebalanceList) {
-				if (rebalance == null) {
-					continue;
-				}
-
 				rebalancingInfo.addInfo(rebalance);
 			}
 
