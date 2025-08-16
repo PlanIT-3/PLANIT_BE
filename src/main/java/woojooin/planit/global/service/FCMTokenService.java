@@ -13,7 +13,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FCMTokenService {
 
-    private final FCMService fcmService;
+    // FCMService는 알림 발송용이므로 일단 제외
     
     // 메모리 기반 토큰 저장소 (실제로는 DB나 Redis 사용 권장)
     private final Map<Long, String> memberTokens = new ConcurrentHashMap<>();
@@ -62,13 +62,11 @@ public class FCMTokenService {
         return memberTokens.get(memberId);
     }
 
-    /**
-     * 회원에게 알림 전송
-     * @param memberId 회원 ID
-     * @param title 알림 제목
-     * @param body 알림 내용
-     * @return 전송 결과
-     */
+    // ===== 알림 발송 관련 메서드들은 RabbitMQ로 분리 예정 =====
+    
+    /*
+    // FCMService 의존성이 필요한 메서드들 - 추후 RabbitMQ Consumer에서 구현 예정
+    
     public String sendNotificationToMember(Long memberId, String title, String body) {
         String token = getTokenByMemberId(memberId);
         if (token != null) {
@@ -79,23 +77,12 @@ public class FCMTokenService {
         }
     }
 
-    /**
-     * 테스트 알림 전송
-     * @param memberId 회원 ID
-     * @return 전송 결과
-     */
     public String sendTestNotification(Long memberId) {
         String title = "🔔 PlanIT 테스트 알림";
         String body = "FCM 설정이 정상적으로 완료되었습니다!";
         return sendNotificationToMember(memberId, title, body);
     }
 
-    /**
-     * 목표 달성 알림 전송
-     * @param memberId 회원 ID
-     * @param goalName 목표 이름
-     * @param achievementRate 달성률
-     */
     public void sendGoalAchievementNotification(Long memberId, String goalName, int achievementRate) {
         String token = getTokenByMemberId(memberId);
         if (token != null) {
@@ -103,11 +90,6 @@ public class FCMTokenService {
         }
     }
 
-    /**
-     * 리밸런싱 알림 전송
-     * @param memberId 회원 ID
-     * @param goalName 목표 이름
-     */
     public void sendRebalanceNotification(Long memberId, String goalName) {
         String token = getTokenByMemberId(memberId);
         if (token != null) {
@@ -115,16 +97,11 @@ public class FCMTokenService {
         }
     }
 
-    /**
-     * 예적금 만기 알림 전송
-     * @param memberId 회원 ID
-     * @param accountName 계좌명
-     * @param daysUntilMaturity 만기까지 남은 일수
-     */
     public void sendDepositMaturityNotification(Long memberId, String accountName, int daysUntilMaturity) {
         String token = getTokenByMemberId(memberId);
         if (token != null) {
             fcmService.sendDepositMaturityNotification(token, accountName, daysUntilMaturity);
         }
     }
+    */
 }
