@@ -69,14 +69,19 @@
             mp.present_amount,
             mp.quantity,
             mp.item_name,
-            1 as checked
+            1 AS checked
         FROM member_product mp
-                 INNER JOIN action a ON mp.member_product_id = a.member_product_id
         WHERE mp.member_id = #{memberId}
-          AND mp.is_deleted = false
-          AND a.goal_id = #{goalId}
-          AND a.is_deleted = false
-
+          AND mp.is_deleted = 0
+          AND EXISTS (
+            SELECT 1
+            FROM action a
+            WHERE a.is_deleted = 0
+              AND a.account_type = 'ISA'
+              AND a.goal_id = #{goalId}
+              AND a.member_product_id = mp.member_product_id
+        )
+        ORDER BY mp.member_product_id DESC
     </select>
     <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.goal.dto.res.GoalDepositResponse">
         select
