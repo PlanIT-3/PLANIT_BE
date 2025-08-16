@@ -129,7 +129,6 @@
         goal_id,
         account_number,
         account_id,
-        member_product_id,
         account_allocated_rate,
         account_type,
         amount
@@ -139,7 +138,6 @@
             (
             #{req.goalId},
             #{req.accountNumber},
-            #{req.memberAccountId},
             #{req.memberAccountId},
             #{req.accountAllocatedRate},
             #{req.accountType},
@@ -215,7 +213,7 @@
         - 사용처: validateAvailableAmount() 메서드에서 호출
         - 반환값: 할당된 총액 (없으면 0)
     -->
-    <select id="getCurrentAllocatedAmount" resultType="java.math.BigDecimal">
+    <select id="getCurrentAllocatedAmount" resultType="Integer">
         SELECT COALESCE(SUM(amount), 0)
         FROM action
         WHERE account_id = #{memberAccountId}
