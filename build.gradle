@@ -20,11 +20,8 @@ ext {
     redisVersion = '2.7.18'
     lettuceVersion = '6.1.10.RELEASE'
     openAiVersion = '2.19.2'
-    openAiVersion = '2.19.2'
 }
 
-sourceCompatibility = '17'
-targetCompatibility = '17'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -105,7 +102,7 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator:6.0.13.Final'
     implementation "org.glassfish:javax.el:${javaxVersion}"
 
-
+    //JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
@@ -120,9 +117,6 @@ dependencies {
     // 레디스
     implementation "org.springframework.data:spring-data-redis:${redisVersion}"
     implementation "io.lettuce:lettuce-core:${lettuceVersion}"
-
-    // OpenAI
-    implementation("com.openai:openai-java:${openAiVersion}")
 
     // OpenAI
     implementation("com.openai:openai-java:${openAiVersion}")
