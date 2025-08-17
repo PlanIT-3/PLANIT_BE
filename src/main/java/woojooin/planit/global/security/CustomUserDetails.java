@@ -1,8 +1,10 @@
 package woojooin.planit.global.security;
 
 import lombok.Getter;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import woojooin.planit.domain.member.domain.Member;
 
 import java.util.Collection;
@@ -11,44 +13,60 @@ import java.util.Collections;
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-    private final Member member;
+	private final Member member;
 
-    public CustomUserDetails(Member member) {
-        this.member = member;
-    }
+	public CustomUserDetails(Member member) {
+		this.member = member;
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(() -> member.getRole());
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.singleton(() -> member.getRole());
+	}
 
-    @Override
-    public String getPassword() {
-        return member.getPassword();
-    }
+	@Override
+	public String getPassword() {
+		return member.getPassword();
+	}
 
-    @Override
-    public String getUsername() {
-        return member.getEmail();
-    }
+	@Override
+	public String getUsername() {
+		return member.getNickname();
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+	public Member getMember() {
+		return member;
+	}
+
+	public Long getId() {
+		return member.getMemberId();
+	}
+
+	public String getRole() {
+		return member.getRole();
+	}
+
+	public String getRiskLevel() {
+		return member.getInvestType();
+	}
 }

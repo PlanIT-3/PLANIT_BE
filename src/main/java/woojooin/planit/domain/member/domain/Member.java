@@ -1,11 +1,9 @@
 package woojooin.planit.domain.member.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
+import java.time.LocalDateTime;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,4 +20,10 @@ public class Member {
     private String password;
     private Boolean benefit;
     private String nickname;
+    private Boolean isAgreed;
+    private Double stable;
+    private Double income;
+    private Double liquid;
+    private Double growth;
+    private Double diversified;
 }

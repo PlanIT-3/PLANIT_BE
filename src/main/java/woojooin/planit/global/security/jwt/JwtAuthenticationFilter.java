@@ -38,6 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain)
 		throws ServletException, IOException {
 
+		log.info("jwt filter = {}", request.getRequestURI());
+
 		if (request.getRequestURI().startsWith("/test")) {
 			log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
 			filterChain.doFilter(request, response);

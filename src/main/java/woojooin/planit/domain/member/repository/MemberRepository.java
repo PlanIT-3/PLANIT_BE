@@ -33,4 +33,12 @@ public class MemberRepository {
     public Member findByEmail(String email) {
         return memberMapper.findByEmail(email);
     }
+
+    public void updateInvestType(Long memberId, String type) {
+        memberMapper.updateInvestType(memberId, type);
+    }
+
+    public String findInvestTypeById(Long memberId) {
+        return memberMapper.findInvestTypeById(memberId);
+    }
 }

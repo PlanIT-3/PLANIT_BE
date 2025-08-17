@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @Builder
 
 public class Goal {
-    private Long objectId;
+    private Long goalId;
     private Long memberId;
 
-    private String objectName;
+    private String goalName;
     private Long targetAmount;
 
     private LocalDate startDate;

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "woojooin.planit.domain.report.mapper.ReportMapper">
+
+<select id="findReturnRateByType" resultType="woojooin.planit.domain.report.domain.ReturnRateDto">
+    select
+        return_date AS date,
+        return_rate AS rate
+    from investment_return
+    where member_id=#{memberId}
+      AND return_type = #{returnType}
+    <if test="startDate != null">
+        AND return_date &lt;= #{startDate}
+    </if>
+    ORDER BY return_date DESC
+        LIMIT 7
+</select>
+
+    <select id="findDailyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.DailyRowRes">
+        SELECT updated_at AS date,
+           daily_invest_total,
+           daily_valuation_total
+        FROM daily_report
+        WHERE member_id = #{memberId}
+        ORDER BY updated_at DESC
+            LIMIT 7
+    </select>
+
+    <select id="findWeeklyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.WeeklyRowRes">
+        SELECT updated_at AS date,
+            weekly_total_amount AS weekly_invest_total,
+           weekly_valuation_total AS weekly_valuation_total
+        FROM weekly_report
+        WHERE member_id = #{memberId}
+        ORDER BY updated_at DESC
+            LIMIT 7
+    </select>
+
+    <select id="findMonthlyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.MonthlyRowRes">
+        SELECT updated_at AS date,
+            monthly_total_amount AS monthly_invest_total,
+            monthly_valuation_total AS monthly_valuation_total
+        FROM monthly_report
+        WHERE member_id = #{memberId}
+        ORDER BY updated_at DESC
+            LIMIT 7
+    </select>
+    <select id="getIsaType" resultType="java.lang.String">
+        SELECT isa_type
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
+
+    <select id="getCumulativeTaxSavingByMemberId"
+            resultType="woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO">
+        SELECT quarter, cumulativeTaxSaved
+        FROM (
+                 SELECT quarter,
+                        SUM(tax_saved) OVER (ORDER BY quarter) AS cumulativeTaxSaved
+                 FROM isa_tax_saving_history
+                 WHERE member_id = #{memberId}
+                 ORDER BY quarter DESC
+                     LIMIT 8
+             ) sub
+        ORDER BY quarter ASC;
+    </select>
+    <select id="getPrincipal" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(present_amount * quantity), 0)
+        FROM member_product
+        WHERE member_id = #{memberId} AND product_type = 'ETF'
+    </select>
+
+    <select id="getLatestIsaTaxSavingHistory"
+            resultType="woojooin.planit.domain.report.domain.IsaTaxSavingHistory">
+        SELECT general_tax, tax_saved
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC LIMIT 1
+    </select>
+    <select id="getLatestIsaProfitByMemberId" resultType="java.lang.Long">
+        SELECT isa_profit
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC
+            LIMIT 1
+    </select>
+    <select id="getLatestGeneralTaxByMemberId" resultType="java.lang.Long">
+        SELECT general_tax
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC
+            LIMIT 1
+    </select>
+    <select id="getLatestTaxSavedByMemberId" resultType="java.lang.Long">
+        SELECT tax_saved
+        FROM isa_tax_saving_history
+        WHERE member_id = #{memberId}
+        ORDER BY quarter DESC
+            LIMIT 1
+
+    </select>
+
+</mapper>
