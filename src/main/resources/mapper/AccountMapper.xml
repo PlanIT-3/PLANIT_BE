@@ -3,40 +3,41 @@
 
 <mapper namespace="woojooin.planit.domain.account.mapper.AccountMapper">
 
-    <select id="getBalanceByMemberIdAndPeriod" parameterType="map" resultType="woojooin.planit.domain.account.domain.BalanceData">
+    <select id="getBalanceByMemberIdAndPeriod" parameterType="map"
+            resultType="woojooin.planit.domain.account.domain.BalanceData">
         <choose>
             <when test="period == 'day'">
-                SELECT 
-                    member_id as memberId,
-                    amount,
-                    created_at as createdAt,
-                    updated_at as updatedAt
-                FROM daily_balance 
+                SELECT
+                member_id as memberId,
+                amount,
+                created_at as createdAt,
+                updated_at as updatedAt
+                FROM daily_balance
                 WHERE member_id = #{memberId}
-                  AND created_at >= #{startDate}
+                AND created_at >= #{startDate}
                 ORDER BY member_id, created_at
             </when>
             <when test="period == 'week'">
-                SELECT 
-                    member_id as memberId,
-                    SUM(amount) as amount,
-                    DATE(DATE_SUB(MIN(created_at), INTERVAL WEEKDAY(MIN(created_at)) DAY)) as createdAt,
-                    MAX(updated_at) as updatedAt
-                FROM daily_balance 
+                SELECT
+                member_id as memberId,
+                SUM(amount) as amount,
+                DATE(DATE_SUB(MIN(created_at), INTERVAL WEEKDAY(MIN(created_at)) DAY)) as createdAt,
+                MAX(updated_at) as updatedAt
+                FROM daily_balance
                 WHERE member_id = #{memberId}
-                  AND created_at >= #{startDate}
+                AND created_at >= #{startDate}
                 GROUP BY member_id, YEAR(created_at), WEEK(created_at, 1)
                 ORDER BY createdAt
             </when>
             <when test="period == 'month'">
-                SELECT 
-                    member_id as memberId,
-                    SUM(amount) as amount,
-                    CONCAT(YEAR(MIN(created_at)), '-', LPAD(MONTH(MIN(created_at)), 2, '0'), '-01') as createdAt,
-                    MAX(updated_at) as updatedAt
-                FROM daily_balance 
+                SELECT
+                member_id as memberId,
+                SUM(amount) as amount,
+                CONCAT(YEAR(MIN(created_at)), '-', LPAD(MONTH(MIN(created_at)), 2, '0'), '-01') as createdAt,
+                MAX(updated_at) as updatedAt
+                FROM daily_balance
                 WHERE member_id = #{memberId}
-                  AND created_at >= #{startDate}
+                AND created_at >= #{startDate}
                 GROUP BY member_id, YEAR(created_at), MONTH(created_at)
                 ORDER BY createdAt
             </when>
@@ -44,58 +45,57 @@
     </select>
 
     <select id="getTotalBalanceByMemberId" parameterType="Long" resultType="java.math.BigDecimal">
-        SELECT 
-            COALESCE(SUM(account_balance), 0) as totalBalance
-        FROM account 
+        SELECT COALESCE(SUM(account_balance), 0) as totalBalance
+        FROM account
         WHERE member_id = #{memberId}
           AND is_deleted = 0
     </select>
 
-    <insert id="insertAccount" parameterType="woojooin.planit.domain.account.domain.Account">
-        INSERT INTO account (
-            member_id,
-            account_name,
-            account_number,
-            account_currency,
-            account_type,
-            account_balance,
-            account_deposit,
-            earnings_rate,
-            account_invested_cost,
-            last_tran_date,
-            account_start_date,
-            account_end_date,
-            is_deleted,
-            is_integrated,
-            bank_code,
-            created_at,
-            updated_at
-        ) VALUES (
-            #{memberId},
-            #{accountName},
-            #{accountNumber},
-            #{accountCurrency},
-            #{accountType},
-            #{accountBalance},
-            #{accountDeposit},
-            #{earningsRate},
-            #{accountInvestedCost},
-            #{lastTranDate},
-            #{accountStartDate},
-            #{accountEndDate},
-            #{isDeleted},
-            #{isIntegrated},
-            #{bankCode},
-            #{createdAt},
-            #{updatedAt}
-        )
+    <insert id="insertAccount" parameterType="woojooin.planit.domain.account.domain.Account"
+            useGeneratedKeys="true"
+            keyProperty="accountId"
+            keyColumn="account_id">
+        INSERT INTO account (member_id,
+                             account_name,
+                             account_number,
+                             account_currency,
+                             account_type,
+                             account_balance,
+                             account_deposit,
+                             earnings_rate,
+                             account_invested_cost,
+                             last_tran_date,
+                             account_start_date,
+                             account_end_date,
+                             is_deleted,
+                             is_integrated,
+                             bank_code,
+                             created_at,
+                             updated_at)
+        VALUES (#{memberId},
+                #{accountName},
+                #{accountNumber},
+                #{accountCurrency},
+                #{accountType},
+                #{accountBalance},
+                #{accountDeposit},
+                #{earningsRate},
+                #{accountInvestedCost},
+                #{lastTranDate},
+                #{accountStartDate},
+                #{accountEndDate},
+                #{isDeleted},
+                #{isIntegrated},
+                #{bankCode},
+                #{createdAt},
+                #{updatedAt})
     </insert>
 
-    <select id="selectAccountsByMemberId" parameterType="Long" resultType="woojooin.planit.domain.account.dto.res.AccountBankRes">
-        SELECT 
-            bank_code as bankCode,
-            account_number as accountNumber
-        FROM account 
+    <select id="selectAccountsByMemberId" parameterType="Long"
+            resultType="woojooin.planit.domain.account.dto.res.AccountBankRes">
+        SELECT bank_code      as bankCode,
+               account_number as accountNumber
+        FROM account
         WHERE member_id = #{memberId}
           AND is_deleted = 0
         ORDER BY created_at

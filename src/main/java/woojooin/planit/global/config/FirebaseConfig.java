@@ -16,19 +16,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 @Configuration
 public class FirebaseConfig {
 
-	@Value("${firebase.enabled:false}")
-	private boolean firebaseEnabled;
-
 	@Value("classpath:firebase/firebase-admin-sdk.json")
 	private Resource serviceAccountJson;
 
-	// Firebase가 활성화되었을 때만 Bean 생성
+	// FirebaseApp를 '빈'으로 등록
 	@Bean
 	public FirebaseApp firebaseApp() throws IOException {
-		if (!firebaseEnabled) {
-			return null; // Firebase가 비활성화된 경우 null 반환
-		}
-		
 		try (InputStream is = serviceAccountJson.getInputStream()) {
 			FirebaseOptions options = FirebaseOptions.builder()
 				.setCredentials(GoogleCredentials.fromStream(is))
@@ -43,11 +36,7 @@ public class FirebaseConfig {
 	}
 
 	@Bean
-	public FirebaseMessaging firebaseMessaging() throws IOException {
-		FirebaseApp app = firebaseApp();
-		if (app == null) {
-			return null; // Firebase가 비활성화된 경우 null 반환
-		}
+	public FirebaseMessaging firebaseMessaging(FirebaseApp app) {
 		return FirebaseMessaging.getInstance(app);
 	}
 }

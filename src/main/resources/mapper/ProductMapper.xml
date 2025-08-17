@@ -6,12 +6,10 @@
     <select id="selectByRiskLevel" resultType="woojooin.planit.domain.product.domain.Product">
         SELECT p.*
         FROM product p
-                 INNER JOIN (
-            SELECT shorten_code, MAX(base_date) AS max_base_date
-            FROM product
-            WHERE invest_type = #{riskLevel}
-            GROUP BY shorten_code
-        ) sub ON p.shorten_code = sub.shorten_code
+                 INNER JOIN (SELECT shorten_code, MAX(base_date) AS max_base_date
+                             FROM product
+                             WHERE invest_type = #{riskLevel}
+                             GROUP BY shorten_code) sub ON p.shorten_code = sub.shorten_code
             AND p.base_date = sub.max_base_date
         WHERE p.invest_type = #{riskLevel}
         ORDER BY CAST(p.fluctuation_rate AS DECIMAL(20, 3)) DESC
@@ -21,11 +19,15 @@
         SELECT *
         FROM product
         WHERE shorten_code = #{shortenCode}
-          AND base_date = (
-            SELECT MAX(base_date)
-            FROM product
-            WHERE shorten_code = #{shortenCode}
-        )
+          AND base_date = (SELECT MAX(base_date)
+                           FROM product
+                           WHERE shorten_code = #{shortenCode})
+    </select>
+
+    <select id="findByProductId" resultType="woojooin.planit.domain.product.domain.Product">
+        SELECT *
+        FROM product
+        WHERE product_id = #{productId}
     </select>
 
 </mapper>

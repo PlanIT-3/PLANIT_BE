@@ -3,22 +3,27 @@ package woojooin.planit.domain.member.domain;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import woojooin.planit.domain.product.domain.ProductTypeCode;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class MemberProduct {
 
 	private Long memberProductId;
-
 	private Long memberId;
+	private Long accountId;
 
 	// ==== 상품 정보 ====
 	private ProductTypeCode productTypeCode;            // 상품유형코드
 	private String itemName;                    // 상품/종목명
 	private String itemCode;                    // 상품/종목코드
+	private String productId;
 
 	// ==== 계좌 정보 ====
 	private String accountNumber;               // 계좌번호

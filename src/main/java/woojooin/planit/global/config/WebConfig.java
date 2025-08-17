@@ -3,6 +3,7 @@ package woojooin.planit.global.config;
 import javax.servlet.Filter;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -11,6 +12,7 @@ import woojooin.planit.global.security.SecurityConfig;
 
 @Slf4j
 @Configuration
+@EnableScheduling
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
