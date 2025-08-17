@@ -39,4 +39,3 @@ public class OpenAiUtil {
 		return message;
 	}
 }
-
