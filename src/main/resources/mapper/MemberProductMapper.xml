@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="woojooin.planit.domain.member.mapper.MemberProductMapper">
+    <insert id="insert" parameterType="woojooin.planit.domain.member.domain.MemberProduct">
+        INSERT INTO member_product (
+            member_id,
+            product_type_code,
+            item_name,
+            item_code,
+            account_number,
+            account_extends,
+            balance_type,
+            account_currency,
+            avg_present_amount,
+            present_amount,
+            valuation_pl,
+            valuation_amount,
+            purchase_amount,
+            earnings_rate,
+            deposit_received,
+            quantity,
+            settle_quantity,
+            created_at,
+            updated_at
+        ) VALUES (
+                     #{memberId},
+                     #{productTypeCode},
+                     #{itemName},
+                     #{itemCode},
+                     #{accountNumber},
+                     #{accountExtends},
+                     #{balanceType},
+                     #{accountCurrency},
+                     #{avgPresentAmount},
+                     #{presentAmount},
+                     #{valuationPl},
+                     #{valuationAmount},
+                     #{purchaseAmount},
+                     #{earningsRate},
+                     #{depositReceived},
+                     #{quantity},
+                     #{settleQuantity},
+                     #{createdAt},
+                     #{updatedAt}
+                 )
+    </insert>
+
+    <insert id="insertAll" parameterType="java.util.List">
+        INSERT INTO member_product (
+        member_id,
+        product_type_code,
+        item_name,
+        item_code,
+        account_number,
+        account_extends,
+        balance_type,
+        account_currency,
+        avg_present_amount,
+        present_amount,
+        valuation_pl,
+        valuation_amount,
+        purchase_amount,
+        earnings_rate,
+        deposit_received,
+        quantity,
+        settle_quantity,
+        created_at,
+        updated_at
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.memberId},
+            #{item.productTypeCode},
+            #{item.itemName},
+            #{item.itemCode},
+            #{item.accountNumber},
+            #{item.accountExtends},
+            #{item.balanceType},
+            #{item.accountCurrency},
+            #{item.avgPresentAmount},
+            #{item.presentAmount},
+            #{item.valuationPl},
+            #{item.valuationAmount},
+            #{item.purchaseAmount},
+            #{item.earningsRate},
+            #{item.depositReceived},
+            #{item.quantity},
+            #{item.settleQuantity},
+            #{item.createdAt},
+            #{item.updatedAt}
+            )
+        </foreach>
+    </insert>
+
+    <select id="select" parameterType="java.lang.Long" resultType="woojooin.planit.domain.member.domain.MemberProduct">
+        SELECT *
+        FROM member_product
+        WHERE member_id = #{memberId}
+    </select>
+</mapper>
