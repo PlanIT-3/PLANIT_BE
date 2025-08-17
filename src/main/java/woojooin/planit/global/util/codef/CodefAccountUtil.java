@@ -39,6 +39,7 @@ import woojooin.planit.global.util.codef.dto.CodefResponse;
 import woojooin.planit.global.util.codef.dto.account.CodefAccountData;
 import woojooin.planit.global.util.codef.dto.account.CodefAccountResponse;
 import woojooin.planit.global.util.codef.dto.account.CodefSecuritiesAccountData;
+import woojooin.planit.global.util.codef.dto.account.CodefSecuritiesAccountProductData;
 import woojooin.planit.global.util.codef.dto.account.ResDepositTrust;
 import woojooin.planit.global.util.codef.dto.connectedId.AccountDto;
 import woojooin.planit.global.util.codef.dto.connectedId.add.ConnectedIdAddReq;
@@ -110,6 +111,39 @@ public class CodefAccountUtil {
 
 		return response.getData();
 	}
+
+	public CodefSecuritiesAccountProductData getAccountProductData(String connectedId, String organization, String id, String password, String accountNumber) throws
+		Exception {
+		String url = CODEF_API_URL + "/v1/kr/stock/a/account/financial-assets";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add(AUTHORIZATION_HEADER, BEARER_PREFIX + getAccessToken().accessToken());
+
+		Map<String, Object> body = new HashMap<>();
+		body.put("organization", organization);
+		body.put("connectedId", connectedId);
+		body.put("account", accountNumber);
+		body.put("accountPassword", encryptPassword(password, CODEF_PUBLIC_KEY));
+		body.put("inquiryType", "0");
+		body.put("id", id);
+
+		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+		ResponseEntity<String> responseEntity = camelRestTemplate.exchange(
+			url,
+			HttpMethod.POST,
+			entity,
+			String.class
+		);
+
+		String resString = responseEntity.getBody();
+
+		TypeReference<CodefSecuritiesAccountProductData> type = new TypeReference<CodefSecuritiesAccountProductData>() {
+		};
+
+		return ConnectionUtil.decodeUrlStringToDto(resString, type, ConnectionUtil.CAMEL);
+	}
+
 
 	public CodefSecuritiesAccountData getSecuritiesAccountData(String connectedId, String organization) {
 		String url = CODEF_API_URL + "/v1/kr/stock/a/account/account-list";
