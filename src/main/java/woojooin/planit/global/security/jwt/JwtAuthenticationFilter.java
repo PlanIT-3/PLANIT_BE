@@ -48,19 +48,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		log.info("Processing JWT authentication for request: {}", request.getRequestURI());
 
 
-<<<<<<< Updated upstream
 //      if ( request.getRequestURI().startsWith("/api")) {
 //         log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
 //         filterChain.doFilter(request, response);
 //         return;
 //      }
-=======
-		//      if ( request.getRequestURI().startsWith("/api")) {
-		//         log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
-		//         filterChain.doFilter(request, response);
-		//         return;
-		//      }
->>>>>>> Stashed changes
 
 		String token = resolveToken(request);
 
@@ -98,11 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				UserDetails userDetails = userDetailsService.loadUserByMemberId(userId);
 
 				UsernamePasswordAuthenticationToken auth =
-<<<<<<< Updated upstream
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-=======
-					new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
->>>>>>> Stashed changes
 
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			} catch (JwtException e) {
@@ -130,13 +118,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(String.format(
-<<<<<<< Updated upstream
 				"{\"error\":\"%s\",\"message\":\"%s\"}",
 				errorCode, message
-=======
-			"{\"error\":\"%s\",\"message\":\"%s\"}",
-			errorCode, message
->>>>>>> Stashed changes
 		));
 	}
 }

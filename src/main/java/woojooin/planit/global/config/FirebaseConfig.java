@@ -3,8 +3,6 @@ package woojooin.planit.global.config;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.annotation.Nullable;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +16,19 @@ import com.google.firebase.messaging.FirebaseMessaging;
 @Configuration
 public class FirebaseConfig {
 
+	@Value("${firebase.enabled:false}")
+	private boolean firebaseEnabled;
+
 	@Value("classpath:firebase/firebase-admin-sdk.json")
 	private Resource serviceAccountJson;
 
-	// FirebaseApp를 '빈'으로 등록
+	// Firebase가 활성화되었을 때만 Bean 생성
 	@Bean
 	public FirebaseApp firebaseApp() throws IOException {
+		if (!firebaseEnabled) {
+			return null; // Firebase가 비활성화된 경우 null 반환
+		}
+		
 		try (InputStream is = serviceAccountJson.getInputStream()) {
 			FirebaseOptions options = FirebaseOptions.builder()
 				.setCredentials(GoogleCredentials.fromStream(is))
@@ -38,7 +43,12 @@ public class FirebaseConfig {
 	}
 
 	@Bean
-	public FirebaseMessaging firebaseMessaging(FirebaseApp app) {
+	public FirebaseMessaging firebaseMessaging() throws IOException {
+		FirebaseApp app = firebaseApp();
+		if (app == null) {
+			return null; // Firebase가 비활성화된 경우 null 반환
+		}
 		return FirebaseMessaging.getInstance(app);
 	}
 }
+
