@@ -5,13 +5,22 @@
 
 <configuration>
     <settings>
-        <setting name="mapUnderscoreToCamelCase" value="true" />
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
     <typeAliases>
-        <package name="woojooin.planit.domain.member.domain" />
-        <package name="woojooin.planit.domain.goal.deposit.dto.res" />
-        <package name="woojooin.planit.domain.goal.action.domain" />
+        <package name="woojooin.planit.domain.member.domain"/>
+        <package name="woojooin.planit.domain.goal.deposit.dto.res"/>
+        <package name="woojooin.planit.domain.goal.action.domain"/>
     </typeAliases>
+
+    <typeHandlers>
+        <typeHandler
+                javaType="woojooin.planit.domain.goal.action.domain.ActionType"
+                handler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <typeHandler
+                javaType="woojooin.planit.domain.product.enums.InvestType"
+                handler="org.apache.ibatis.type.EnumTypeHandler"/>
+    </typeHandlers>
 
 </configuration>

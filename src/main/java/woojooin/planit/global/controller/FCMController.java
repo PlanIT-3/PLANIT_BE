@@ -37,7 +37,7 @@ public class FCMController {
     @ApiOperation(value = "FCM 토큰 해제 API", notes = "등록된 FCM 토큰을 해제합니다.")
     public ResponseEntity<Response<Void>> unregisterToken(@RequestBody FCMTokenDto fcmTokenDto) {
         log.info("FCM 토큰 해제 요청: memberId={}", fcmTokenDto.getMemberId());
-        
+
         fcmTokenService.unregisterToken(fcmTokenDto.getMemberId());
         
         return ResponseEntity.ok(Response.ok());
@@ -50,4 +50,16 @@ public class FCMController {
         return ResponseEntity.ok(Response.ok(vapidKey));
     }
 
+    /*
+    // 테스트 API는 FCMService 의존성이 필요하므로 RabbitMQ로 분리 예정
+    @PostMapping("/test/{memberId}")
+    @ApiOperation(value = "FCM 테스트 전송 API", notes = "테스트용 FCM 알림을 전송합니다.")
+    public ResponseEntity<Response<String>> sendTestNotification(@PathVariable Long memberId) {
+        log.info("FCM 테스트 알림 전송: memberId={}", memberId);
+        
+        String result = fcmTokenService.sendTestNotification(memberId);
+        
+        return ResponseEntity.ok(Response.ok(result));
+    }
+    */
 }

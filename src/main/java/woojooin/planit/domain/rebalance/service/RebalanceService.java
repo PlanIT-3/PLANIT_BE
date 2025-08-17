@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import woojooin.planit.domain.goal.action.domain.Action;
+import woojooin.planit.domain.goal.action.mapper.ActionMapper;
 import woojooin.planit.domain.goal.domain.Goal;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
+import woojooin.planit.domain.product.domain.repository.EtfDailyHistoryRepository;
 import woojooin.planit.domain.rebalance.dto.res.RebalanceInvestInfoRes;
 import woojooin.planit.domain.rebalance.dto.res.RebalancingInfo;
 import woojooin.planit.domain.rebalance.mapper.RebalanceMapper;
@@ -21,6 +24,8 @@ public class RebalanceService {
 
 	private final GoalMapper goalMapper;
 	private final RebalanceMapper rebalanceMapper;
+	private final EtfDailyHistoryRepository etfDailyHistoryRepository;
+	private final ActionMapper actionMapper;
 
 	public List<RebalancingInfo> reqCurrentRebalancing(Long memberId) {
 		List<Goal> goals = goalMapper.selectAllGoals(memberId);
@@ -28,10 +33,13 @@ public class RebalanceService {
 		List<RebalancingInfo> infoList = new ArrayList<>();
 
 		for (Goal goal : goals) {
+
 			List<Rebalance> rebalanceList = rebalanceMapper.findLatestRebalanceByGoalId(goal.getGoalId());
 
 			RebalancingInfo rebalancingInfo = new RebalancingInfo();
+			calcGoalExpectation(goal, rebalancingInfo);
 			rebalancingInfo.setGoalName(goal.getGoalName());
+
 			for (Rebalance rebalance : rebalanceList) {
 				rebalancingInfo.addInfo(rebalance);
 			}
@@ -49,5 +57,13 @@ public class RebalanceService {
 			return new ArrayList<>();
 		}
 		return investInfoList;
+	}
+
+	public void calcGoalExpectation(Goal goal, RebalancingInfo rebalancingInfo) {
+		List<Action> actionList = actionMapper.findActionsByGoalId(goal.getGoalId());
+
+		for (Action action : actionList) {
+			log.info("action: {}", action);
+		}
 	}
 }
