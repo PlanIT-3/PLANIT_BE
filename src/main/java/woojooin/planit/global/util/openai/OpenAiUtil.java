@@ -1,4 +1,4 @@
-package woojooin.planit.global.util.openai;
+package woojooin.planit.global.util.openAi;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,10 +38,10 @@ public class OpenAiUtil {
 		return "response";
 	}
 
-	public String basicChat() {
+	public String basicChat(String userMessage, String assistantMessage) {
 		ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-			.addAssistantMessage(keyWordPrompt)
-			.addUserMessage("Say this is a test")
+			.addAssistantMessage(assistantMessage)
+			.addUserMessage(userMessage)
 			.model(ChatModel.O3_MINI)
 			.build();
 
