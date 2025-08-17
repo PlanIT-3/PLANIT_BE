@@ -125,8 +125,10 @@ public class GoalSettingService {
 			long totalDepositAmount = depositList.stream()
 				.mapToLong(item -> item.getMyAmount().longValue())
 				.sum();
+
 			long totalCurrentAmount = totalIsaAmount + totalDepositAmount;
 			int goalRate = 0;
+
 			if (goal.getTargetAmount() != null && goal.getTargetAmount() > 0) {
 				goalRate = (int)Math.floor((double)totalCurrentAmount * 100 / goal.getTargetAmount());
 			}

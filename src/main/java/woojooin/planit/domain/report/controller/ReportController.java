@@ -70,7 +70,6 @@ public class ReportController {
         return ResponseEntity.ok(totalInvestment);
     }
 
-
 }
 
 
