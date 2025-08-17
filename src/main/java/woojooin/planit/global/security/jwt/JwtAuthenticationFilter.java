@@ -41,18 +41,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
-									HttpServletResponse response,
-									FilterChain filterChain)
-			throws ServletException, IOException {
+		HttpServletResponse response,
+		FilterChain filterChain)
+		throws ServletException, IOException {
 
 		log.info("Processing JWT authentication for request: {}", request.getRequestURI());
 
 
-//      if ( request.getRequestURI().startsWith("/api")) {
-//         log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
-//         filterChain.doFilter(request, response);
-//         return;
-//      }
+		//      if ( request.getRequestURI().startsWith("/api")) {
+		//         log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
+		//         filterChain.doFilter(request, response);
+		//         return;
+		//      }
 
 		String token = resolveToken(request);
 
@@ -90,7 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				UserDetails userDetails = userDetailsService.loadUserByMemberId(userId);
 
 				UsernamePasswordAuthenticationToken auth =
-						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+					new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			} catch (JwtException e) {
@@ -118,8 +118,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(String.format(
-				"{\"error\":\"%s\",\"message\":\"%s\"}",
-				errorCode, message
+			"{\"error\":\"%s\",\"message\":\"%s\"}",
+			errorCode, message
 		));
 	}
 }
