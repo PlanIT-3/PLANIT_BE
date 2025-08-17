@@ -53,6 +53,7 @@
         FROM account acc
         WHERE acc.member_id = #{memberId}
           AND acc.is_deleted = false
+          AND acc.account_type = 'DEPOSIT'  -- 예적금 계좌만 필터링
         ORDER BY acc.created_at DESC
     </select>
 
@@ -73,14 +74,16 @@
                 SUM(a.amount) as total_allocated
             FROM action a
             WHERE a.is_deleted = false
-              AND a.account_type = '11'
+              AND a.account_type = 'Deposit'
             GROUP BY a.account_id
         ) allocated_sum ON acc.account_id = allocated_sum.account_id
                  INNER JOIN action a ON acc.account_id = a.account_id
         WHERE acc.member_id = #{memberId}
           AND acc.is_deleted = false
+          AND acc.account_type = 'DEPOSIT'  -- 예적금 계좌만 필터링
           AND a.goal_id = #{goalId}
           AND a.is_deleted = false
+          AND a.account_type = 'Deposit'  -- action 테이블에서도 예적금만 필터링
         ORDER BY acc.account_id DESC
     </select>
 
@@ -106,12 +109,12 @@
                 SUM(a.amount) as total_allocated
             FROM action a
             WHERE a.is_deleted = false
-              AND a.account_type = '11'
+              AND a.account_type = 'Deposit'
             GROUP BY a.account_id
         ) allocated_sum ON acc.account_id = allocated_sum.account_id
         WHERE acc.member_id = #{memberId}
           AND acc.is_deleted = false
-          AND acc.account_type = '11'  -- 예적금 계좌만 필터링
+          AND acc.account_type = 'DEPOSIT'  -- 예적금 계좌만 필터링
           -- 잔여액이 0보다 큰 계좌만 조회 (할당 가능한 계좌)
           AND (acc.account_balance - COALESCE(allocated_sum.total_allocated, 0)) > 0
           -- 해당 목적에 할당되지 않은 계좌들만 조회
@@ -216,12 +219,12 @@
         - 사용처: validateAvailableAmount() 메서드에서 호출
         - 반환값: 할당된 총액 (없으면 0)
     -->
-    <select id="getCurrentAllocatedAmount" resultType="java.math.BigDecimal">
+    <select id="getCurrentAllocatedAmount" resultType="Integer">
         SELECT COALESCE(SUM(amount), 0)
         FROM action
         WHERE account_id = #{memberAccountId}
           AND is_deleted = false
-          AND account_type = '11'
+          AND account_type = 'Deposit'
     </select>
 
     <!--
