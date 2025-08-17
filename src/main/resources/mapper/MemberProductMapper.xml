@@ -6,6 +6,7 @@
     <insert id="insert" parameterType="woojooin.planit.domain.member.domain.MemberProduct">
         INSERT INTO member_product (
             member_id,
+            account_id,
             product_id,
             product_type_code,
             product_type,
@@ -28,6 +29,7 @@
             updated_at
         ) VALUES (
                      #{memberId},
+                     #{accountId},
                      #{productId},
                      #{productTypeCode},
                      #{productType},
@@ -54,6 +56,7 @@
     <insert id="insertAll" parameterType="java.util.List">
         INSERT INTO member_product (
         member_id,
+        account_id,
         product_id,
         product_type_code,
         product_type,
@@ -78,6 +81,7 @@
         <foreach collection="list" item="item" separator=",">
             (
             #{item.memberId},
+            #{item.accountId},
             #{item.productId},
             #{item.productTypeCode},
             #{item.productType},

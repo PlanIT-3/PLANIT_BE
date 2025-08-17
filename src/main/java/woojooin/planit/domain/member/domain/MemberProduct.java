@@ -13,6 +13,7 @@ public class MemberProduct {
 
 	private Long memberProductId;
 	private Long memberId;
+	private Long accountId;                  // 계좌ID
 	private Long productId;                  // 상품ID
 	private String productTypeCode;            // 상품유형코드
 	private String productType;

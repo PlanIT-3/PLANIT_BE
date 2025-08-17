@@ -51,7 +51,7 @@
           AND is_deleted = 0
     </select>
 
-    <insert id="insertAccount" parameterType="woojooin.planit.domain.account.domain.Account">
+    <insert id="insertAccount" parameterType="woojooin.planit.domain.account.domain.Account" useGeneratedKeys="true" keyProperty="accountId" keyColumn="account_id">
         INSERT INTO account (
             member_id,
             account_name,
@@ -89,6 +89,9 @@
             #{createdAt},
             #{updatedAt}
         )
+        <selectKey resultType="Long" keyProperty="accountId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
     <select id="selectAccountsByMemberId" parameterType="Long" resultType="woojooin.planit.domain.account.dto.res.AccountBankRes">
