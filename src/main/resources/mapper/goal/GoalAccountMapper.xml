@@ -35,6 +35,7 @@
                  INNER JOIN member_product mp ON act.member_product_id = mp.member_product_id
         WHERE g.member_id = #{memberId}
           AND g.goal_id = #{goalId}
+          AND act.is_deleted = 0
           AND act.account_type = 'ISA'
     </select>
 
@@ -52,6 +53,7 @@
                  INNER JOIN account acc ON act.account_id = acc.account_id
         WHERE g.member_id = #{memberId}
           AND g.goal_id = #{goalId}
+          AND act.is_deleted = 0
           AND act.account_type = 'Deposit'
     </select>
 
