@@ -16,6 +16,7 @@ import lombok.Setter;
 public class RebalanceChoice {
 	public enum Action {BUY, SELL, HOLD}
 
+	private String goalName;
 	private Action action;              // BUY / SELL / HOLD
 	private String mpName;              // 대상 MP 이름
 	private String mpCode;              // 대상 MP 코드(옵션)
