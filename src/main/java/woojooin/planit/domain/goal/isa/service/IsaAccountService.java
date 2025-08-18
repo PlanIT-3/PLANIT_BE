@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import woojooin.planit.domain.account.mapper.AccountMapper;
 import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductEditListReq;
 import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductEditReq;
 import woojooin.planit.domain.goal.isa.dto.req.IsaAccountProductRegisterListReq;
@@ -29,6 +30,7 @@ import woojooin.planit.global.response.ResponseCode;
 public class IsaAccountService {
 
     private final IsaAccountMapper isaAccountMapper;
+    private final AccountMapper accountMapper;
 
     public List<IsaAccountProductRes> getMemberProductsByMemberId(Long memberId) {
 
@@ -48,7 +50,9 @@ public class IsaAccountService {
         validateDuplicateProducts(request.getIsaAccountProductRegisterReqs());
 
         try {
-            isaAccountMapper.register(memberId, request.getIsaAccountProductRegisterReqs());
+            Long accountId = accountMapper.findAccountIdByMemberId(memberId);
+
+            isaAccountMapper.register(memberId, accountId, request.getIsaAccountProductRegisterReqs());
         } catch (Exception e) {
             log.error("[IsaAccountService.registerMemberProductsByMemberId()] - failed to register products memberId=\"{}\" productCount=\"{}\" error=\"{}\"", memberId, request.getIsaAccountProductRegisterReqs().size(), e.getMessage());
             throw new BusinessException(ResponseCode.ISA_REGISTRATION_FAILED);

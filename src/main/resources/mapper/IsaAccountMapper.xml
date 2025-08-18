@@ -82,6 +82,7 @@
     <insert id="register">
         INSERT INTO action (
         goal_id,
+        account_id,
         member_product_id,
         account_type
         )
@@ -89,6 +90,7 @@
         <foreach collection="requestList" item="req" separator=",">
             (
             #{req.goalId},
+            #{accountId},
             #{req.memberProductId},
             #{req.accountType}
             )
