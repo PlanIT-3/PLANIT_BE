@@ -101,4 +101,12 @@
         ORDER BY created_at
     </select>
 
+    <select id="findAccountIdByMemberId" parameterType="Long" resultType="java.lang.Long">
+        SELECT account_id
+        FROM account 
+        WHERE member_id = #{memberId}
+          AND is_deleted = 0
+        LIMIT 1
+    </select>
+
 </mapper>

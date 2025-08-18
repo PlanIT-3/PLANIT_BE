@@ -20,4 +20,6 @@ public interface AccountMapper {
 	void insertAccount(Account account);
 	
 	List<AccountBankRes> selectAccountsByMemberId(@Param("memberId") Long memberId);
+	
+	Long findAccountIdByMemberId(@Param("memberId") Long memberId);
 }

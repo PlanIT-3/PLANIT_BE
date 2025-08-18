@@ -14,7 +14,7 @@ public interface IsaAccountMapper {
 
 	List<IsaAccountProductRes> findAllByMemberId(@Param("memberId") Long memberId);
 
-	void register(@Param("memberId") Long memberId, @Param("requestList") List<IsaAccountProductRegisterReq> isaAccountProductRegisterReqs);
+	void register(@Param("memberId") Long memberId, @Param("accountId") Long accountId, @Param("requestList") List<IsaAccountProductRegisterReq> isaAccountProductRegisterReqs);
 
 	List<IsaAccountProductRes> findAllByMemberIdAndGoalId(
 		@Param("memberId") Long memberId,
