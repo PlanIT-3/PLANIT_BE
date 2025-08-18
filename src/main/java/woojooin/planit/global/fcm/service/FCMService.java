@@ -1,4 +1,4 @@
-package woojooin.planit.global.service;
+package woojooin.planit.global.fcm.service;
 
 import org.springframework.stereotype.Service;
 

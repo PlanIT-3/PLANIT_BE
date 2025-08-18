@@ -3,25 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="woojooin.planit.global.mapper.FCMTokenMapper">
+<mapper namespace="woojooin.planit.global.fcm.mapper.FCMTokenMapper">
 
     <!-- FCM 토큰 저장/업데이트 -->
     <update id="updateFcmToken">
-        UPDATE member 
+        UPDATE member
         SET fcm_token = #{fcmToken}
         WHERE member_id = #{memberId}
     </update>
 
     <!-- FCM 토큰 조회 -->
     <select id="findFcmTokenById" resultType="string">
-        SELECT fcm_token 
-        FROM member 
+        SELECT fcm_token
+        FROM member
         WHERE member_id = #{memberId}
     </select>
 
     <!-- FCM 토큰 삭제 (NULL로 설정) -->
     <update id="deleteFcmTokenById">
-        UPDATE member 
+        UPDATE member
         SET fcm_token = NULL
         WHERE member_id = #{memberId}
     </update>

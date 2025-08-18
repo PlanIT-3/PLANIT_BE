@@ -1,4 +1,4 @@
-package woojooin.planit.global.mapper;
+package woojooin.planit.global.fcm.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
