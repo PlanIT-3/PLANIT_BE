@@ -14,6 +14,7 @@ import woojooin.planit.domain.rebalance.vo.Rebalance;
 public class RebalancingInfo {
 
 	private String goalName;
+	private Double expectedRate;
 	private List<Info> rebalanceInfo = new ArrayList<>();
 
 	@Data

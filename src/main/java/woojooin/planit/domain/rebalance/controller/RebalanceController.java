@@ -1,6 +1,5 @@
 package woojooin.planit.domain.rebalance.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import woojooin.planit.domain.rebalance.dto.res.RebalancingInfo;
 import woojooin.planit.domain.rebalance.service.RebalanceService;
 import woojooin.planit.global.response.Response;
 import woojooin.planit.global.security.CustomUserDetails;
+import woojooin.planit.global.util.calc.dto.RebalanceChoice;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,11 +22,10 @@ public class RebalanceController {
 
 	private final RebalanceService rebalanceService;
 
-	@GetMapping("/auth/rebalance")
+	@GetMapping("/auth/rebalance/recommend")
 	public ResponseEntity<?> getRebalanceInfo(@AuthenticationPrincipal CustomUserDetails member) {
 
-		List<RebalancingInfo> infos = new ArrayList<>();
-		infos = rebalanceService.reqCurrentRebalancing(member.getId());
+		List<RebalancingInfo> infos = rebalanceService.reqCurrentRebalancing(member.getId());
 
 		RebalanceRes rebalanceRes = new RebalanceRes(infos);
 
@@ -34,13 +33,20 @@ public class RebalanceController {
 	}
 
 	@GetMapping("/auth/rebalance/invest/info")
-	public ResponseEntity<List<RebalanceInvestInfoRes>> getRebalanceInvestInfo(@AuthenticationPrincipal CustomUserDetails member) {
+	public ResponseEntity<List<RebalanceInvestInfoRes>> getRebalanceInvestInfo(
+		@AuthenticationPrincipal CustomUserDetails member) {
 
 		List<RebalanceInvestInfoRes> rebalanceInvestInfoRes = rebalanceService.getRebalanceInvestInfo(member.getId());
 
 		return ResponseEntity.ok(rebalanceInvestInfoRes);
 	}
 
+	@GetMapping("/auth/rebalance")
+	public ResponseEntity<Response<?>> getRebalanceChoice(
+		@AuthenticationPrincipal CustomUserDetails member) {
 
+		List<RebalanceChoice> choiceList = rebalanceService.getRebalanceChoice(member.getId());
+		return ResponseEntity.ok(Response.ok(choiceList));
+	}
 
 }

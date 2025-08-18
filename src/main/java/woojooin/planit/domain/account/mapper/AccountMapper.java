@@ -13,13 +13,16 @@ import woojooin.planit.domain.account.dto.res.AccountBankRes;
 @Mapper
 public interface AccountMapper {
 
-	List<BalanceData> getBalanceByMemberIdAndPeriod(@Param("memberId") Long memberId, @Param("period") String period, @Param("startDate") String startDate);
-	
+	List<BalanceData> getBalanceByMemberIdAndPeriod(@Param("memberId") Long memberId, @Param("period") String period,
+		@Param("startDate") String startDate);
+
 	BigDecimal getTotalBalanceByMemberId(@Param("memberId") Long memberId);
-	
+
 	void insertAccount(Account account);
-	
+
 	List<AccountBankRes> selectAccountsByMemberId(@Param("memberId") Long memberId);
-	
-	Long findAccountIdByMemberId(@Param("memberId") Long memberId);
+
+	Account findAccountById(@Param("accountId") Long accountId);
+
+	Long findAccountIdByMemberId(@Param("memberId") Long MemberId);
 }

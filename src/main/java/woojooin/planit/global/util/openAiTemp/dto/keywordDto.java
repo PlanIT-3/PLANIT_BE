@@ -1,4 +1,4 @@
-package woojooin.planit.global.util.openAi.dto;
+package woojooin.planit.global.util.openAiTemp.dto;
 
 public record keywordDto(String investKeyword) {
 }

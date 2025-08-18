@@ -1,11 +1,15 @@
 package woojooin.planit.domain.member.mapper;
 
-import woojooin.planit.domain.member.domain.MemberProduct;
-
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import woojooin.planit.domain.member.domain.MemberProduct;
+
 public interface MemberProductMapper {
-    void insert(MemberProduct memberProduct);
-    void insertAll(List<MemberProduct> memberProducts);
-    List<MemberProduct> select(Long memberId);
+	void insert(MemberProduct memberProduct);
+
+	MemberProduct findByMemberId(@Param("memberProductId") Long memberProductId);
+
+	List<MemberProduct> select(Long memberId);
 }

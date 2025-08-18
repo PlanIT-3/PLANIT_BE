@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="woojooin.planit.domain.goal.action.mapper.ActionMapper">
+
+    <resultMap id="ActionResultMap" type="Action">
+        <id property="actionId" column="action_id"/>
+        <result property="accountId" column="account_id"/>
+        <result property="goalId" column="goal_id"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="memberProductId" column="member_product_id"/>
+        <result property="accountAllocatedRate" column="account_allocated_rate"/>
+        <result property="accountType" column="account_type"/>
+        <result property="amount" column="amount"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findActionsByGoalId" parameterType="long" resultMap="ActionResultMap">
+        SELECT *
+        FROM action
+        WHERE goal_id = #{goalId}
+          AND is_deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 배치 저장 -->
+    <insert id="saveAll"
+            parameterType="java.util.List"
+            useGeneratedKeys="true"
+            keyProperty="list.actionId"
+            keyColumn="action_id">
+        INSERT INTO action (
+        goal_id,
+        account_id,
+        account_number,
+        member_product_id,
+        account_allocated_rate,
+        account_type,
+        amount,
+        created_at,
+        updated_at,
+        is_deleted
+        )
+        VALUES
+        <foreach collection="list" item="a" separator=",">
+            (
+            #{a.goalId},
+            #{a.accountId},
+            #{a.accountNumber},
+            #{a.memberProductId},
+            #{a.accountAllocatedRate},
+            #{a.accountType},
+            #{a.amount},
+            #{a.createdAt},
+            #{a.updatedAt},
+            0
+            )
+        </foreach>
+    </insert>
+
+</mapper>

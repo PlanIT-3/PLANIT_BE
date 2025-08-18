@@ -2,16 +2,20 @@ package woojooin.planit.domain.goal.action.domain;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Action {
 
 	private Long actionId;
 
 	private Long goalId;
+
+	private Long accountId;
 
 	private String accountNumber;
 
@@ -21,7 +25,7 @@ public class Action {
 
 	private Integer accountAllocatedRate;
 
-	private String accountType;
+	private ActionType accountType;
 
 	private Integer amount;
 

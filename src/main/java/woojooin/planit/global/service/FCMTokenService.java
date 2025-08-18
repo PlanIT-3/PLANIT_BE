@@ -22,7 +22,7 @@ public class FCMTokenService {
         String token = fcmTokenDto.getToken();
 
         fcmTokenMapper.updateFcmToken(memberId, token);
-        
+
         log.info("FCM 토큰 등록 완료: memberId={}, token={}", memberId, token);
     }
 
