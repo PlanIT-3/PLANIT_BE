@@ -101,4 +101,11 @@
         ORDER BY created_at
     </select>
 
+    <select id="findAccountById" parameterType="Long"
+            resultType="woojooin.planit.domain.account.domain.Account">
+        SELECT *
+        FROM account
+        WHERE account_id = #{accountId}
+    </select>
+
 </mapper>
