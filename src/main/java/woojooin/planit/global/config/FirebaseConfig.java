@@ -19,7 +19,6 @@ public class FirebaseConfig {
 	@Value("classpath:firebase/firebase-admin-sdk.json")
 	private Resource serviceAccountJson;
 
-	// FirebaseApp를 '빈'으로 등록
 	@Bean
 	public FirebaseApp firebaseApp() throws IOException {
 		try (InputStream is = serviceAccountJson.getInputStream()) {

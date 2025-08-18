@@ -23,4 +23,6 @@ public interface AccountMapper {
 	List<AccountBankRes> selectAccountsByMemberId(@Param("memberId") Long memberId);
 
 	Account findAccountById(@Param("accountId") Long accountId);
+
+	Long findAccountIdByMemberId(@Param("memberId") Long MemberId);
 }
