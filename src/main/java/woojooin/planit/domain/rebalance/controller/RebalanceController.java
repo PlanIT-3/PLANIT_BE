@@ -41,7 +41,7 @@ public class RebalanceController {
 		return ResponseEntity.ok(rebalanceInvestInfoRes);
 	}
 
-	@GetMapping("/auth/rebalance")
+	@GetMapping("/auth/rebalance/rate")
 	public ResponseEntity<Response<?>> getRebalanceChoice(
 		@AuthenticationPrincipal CustomUserDetails member) {
 

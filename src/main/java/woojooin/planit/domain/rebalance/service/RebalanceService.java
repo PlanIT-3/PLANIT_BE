@@ -88,9 +88,7 @@ public class RebalanceService {
 			for (Action action : actionList) {
 
 				if (action.getAccountType().equals(ActionType.DEPOSIT)) {
-					log.info("action.getAccountId={}", action.getAccountId());
 					account = accountMapper.findAccountById(action.getAccountId());
-					log.info("deposit account={}", account);
 				} else {
 					memberProductList.add(memberProductMapper.findByMemberId(action.getMemberProductId()));
 				}
@@ -106,7 +104,7 @@ public class RebalanceService {
 			BigDecimal depositAmount = accountBalance.multiply(rate);
 
 			RebalanceChoice choice = RebalanceCalc.decide(goal, depositAmount, memberProductList);
-
+			choice.setGoalName(goal.getGoalName());
 			choiceList.add(choice);
 		}
 		return choiceList;
