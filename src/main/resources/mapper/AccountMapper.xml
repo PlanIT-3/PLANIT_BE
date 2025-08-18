@@ -101,9 +101,16 @@
         ORDER BY created_at
     </select>
 
+    <select id="findAccountById" parameterType="Long"
+            resultType="woojooin.planit.domain.account.domain.Account">
+        SELECT *
+        FROM account
+        WHERE account_id = #{accountId}
+    </select>
+
     <select id="findAccountIdByMemberId" parameterType="Long" resultType="java.lang.Long">
         SELECT account_id
-        FROM account 
+        FROM account
         WHERE member_id = #{memberId}
           AND is_deleted = 0
         LIMIT 1

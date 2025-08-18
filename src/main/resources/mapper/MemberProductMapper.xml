@@ -101,4 +101,11 @@
         FROM member_product
         WHERE member_id = #{memberId}
     </select>
+
+    <select id="findByMemberId" parameterType="java.lang.Long"
+            resultType="woojooin.planit.domain.member.domain.MemberProduct">
+        SELECT *
+        FROM member_product
+        WHERE member_product_id = #{memberProductId}
+    </select>
 </mapper>
