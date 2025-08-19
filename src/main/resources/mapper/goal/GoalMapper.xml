@@ -103,7 +103,7 @@
                 SUM(a.amount) as total_allocated
             FROM action a
             WHERE a.is_deleted = false
-              AND a.account_type = 'Deposit'
+              AND a.account_type = 'DEPOSIT'
             GROUP BY a.account_id
         ) allocated_sum ON acc.account_id = allocated_sum.account_id
                  INNER JOIN action a ON acc.account_id = a.account_id
@@ -157,7 +157,7 @@
         FROM action act
                  JOIN account a ON act.account_id = a.account_id
         WHERE act.goal_id = #{goalId}
-          AND act.account_type = 'Deposit'
+          AND act.account_type = 'DEPOSIT'
           AND act.is_deleted = 0
           AND a.is_deleted = 0
     </select>
