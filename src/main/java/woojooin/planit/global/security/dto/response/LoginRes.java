@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class LoginRes {
+    private Long memberId;  // memberId 추가
     private String email;
     private String password;
     private String username;
