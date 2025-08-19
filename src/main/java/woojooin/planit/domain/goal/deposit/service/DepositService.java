@@ -90,6 +90,8 @@ public class DepositService {
             }
 
             if (!checkedItems.isEmpty()) {
+                // DELETE + INSERT 방식으로 모든 항목 처리
+                // 기존 레코드가 있으면 삭제 후 재생성, 없으면 새로 생성
                 depositMapper.upsert(memberId, checkedItems);
             }
         } catch (Exception e) {

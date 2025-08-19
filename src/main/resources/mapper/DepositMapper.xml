@@ -74,7 +74,7 @@
                 SUM(a.amount) as total_allocated
             FROM action a
             WHERE a.is_deleted = false
-              AND a.account_type = 'Deposit'
+              AND a.account_type = 'DEPOSIT'
             GROUP BY a.account_id
         ) allocated_sum ON acc.account_id = allocated_sum.account_id
                  INNER JOIN action a ON acc.account_id = a.account_id
@@ -83,7 +83,7 @@
           AND acc.account_type = 'DEPOSIT'  -- 예적금 계좌만 필터링
           AND a.goal_id = #{goalId}
           AND a.is_deleted = false
-          AND a.account_type = 'Deposit'  -- action 테이블에서도 예적금만 필터링
+          AND a.account_type = 'DEPOSIT'  -- action 테이블에서도 예적금만 필터링
         ORDER BY acc.account_id DESC
     </select>
 
@@ -109,7 +109,7 @@
                 SUM(a.amount) as total_allocated
             FROM action a
             WHERE a.is_deleted = false
-              AND a.account_type = 'Deposit'
+              AND a.account_type = 'DEPOSIT'
             GROUP BY a.account_id
         ) allocated_sum ON acc.account_id = allocated_sum.account_id
         WHERE acc.member_id = #{memberId}
@@ -173,15 +173,28 @@
         AND is_deleted = false
     </update>
 
-    <!-- UPSERT 쿼리 - ON DUPLICATE KEY UPDATE 사용 -->
+    <!-- 기존 레코드 삭제 -->
+    <delete id="deleteExistingDeposits">
+        DELETE FROM action 
+        WHERE is_deleted = false 
+        AND (
+        <foreach collection="requestList" item="req" separator=" OR ">
+            (goal_id = #{req.goalId} 
+             AND account_id = #{req.memberAccountId}
+             AND account_type = 'DEPOSIT')
+        </foreach>
+        )
+    </delete>
+    
+    <!-- 새로운 레코드 INSERT -->
     <insert id="upsert">
         INSERT INTO action (
         goal_id,
+        account_id,
         member_product_id,
         account_number,
         account_type,
         amount,
-        allocated_rate,
         account_allocated_rate,
         is_deleted,
         created_at,
@@ -191,25 +204,23 @@
             (
             #{req.goalId},
             #{req.memberAccountId},
+            #{req.memberAccountId},
             #{req.accountNumber},
-            #{req.accountType},
+            'DEPOSIT',
             #{req.amount},
-            #{req.allocatedRate},
             #{req.accountAllocatedRate},
             false,
             NOW(),
             NOW()
             )
         </foreach>
-        ON DUPLICATE KEY UPDATE
-        account_number = VALUES(account_number),
-        account_type = VALUES(account_type),
-        amount = VALUES(amount),
-        allocated_rate = VALUES(allocated_rate),
-        account_allocated_rate = VALUES(account_allocated_rate),
-        is_deleted = false,
-        updated_at = NOW()
     </insert>
+    
+    <!-- 기존 action 업데이트 쿼리 - DELETE 후 INSERT 방식으로 변경 -->
+    <update id="updateExisting">
+        <!-- updateExisting은 사용하지 않음 - deleteExistingDeposits + upsert 사용 -->
+        UPDATE action SET updated_at = NOW() WHERE 1=0
+    </update>
 
     <!--
         특정 계좌의 현재 할당된 총액 조회
@@ -222,7 +233,7 @@
         FROM action
         WHERE account_id = #{memberAccountId}
           AND is_deleted = false
-          AND account_type = 'Deposit'
+          AND account_type = 'DEPOSIT'
     </select>
 
     <!--
