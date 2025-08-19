@@ -111,6 +111,7 @@
         AND acc.is_deleted = false
         AND a.goal_id = #{goalId}
         AND a.is_deleted = false
+        AND a.account_type = 'DEPOSIT'
         ORDER BY acc.account_id DESC
     </select>
 
