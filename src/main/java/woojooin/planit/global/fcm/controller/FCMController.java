@@ -18,7 +18,7 @@ import woojooin.planit.global.fcm.service.FCMTokenService;
 import woojooin.planit.global.response.Response;
 
 @RestController
-@RequestMapping("/auth/api/fcm")
+@RequestMapping("/api/fcm")
 @Api(value = "FCM API", description = "Firebase Cloud Messaging 관련 API")
 @RequiredArgsConstructor
 @Slf4j
