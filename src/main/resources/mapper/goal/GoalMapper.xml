@@ -109,8 +109,10 @@
                  INNER JOIN action a ON acc.account_id = a.account_id
         WHERE acc.member_id = #{memberId}
         AND acc.is_deleted = false
+        AND acc.account_type = 'DEPOSIT'  -- 예적금 계좌만 필터링
         AND a.goal_id = #{goalId}
         AND a.is_deleted = false
+        AND a.account_type = 'Deposit'  -- action 테이블에서도 예적금만 필터링
         ORDER BY acc.account_id DESC
     </select>
 
