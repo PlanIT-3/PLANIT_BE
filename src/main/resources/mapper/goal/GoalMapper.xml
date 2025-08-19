@@ -120,7 +120,7 @@
         where goal_id = #{goalId} AND member_id = #{memberId}
     </delete>
 
-    <update id="softDeleteActionsByGoalId" parameterType="Long">
+    <update id="softDeleteActionsByGoalId" >
         UPDATE `action`
         SET is_deleted = 1
         WHERE goal_id = #{goalId}  AND member_id = #{memberId}
