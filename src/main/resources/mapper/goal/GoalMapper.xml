@@ -114,10 +114,18 @@
         ORDER BY acc.account_id DESC
     </select>
 
+
     <delete id="deleteGoal" >
         delete from `goal`
         where goal_id = #{goalId} AND member_id = #{memberId}
     </delete>
+
+    <update id="softDeleteActionsByGoalId" >
+        UPDATE `action`
+        SET is_deleted = 1
+        WHERE goal_id = #{goalId}  AND member_id = #{memberId}
+    </update>
+
 
     <select id="selectGoalProgressByGoalId" resultType="woojooin.planit.domain.goal.domain.GoalProgress">
         SELECT *
