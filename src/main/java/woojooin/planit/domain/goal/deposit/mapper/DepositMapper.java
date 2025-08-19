@@ -55,7 +55,20 @@ public interface DepositMapper {
 	 * @param requestList 업서트할 예적금 계좌 목록
 	 */
 	void upsert(@Param("memberId") Long memberId, @Param("requestList") List<DepositAccountEditReq> requestList);
-
+	
+	/**
+	 * 기존 예적금 계좌 삭제
+	 * @param memberId 회원 ID
+	 * @param requestList 삭제할 예적금 계좌 목록
+	 */
+	void deleteExistingDeposits(@Param("memberId") Long memberId, @Param("requestList") List<DepositAccountEditReq> requestList);
+	
+	/**
+	 * 기존 예적금 계좌 업데이트
+	 * @param memberId 회원 ID
+	 * @param requestList 업데이트할 예적금 계좌 목록
+	 */
+	void updateExisting(@Param("memberId") Long memberId, @Param("requestList") List<DepositAccountEditReq> requestList);
 	/**
 	 * 특정 계좌의 현재 할당된 총액 조회
 	 * - 목적: 예적금 계좌 등록 시 잔여액 검증을 위해 사용

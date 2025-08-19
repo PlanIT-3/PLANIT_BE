@@ -74,7 +74,7 @@
                 SUM(a.amount) as total_allocated
             FROM action a
             WHERE a.is_deleted = false
-              AND a.account_type = 'Deposit'
+              AND a.account_type = 'DEPOSIT'
             GROUP BY a.account_id
         ) allocated_sum ON acc.account_id = allocated_sum.account_id
                  INNER JOIN action a ON acc.account_id = a.account_id
@@ -83,7 +83,7 @@
           AND acc.account_type = 'DEPOSIT'  -- 예적금 계좌만 필터링
           AND a.goal_id = #{goalId}
           AND a.is_deleted = false
-          AND a.account_type = 'Deposit'  -- action 테이블에서도 예적금만 필터링
+          AND a.account_type = 'DEPOSIT'  -- action 테이블에서도 예적금만 필터링
         ORDER BY acc.account_id DESC
     </select>
 
@@ -174,14 +174,25 @@
     </update>
 
     <!-- UPSERT 쿼리 - ON DUPLICATE KEY UPDATE 사용 -->
+    <delete id="deleteExistingDeposits">
+        DELETE FROM action 
+        WHERE is_deleted = false 
+        AND (
+        <foreach collection="requestList" item="req" separator=" OR ">
+            (goal_id = #{req.goalId} 
+             AND account_id = #{req.memberAccountId}
+             AND account_type = 'DEPOSIT')
+        </foreach>
+        )
+    </delete>
+
     <insert id="upsert">
         INSERT INTO action (
         goal_id,
-        member_product_id,
+        account_id,
         account_number,
         account_type,
         amount,
-        allocated_rate,
         account_allocated_rate,
         is_deleted,
         created_at,
@@ -192,23 +203,14 @@
             #{req.goalId},
             #{req.memberAccountId},
             #{req.accountNumber},
-            #{req.accountType},
+            'Deposit',
             #{req.amount},
-            #{req.allocatedRate},
             #{req.accountAllocatedRate},
             false,
             NOW(),
             NOW()
             )
         </foreach>
-        ON DUPLICATE KEY UPDATE
-        account_number = VALUES(account_number),
-        account_type = VALUES(account_type),
-        amount = VALUES(amount),
-        allocated_rate = VALUES(allocated_rate),
-        account_allocated_rate = VALUES(account_allocated_rate),
-        is_deleted = false,
-        updated_at = NOW()
     </insert>
 
     <!--
@@ -222,7 +224,7 @@
         FROM action
         WHERE account_id = #{memberAccountId}
           AND is_deleted = false
-          AND account_type = 'Deposit'
+          AND account_type = 'DEPOSIT'
     </select>
 
     <!--

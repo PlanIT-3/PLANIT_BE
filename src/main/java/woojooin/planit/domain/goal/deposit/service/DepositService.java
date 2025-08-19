@@ -90,6 +90,8 @@ public class DepositService {
             }
 
             if (!checkedItems.isEmpty()) {
+                // DELETE + INSERT 방식으로 처리
+                depositMapper.deleteExistingDeposits(memberId, checkedItems);
                 depositMapper.upsert(memberId, checkedItems);
             }
         } catch (Exception e) {
