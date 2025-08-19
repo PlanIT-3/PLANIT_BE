@@ -13,7 +13,7 @@ public class PrometheusController {
 
 	private final PrometheusMeterRegistry registry;
 
-	@GetMapping(value = "/prometheus", produces = "text/plain; version=0.0.4; charset=utf-8")
+	@GetMapping(value = "/test/prometheus", produces = "text/plain; version=0.0.4; charset=utf-8")
 	@ResponseBody
 	public String scrape() {
 		return registry.scrape();
