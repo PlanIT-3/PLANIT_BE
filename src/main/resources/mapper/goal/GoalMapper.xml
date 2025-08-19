@@ -92,9 +92,7 @@
             1 as checked,
             COALESCE(allocated_sum.total_allocated, 0) as allocated_amount,
             (acc.account_balance - COALESCE(allocated_sum.total_allocated, 0)) as remaining_amount,
-            ( COALESCE(acc.account_balance, 0)
-                  * CAST(COALESCE(a.account_allocated_rate, 0) AS DECIMAL(5,2)) / 100.0
-                )                                                                  AS myAmount
+            a.amount AS myAmount
         FROM account acc
                  -- 각 계좌별로 현재 할당된 총액을 계산하는 서브쿼리
                  LEFT JOIN (
