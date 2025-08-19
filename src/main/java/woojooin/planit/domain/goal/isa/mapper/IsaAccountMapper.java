@@ -23,7 +23,7 @@ public interface IsaAccountMapper {
 
 	void softDelete(@Param("memberId") Long memberId, @Param("requestList") List<IsaAccountProductEditReq> editReqs);
 
-	void upsert(@Param("memberId") Long memberId, @Param("requestList") List<IsaAccountProductEditReq> editReqs);
+	void upsert(@Param("memberId") Long memberId, @Param("accountId") Long accountId, @Param("requestList") List<IsaAccountProductEditReq> editReqs);
 
 	Long getTotalIsaProfitByMemberId(@Param("memberId") Long memberId);
 }

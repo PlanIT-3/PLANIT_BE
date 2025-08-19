@@ -124,6 +124,7 @@
     <insert id="upsert">
         INSERT INTO action (
         goal_id,
+        account_id,
         member_product_id,
         account_type,
         is_deleted,
@@ -133,6 +134,7 @@
         <foreach collection="requestList" item="req" separator=",">
             (
             #{req.goalId},
+            #{accountId},
             #{req.memberProductId},
             #{req.accountType},
             false,
@@ -141,6 +143,7 @@
             )
         </foreach>
         ON DUPLICATE KEY UPDATE
+        account_id = VALUES(account_id),
         account_type = VALUES(account_type),
         is_deleted = false,
         updated_at = NOW()

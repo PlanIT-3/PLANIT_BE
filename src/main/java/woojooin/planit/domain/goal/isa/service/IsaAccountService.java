@@ -50,8 +50,9 @@ public class IsaAccountService {
         validateDuplicateProducts(request.getIsaAccountProductRegisterReqs());
 
         try {
+            log.info("memberId:{}", memberId);
             Long accountId = accountMapper.findAccountIdByMemberId(memberId);
-
+            log.info("accountId:{}", accountId);
             isaAccountMapper.register(memberId, accountId, request.getIsaAccountProductRegisterReqs());
         } catch (Exception e) {
             log.error("[IsaAccountService.registerMemberProductsByMemberId()] - failed to register products memberId=\"{}\" productCount=\"{}\" error=\"{}\"", memberId, request.getIsaAccountProductRegisterReqs().size(), e.getMessage());
@@ -78,7 +79,11 @@ public class IsaAccountService {
             }
 
             if (!checkedItems.isEmpty()) {
-                isaAccountMapper.upsert(memberId, checkedItems);
+                log.info("memberId:{}",memberId);
+                Long accountId = accountMapper.findAccountIdByMemberId(memberId);
+                log.info("fasfas");
+                log.info("accountId:{}", accountId);
+                isaAccountMapper.upsert(memberId, accountId, checkedItems);
             }
         } catch (Exception e) {
             log.error("[IsaAccountService.editMemberProductsByMemberId()] - failed to edit products memberId=\"{}\" checkedCount=\"{}\" uncheckedCount=\"{}\" error=\"{}\"", memberId, checkedItems.size(), uncheckedItems.size(), e.getMessage());
