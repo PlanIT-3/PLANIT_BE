@@ -52,6 +52,7 @@
     <insert id="insertAll" parameterType="java.util.List">
         INSERT INTO member_product (
         member_id,
+        account_id,
         product_type_code,
         item_name,
         item_code,
@@ -74,6 +75,7 @@
         <foreach collection="list" item="item" separator=",">
             (
             #{item.memberId},
+            #{item.accountId},
             #{item.productTypeCode},
             #{item.itemName},
             #{item.itemCode},
@@ -96,6 +98,57 @@
         </foreach>
     </insert>
 
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO member_product (
+        member_id,
+        account_id,
+        product_type_code,
+        product_id,
+        item_name,
+        item_code,
+        account_extends,
+        balance_type,
+        account_currency,
+        avg_present_amount,
+        present_amount,
+        valuation_pl,
+        valuation_amount,
+        purchase_amount,
+        earnings_rate,
+        deposit_received,
+        quantity,
+        settle_quantity,
+        is_integrated,
+        created_at,
+        updated_at
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.memberId},
+            #{item.accountId},
+            #{item.productTypeCode},
+            #{item.productId},
+            #{item.itemName},
+            #{item.itemCode},
+            #{item.accountExtends},
+            #{item.balanceType},
+            #{item.accountCurrency},
+            #{item.avgPresentAmount},
+            #{item.presentAmount},
+            #{item.valuationPl},
+            #{item.valuationAmount},
+            #{item.purchaseAmount},
+            #{item.earningsRate},
+            #{item.depositReceived},
+            #{item.quantity},
+            #{item.settleQuantity},
+            #{item.isIntegrated},
+            #{item.createdAt},
+            #{item.updatedAt}
+            )
+        </foreach>
+    </insert>
+
     <select id="select" parameterType="java.lang.Long" resultType="woojooin.planit.domain.member.domain.MemberProduct">
         SELECT *
         FROM member_product
@@ -108,4 +161,17 @@
         FROM member_product
         WHERE member_product_id = #{memberProductId}
     </select>
+
+    <select id="selectProductIdByItemName" resultType="java.lang.Long">
+        SELECT CAST(shorten_code AS UNSIGNED) as productId
+        FROM product
+        WHERE item_name = #{itemName}
+          AND base_date = (
+            SELECT MAX(base_date)
+            FROM product
+            WHERE item_name = #{itemName}
+        )
+            LIMIT 1
+    </select>
+
 </mapper>

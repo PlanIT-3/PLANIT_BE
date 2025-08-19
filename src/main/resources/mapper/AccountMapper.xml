@@ -89,6 +89,9 @@
                 #{bankCode},
                 #{createdAt},
                 #{updatedAt})
+        <selectKey resultType="Long" keyProperty="accountId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
     <select id="selectAccountsByMemberId" parameterType="Long"

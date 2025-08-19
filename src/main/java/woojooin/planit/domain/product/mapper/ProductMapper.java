@@ -10,4 +10,5 @@ public interface ProductMapper {
 	Product selectBySrtnCd(String srtncd);
 
 	Product findByProductId(Long productId);
+	Long selectProductIdByItemName(String itemName);
 }
