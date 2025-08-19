@@ -91,7 +91,13 @@ public class DepositService {
 
             if (!checkedItems.isEmpty()) {
                 // DELETE + INSERT 방식으로 모든 항목 처리
+<<<<<<< Updated upstream
                 // 기존 레코드가 있으면 삭제 후 재생성, 없으면 새로 생성
+=======
+                // 1. 먼저 기존 레코드 삭제
+                depositMapper.deleteExistingDeposits(memberId, checkedItems);
+                // 2. 그 다음 새로 INSERT
+>>>>>>> Stashed changes
                 depositMapper.upsert(memberId, checkedItems);
             }
         } catch (Exception e) {

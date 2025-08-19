@@ -13,8 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import woojooin.planit.global.fcm.dto.FCMTokenDto;
-import woojooin.planit.global.fcm.service.FCMTokenService;
+import woojooin.planit.global.dto.FCMTokenDto;
+import woojooin.planit.global.service.FCMTokenService;
 import woojooin.planit.global.response.Response;
 
 @RestController
@@ -44,7 +44,7 @@ public class FCMController {
 	public ResponseEntity<Response<Void>> unregisterToken(@RequestBody FCMTokenDto fcmTokenDto) {
 		log.info("FCM 토큰 해제 요청: memberId={}", fcmTokenDto.getMemberId());
 
-		fcmTokenService.unregisterToken(fcmTokenDto.getMemberId());
+		fcmTokenService.unregisterToken(fcmTokenDto.getToken());
 
 		return ResponseEntity.ok(Response.ok());
 	}
