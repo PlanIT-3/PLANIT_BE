@@ -119,4 +119,13 @@
         LIMIT 1
     </select>
 
+    <select id="findIsaAccountIdByMemberId" parameterType="Long" resultType="java.lang.Long">
+        SELECT account_id
+        FROM account
+        WHERE member_id = #{memberId}
+          AND account_type = 'ISA'
+          AND is_deleted = 0
+        LIMIT 1
+    </select>
+
 </mapper>

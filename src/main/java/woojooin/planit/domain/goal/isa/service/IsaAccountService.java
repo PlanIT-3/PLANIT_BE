@@ -51,7 +51,7 @@ public class IsaAccountService {
 
         try {
             log.info("memberId:{}", memberId);
-            Long accountId = accountMapper.findAccountIdByMemberId(memberId);
+            Long accountId = accountMapper.findIsaAccountIdByMemberId(memberId);
             log.info("accountId:{}", accountId);
             isaAccountMapper.register(memberId, accountId, request.getIsaAccountProductRegisterReqs());
         } catch (Exception e) {
@@ -80,7 +80,7 @@ public class IsaAccountService {
 
             if (!checkedItems.isEmpty()) {
                 log.info("memberId:{}",memberId);
-                Long accountId = accountMapper.findAccountIdByMemberId(memberId);
+                Long accountId = accountMapper.findIsaAccountIdByMemberId(memberId);
                 log.info("fasfas");
                 log.info("accountId:{}", accountId);
                 isaAccountMapper.upsert(memberId, accountId, checkedItems);
