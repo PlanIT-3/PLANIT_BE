@@ -9,6 +9,8 @@ import woojooin.planit.domain.member.domain.MemberProduct;
 public interface MemberProductMapper {
 	void insert(MemberProduct memberProduct);
 
+	void insertBatch(List<MemberProduct> memberProducts);
+
 	MemberProduct findByMemberId(@Param("memberProductId") Long memberProductId);
 
 	List<MemberProduct> select(Long memberId);

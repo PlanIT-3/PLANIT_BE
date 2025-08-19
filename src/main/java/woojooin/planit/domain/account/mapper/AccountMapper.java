@@ -18,7 +18,7 @@ public interface AccountMapper {
 
 	BigDecimal getTotalBalanceByMemberId(@Param("memberId") Long memberId);
 
-	void insertAccount(Account account);
+	Long insertAccount(Account account);
 
 	List<AccountBankRes> selectAccountsByMemberId(@Param("memberId") Long memberId);
 
