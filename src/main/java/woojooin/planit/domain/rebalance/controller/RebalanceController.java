@@ -66,7 +66,7 @@ public class RebalanceController {
 	public ResponseEntity<?> getMockMember() {
 		Random random = new Random();
 
-		Member member = memberMapper.findById(random.nextLong(11105L, 11304L));
+		Member member = memberMapper.findByEmail("test" + random.nextInt(1, 9999) + "@example.com");
 		return ResponseEntity.ok(member);
 	}
 
