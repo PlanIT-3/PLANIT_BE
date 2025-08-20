@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import woojooin.planit.domain.member.domain.Member;
+import woojooin.planit.domain.member.mapper.MemberMapper;
 import woojooin.planit.domain.product.mapper.ProductMapper;
 import woojooin.planit.domain.rebalance.dto.res.RebalanceInvestInfoRes;
 import woojooin.planit.domain.rebalance.dto.res.RebalanceRes;
@@ -24,6 +26,7 @@ public class RebalanceController {
 
 	private final RebalanceService rebalanceService;
 	private final ProductMapper productMapper;
+	private final MemberMapper memberMapper;
 
 	@GetMapping("/auth/rebalance/recommend")
 	public ResponseEntity<?> getRebalanceInfo(@AuthenticationPrincipal CustomUserDetails member) {
@@ -57,6 +60,14 @@ public class RebalanceController {
 		Random random = new Random();
 
 		return ResponseEntity.ok(productMapper.findByProductId(random.nextLong(11105L, 11304L)));
+	}
+
+	@GetMapping("/test/member/mock")
+	public ResponseEntity<?> getMockMember() {
+		Random random = new Random();
+
+		Member member = memberMapper.findById(random.nextLong(11105L, 11304L));
+		return ResponseEntity.ok(member);
 	}
 
 }
