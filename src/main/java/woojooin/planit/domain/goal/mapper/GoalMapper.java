@@ -26,6 +26,8 @@ public interface GoalMapper {
 
     int deleteGoal(@Param("goalId") Long goalId, @Param("memberId") Long memberId);
 
+    int softDeleteActionsByGoalId(@Param("goalId") Long goalId, @Param("memberId") Long memberId);
+
     List<IsaAccountProductRes> findAllocatedIsaByGoal(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
 
     List<GoalDepositAmountRes> findAllocatedDepositByGoal(@Param("memberId") Long memberId, @Param("goalId") Long goalId);

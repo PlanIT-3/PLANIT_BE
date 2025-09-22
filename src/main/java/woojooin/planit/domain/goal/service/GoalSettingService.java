@@ -156,7 +156,9 @@ public class GoalSettingService {
 
 	@Transactional
 	public void deleteGoal(Long goalId, Long memberId) {
+		goalMapper.softDeleteActionsByGoalId(goalId,memberId);
 		goalMapper.deleteGoal(goalId, memberId);
+
 	}
 
 	public List<GoalProgressGraphDto> getGoalProgressByGoalId(Long goalId) {

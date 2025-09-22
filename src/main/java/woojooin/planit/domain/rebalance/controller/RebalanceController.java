@@ -1,6 +1,7 @@
 package woojooin.planit.domain.rebalance.controller;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import woojooin.planit.domain.member.domain.Member;
+import woojooin.planit.domain.member.mapper.MemberMapper;
+import woojooin.planit.domain.product.mapper.ProductMapper;
 import woojooin.planit.domain.rebalance.dto.res.RebalanceInvestInfoRes;
 import woojooin.planit.domain.rebalance.dto.res.RebalanceRes;
 import woojooin.planit.domain.rebalance.dto.res.RebalancingInfo;
@@ -21,6 +25,8 @@ import woojooin.planit.global.util.calc.dto.RebalanceChoice;
 public class RebalanceController {
 
 	private final RebalanceService rebalanceService;
+	private final ProductMapper productMapper;
+	private final MemberMapper memberMapper;
 
 	@GetMapping("/auth/rebalance/recommend")
 	public ResponseEntity<?> getRebalanceInfo(@AuthenticationPrincipal CustomUserDetails member) {
@@ -47,6 +53,21 @@ public class RebalanceController {
 
 		List<RebalanceChoice> choiceList = rebalanceService.getRebalanceChoice(member.getId());
 		return ResponseEntity.ok(Response.ok(choiceList));
+	}
+
+	@GetMapping("/test/product/mock")
+	public ResponseEntity<?> getMockProduct() {
+		Random random = new Random();
+
+		return ResponseEntity.ok(productMapper.findByProductId(random.nextLong(11105L, 11304L)));
+	}
+
+	@GetMapping("/test/member/mock")
+	public ResponseEntity<?> getMockMember() {
+		Random random = new Random();
+
+		Member member = memberMapper.findByEmail("test" + random.nextInt(1, 9999) + "@example.com");
+		return ResponseEntity.ok(member);
 	}
 
 }

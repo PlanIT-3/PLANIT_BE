@@ -24,6 +24,8 @@ import org.springframework.web.servlet.view.JstlView;
 	"woojooin.planit.global.exception",
 	"woojooin.planit.domain.rebalance.controller",
 	"woojooin.planit.global.controller",  // FCM 컨트롤러 추가
+	"woojooin.planit.global.fcm.controller",  // FCM 컨트롤러 추가
+	"woojooin.planit.global.monitoring",
 })
 public class ServletConfig implements WebMvcConfigurer {
 	@Override
