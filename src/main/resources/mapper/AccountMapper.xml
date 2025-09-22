@@ -95,7 +95,7 @@
     </insert>
 
     <select id="selectAccountsByMemberId" parameterType="Long"
-            resultType="woojooin.planit.domain.account.dto.res.AccountBankRes">
+            resultType="woojooin.planit.domain.account.api.dto.res.AccountBankRes">
         SELECT bank_code      as bankCode,
                account_number as accountNumber
         FROM account

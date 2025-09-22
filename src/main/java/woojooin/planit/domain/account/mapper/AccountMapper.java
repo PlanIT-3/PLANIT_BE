@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import woojooin.planit.domain.account.domain.Account;
 import woojooin.planit.domain.account.domain.BalanceData;
-import woojooin.planit.domain.account.dto.res.AccountBankRes;
+import woojooin.planit.domain.account.api.dto.res.AccountBankRes;
 
 @Mapper
 public interface AccountMapper {

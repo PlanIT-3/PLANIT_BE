@@ -1,6 +1,7 @@
 package woojooin.planit.domain.member.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,4 +31,6 @@ public class Member {
 	private Double liquid;
 	private Double growth;
 	private Double diversified;
+
+	private List<MemberProduct> memberProducts;
 }

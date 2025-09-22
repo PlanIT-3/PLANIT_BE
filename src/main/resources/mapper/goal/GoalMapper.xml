@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="woojooin.planit.domain.goal.mapper.GoalMapper">
 
-    <resultMap id="GoalResultMap" type="woojooin.planit.domain.goal.domain.Goal">
+    <resultMap id="GoalResultMap" type="woojooin.planit.domain.goal.domain.vo.Goal">
         <id property="goalId" column="goal_id"/>
         <result property="memberId" column="member_id"/>
         <result property="goalName" column="goal_name"/>
@@ -17,7 +17,7 @@
         <result property="goalRate" column="goal_rate"/>
     </resultMap>
 
-    <insert id="insertGoal" parameterType="woojooin.planit.domain.goal.domain.Goal" useGeneratedKeys="true" keyProperty="goalId">
+    <insert id="insertGoal" parameterType="woojooin.planit.domain.goal.domain.vo.Goal" useGeneratedKeys="true" keyProperty="goalId">
     insert  into `goal` (member_id, goal_name, target_amount, start_date, end_date,
             deposit_rate, isa_rate, start_amount, goal_rate
         )
@@ -28,7 +28,7 @@
     </insert>
 
 
-    <update id="updateGoal" parameterType="woojooin.planit.domain.goal.domain.Goal">
+    <update id="updateGoal" parameterType="woojooin.planit.domain.goal.domain.vo.Goal">
         UPDATE `goal`
         SET
             goal_name = #{goalName},
@@ -63,7 +63,7 @@
         ORDER BY goal_id DESC
     </select>
 
-    <select id="findAllocatedIsaByGoal" resultType="woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes">
+    <select id="findAllocatedIsaByGoal" resultType="woojooin.planit.domain.goal.api.dto.res.IsaAccountProductRes">
         SELECT
             mp.member_product_id,
             mp.present_amount,
@@ -83,7 +83,7 @@
         )
         ORDER BY mp.member_product_id DESC
     </select>
-    <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.goal.dto.res.GoalDepositResponse">
+    <select id="findAllocatedDepositByGoal" resultType="woojooin.planit.domain.goal.api.dto.res.GoalDepositAmountRes">
         select
             acc.account_id as member_product_id,
             acc.account_number,
@@ -119,7 +119,7 @@
         where goal_id = #{goalId} AND member_id = #{memberId}
     </delete>
 
-    <select id="selectGoalProgressByGoalId" resultType="woojooin.planit.domain.goal.domain.GoalProgress">
+    <select id="selectGoalProgressByGoalId" resultType="woojooin.planit.domain.goal.domain.vo.GoalProgress">
         SELECT *
         FROM daily_goal_progress
         WHERE goal_id = #{goalId}
@@ -128,7 +128,7 @@
 
 
 
-    <select id="selectDailyGoalProgressLast6Months" resultType="woojooin.planit.domain.goal.domain.GoalProgress">
+    <select id="selectDailyGoalProgressLast6Months" resultType="woojooin.planit.domain.goal.domain.vo.GoalProgress">
         SELECT
             daily_goal_progress_id,
             goal_id,
@@ -142,7 +142,7 @@
           AND created_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
         ORDER BY created_at DESC
     </select>
-    <select id="selectDepositAccountsByGoalId" resultType="woojooin.planit.domain.goal.dto.DepositAccountDto">
+    <select id="selectDepositAccountsByGoalId" resultType="woojooin.planit.domain.goal.domain.dto.DepositAccountDto">
         SELECT a.bank_code AS bankCode,
                a.account_balance AS accountBalance,
                act.account_allocated_rate AS allocatedRate
@@ -154,7 +154,7 @@
           AND a.is_deleted = 0
     </select>
 
-    <select id="selectIsaProductsByGoalId" resultType="woojooin.planit.domain.goal.dto.IsaProductDto">
+    <select id="selectIsaProductsByGoalId" resultType="woojooin.planit.domain.goal.domain.dto.IsaProductDto">
         SELECT mp.present_amount AS presentAmount,
                mp.quantity AS quantity
         FROM member_product mp

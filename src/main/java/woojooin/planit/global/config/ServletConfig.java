@@ -10,13 +10,13 @@ import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
 @ComponentScan(basePackages = {
-	"woojooin.planit.domain.account.controller",
-	"woojooin.planit.domain.member.controller",
+        "woojooin.planit.domain.account.api.controller",
+        "woojooin.planit.domain.member.api.controller",
 	"woojooin.planit.global.security.controller",
 	"woojooin.planit.domain.openAi.controller",
 	"woojooin.planit.domain.goal.isa.controller",
 	"woojooin.planit.domain.goal.goalAccount.controller",
-	"woojooin.planit.domain.goal.controller",
+        "woojooin.planit.domain.goal.api.controller",
 	"woojooin.planit.domain.goal.deposit.controller",
 	"woojooin.planit.domain.product.controller",
 	"woojooin.planit.domain.tax.controller",  // tax 컨트롤러 추가

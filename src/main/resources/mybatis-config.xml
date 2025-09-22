@@ -11,12 +11,12 @@
     <typeAliases>
         <package name="woojooin.planit.domain.member.domain"/>
         <package name="woojooin.planit.domain.goal.deposit.dto.res"/>
-        <package name="woojooin.planit.domain.goal.action.domain"/>
+        <package name="woojooin.planit.domain.goal.domain"/>
     </typeAliases>
 
     <typeHandlers>
         <typeHandler
-                javaType="woojooin.planit.domain.goal.action.domain.ActionType"
+                javaType="woojooin.planit.domain.goal.domain.enums.ActionType"
                 handler="org.apache.ibatis.type.EnumTypeHandler"/>
         <typeHandler
                 javaType="woojooin.planit.domain.product.enums.InvestType"

@@ -1,20 +1,17 @@
 package woojooin.planit.domain.goal.mapper;
 
-import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import woojooin.planit.domain.goal.domain.Goal; // 변경된 Goal VO 임포트
-import woojooin.planit.domain.goal.domain.GoalProgress;
+import woojooin.planit.domain.goal.api.dto.res.GoalDepositAmountRes;
+import woojooin.planit.domain.goal.domain.vo.Goal; // 변경된 Goal VO 임포트
+import woojooin.planit.domain.goal.domain.vo.GoalProgress;
 
-import woojooin.planit.domain.goal.dto.DepositAccountDto;
-import woojooin.planit.domain.goal.dto.IsaProductDto;
-import woojooin.planit.domain.goal.dto.res.GoalDepositResponse;
-import woojooin.planit.domain.goal.isa.dto.res.IsaAccountProductRes;
-import woojooin.planit.domain.goal.deposit.dto.res.DepositAccountRes;
+import woojooin.planit.domain.goal.domain.dto.DepositAccountDto;
+import woojooin.planit.domain.goal.domain.dto.IsaProductDto;
+import woojooin.planit.domain.goal.api.dto.res.IsaAccountProductRes;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface GoalMapper {
@@ -31,7 +28,7 @@ public interface GoalMapper {
 
     List<IsaAccountProductRes> findAllocatedIsaByGoal(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
 
-    List<GoalDepositResponse> findAllocatedDepositByGoal(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
+    List<GoalDepositAmountRes> findAllocatedDepositByGoal(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
 
     List<DepositAccountDto> selectDepositAccountsByGoalId(Long goalId);
 

@@ -19,11 +19,27 @@
         <result property="benefit" column="benefit"/>
         <result property="nickname" column="nickname"/>
     </resultMap>
+    
+<!--    <resultMap id="MemberWithProductsMap" type="woojooin.planit.domain.member.domain.Member">-->
+
+<!--    </resultMap>-->
 
     <select id="findById" resultMap="MemberResultMap" parameterType="long">
         SELECT * FROM member WHERE member_id = #{memberId}
     </select>
 
+    <select id="findByEmail" resultMap="MemberResultMap" parameterType="String">
+        SELECT * FROM member WHERE email = #{email}
+    </select>
+
+    <select id="findByConnectedIdString" resultType="java.lang.String">
+        select connected_id from member where member_id = #{memberId}
+    </select>
+
+    <select id="findInvestTypeById" parameterType="long" resultType="string">
+        select invest_type from member
+        where member_id=#{memberId}
+    </select>
 
     <insert id="insert" parameterType="woojooin.planit.domain.member.domain.Member" useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO member (
@@ -55,12 +71,6 @@
         DELETE FROM member WHERE member_id = #{memberId}
     </delete>
 
-    <select id="findByEmail" resultMap="MemberResultMap" parameterType="String">
-        SELECT * FROM member WHERE email = #{email}
-    </select>
-    <select id="findByConnectedIdString" resultType="java.lang.String">
-        select connected_id from member where member_id = #{memberId}
-    </select>
 
     <update id="updateInvestType">
         UPDATE member
@@ -74,10 +84,6 @@
         WHERE member_id = #{memberId}
     </update>
 
-    <select id="findInvestTypeById" parameterType="long" resultType="string">
-        select invest_type from member
-        where member_id=#{memberId}
-    </select>
     
     <update id="updateIsaType">
         UPDATE member

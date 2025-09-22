@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="woojooin.planit.domain.goal.action.mapper.ActionMapper">
+<mapper namespace="woojooin.planit.domain.goal.mapper.ActionMapper">
 
-    <resultMap id="ActionResultMap" type="Action">
+    <resultMap id="ActionResultMap" type="woojooin.planit.domain.goal.domain.vo.Action">
         <id property="actionId" column="action_id"/>
         <result property="accountId" column="account_id"/>
         <result property="goalId" column="goal_id"/>
