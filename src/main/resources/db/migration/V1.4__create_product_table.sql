@@ -1,21 +1,26 @@
-CREATE TABLE IF NOT EXISTS product (
-                         srtn_cd        VARCHAR(20)  NOT NULL, -- 단축코드
-                         isin_cd        VARCHAR(30)  NOT NULL, -- ISIN 코드
-                         itms_nm        VARCHAR(100) NOT NULL, -- 종목명
-                         bas_dt         VARCHAR(8)   NOT NULL, -- 기준일자 (YYYYMMDD)
-
-                         clpr           VARCHAR(20),           -- 종가
-                         vs             VARCHAR(20),           -- 전일 대비
-                         flt_rt         VARCHAR(20),           -- 등락률
-                         mkp            VARCHAR(20),           -- 시가
-                         hipr           VARCHAR(20),           -- 고가
-                         lopr           VARCHAR(20),           -- 저가
-                         trqu           VARCHAR(30),           -- 거래량
-                         tr_prc         VARCHAR(30),           -- 거래대금
-                         lstg_st_cnt    VARCHAR(30),           -- 상장주식수
-                         mrkt_tot_amt   VARCHAR(30),           -- 시가총액
-
-                         risk_level     VARCHAR(20),           -- 투자위험성
-
-                         PRIMARY KEY (srtn_cd, bas_dt)         -- 복합키: 종목 + 날짜 기준으로 유니크
+create table plan_it.product
+(
+    product_id               bigint,
+    shorten_code             varchar(20)                                                                not null                                primary key,
+    isin_code                varchar(20)                                                                null comment 'ISIN 코드',
+    item_name                varchar(100)                                                               null comment '종목명',
+    base_date                date                                                                       null comment '기준일자',
+    closing_price            int                                                                        null comment '종가',
+    difference               int                                                                        null comment '대비(전일 대비 등락가)',
+    fluctuation_rate         decimal(20, 3)                                                             null comment '등락률',
+    market_open_price        int                                                                        null comment '시가',
+    high_price               int                                                                        null comment '고가',
+    low_price                int                                                                        null comment '저가',
+    trade_quantity           bigint                                                                     null comment '거래량',
+    trade_price              bigint                                                                     null comment '거래대금',
+    market_total_amount      bigint                                                                     null comment '시가총액',
+    stock_listing_count      bigint                                                                     null comment '상장주식수',
+    invest_type              enum ('SAFE', 'CONSERVATIVE', 'MODERATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE') null comment '투자 타입',
+    created_at               timestamp default CURRENT_TIMESTAMP                                        null,
+    updated_at               timestamp default CURRENT_TIMESTAMP                                        null on update CURRENT_TIMESTAMP,
+    net_asset_value          decimal(20, 3)                                                             null comment '순자산가치(NAV)',
+    base_index_name          varchar(100)                                                               null comment '기초지수명',
+    base_index_closing_price decimal(20, 3)                                                             null comment '기초지수 종가',
+    net_asset_total_amount   bigint                                                                     null comment '순자산총액',
+    expected_return_rate     decimal(5, 2)                                                              null comment '예상 수익률'
 );

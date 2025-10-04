@@ -22,9 +22,6 @@ CREATE TABLE etf_daily_history (
     created_at                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
---     INDEX idx_etf_history_short_code (shorten_code),
---     INDEX idx_etf_history_base_date  (base_date),
-
    CONSTRAINT fk_etf_history_product
        FOREIGN KEY (shorten_code)
            REFERENCES product (shorten_code)
