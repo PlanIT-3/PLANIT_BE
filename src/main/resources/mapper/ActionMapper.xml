@@ -18,6 +18,12 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
+    <select id="findByMemberProductId" parameterType="long" resultMap="ActionResultMap">
+        SELECT *
+        FROM action
+        WHERE member_product_id = #{memberProductId}
+    </select>
+
     <select id="findActionsByGoalId" parameterType="long" resultMap="ActionResultMap">
         SELECT *
         FROM action

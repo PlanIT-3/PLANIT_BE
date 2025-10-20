@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import woojooin.planit.domain.member.domain.MemberProduct;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +21,7 @@ public class Action {
 	private String accountNumber;
 
 	private Long memberProductId;
+	private MemberProduct memberProduct;
 
 	private Integer allocatedRate;
 
