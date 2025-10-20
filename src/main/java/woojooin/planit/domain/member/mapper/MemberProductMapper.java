@@ -11,7 +11,7 @@ public interface MemberProductMapper {
 
 	void insertBatch(List<MemberProduct> memberProducts);
 
-	MemberProduct findByMemberId(@Param("memberProductId") Long memberProductId);
+	MemberProduct findByMemberProductId(@Param("memberProductId") Long memberProductId);
 
 	List<MemberProduct> select(Long memberId);
 
