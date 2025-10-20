@@ -199,6 +199,13 @@
         WHERE member_id = #{memberId}
     </select>
 
+    <select id="findById" parameterType="java.lang.Long"
+            resultType="woojooin.planit.domain.member.domain.MemberProduct">
+        SELECT *
+        FROM member_product
+        WHERE member_product_id = #{id}
+    </select>
+
     <select id="selectProductIdByItemName" resultType="java.lang.Long">
         SELECT CAST(shorten_code AS UNSIGNED) as productId
         FROM product

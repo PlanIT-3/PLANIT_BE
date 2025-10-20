@@ -21,45 +21,50 @@
     </resultMap>
 
     <select id="findById" resultMap="MemberResultMap" parameterType="long">
-        SELECT * FROM member WHERE member_id = #{memberId}
+        SELECT *
+        FROM member
+        WHERE member_id = #{memberId}
     </select>
 
 
-    <insert id="insert" parameterType="woojooin.planit.domain.member.domain.Member" useGeneratedKeys="true" keyProperty="memberId">
-        INSERT INTO member (
-            role, connected_id, reward_cnt, social_id, auth_vender,
-            invest_type, last_visit, email, password, benefit, nickname
-        ) VALUES (
-                     #{role}, #{connectedId}, #{rewardCnt}, #{socialId}, #{authVender},
-                     #{investType}, #{lastVisit}, #{email}, #{password}, #{benefit}, #{nickname}
-                 )
+    <insert id="insert" parameterType="woojooin.planit.domain.member.domain.Member" keyProperty="memberId">
+        INSERT INTO member (member_id, role, connected_id, reward_cnt, social_id, auth_vender,
+                            invest_type, last_visit, email, password, benefit, nickname)
+        VALUES (${memberId}, #{role}, #{connectedId}, #{rewardCnt}, #{socialId}, #{authVender},
+                #{investType}, #{lastVisit}, #{email}, #{password}, #{benefit}, #{nickname})
     </insert>
 
     <update id="update" parameterType="woojooin.planit.domain.member.domain.Member">
         UPDATE member
-        SET role = #{role},
+        SET role         = #{role},
             connected_id = #{connectedId},
-            reward_cnt = #{rewardCnt},
-            social_id = #{socialId},
-            auth_vender = #{authVender},
-            invest_type = #{investType},
-            last_visit = #{lastVisit},
-            email = #{email},
-            password = #{password},
-            benefit = #{benefit},
-            nickname = #{nickname}
+            reward_cnt   = #{rewardCnt},
+            social_id    = #{socialId},
+            auth_vender  = #{authVender},
+            invest_type  = #{investType},
+            last_visit   = #{lastVisit},
+            email        = #{email},
+            password     = #{password},
+            benefit      = #{benefit},
+            nickname     = #{nickname}
         WHERE member_id = #{memberId}
     </update>
 
     <delete id="delete" parameterType="long">
-        DELETE FROM member WHERE member_id = #{memberId}
+        DELETE
+        FROM member
+        WHERE member_id = #{memberId}
     </delete>
 
     <select id="findByEmail" resultMap="MemberResultMap" parameterType="String">
-        SELECT * FROM member WHERE email = #{email}
+        SELECT *
+        FROM member
+        WHERE email = #{email}
     </select>
     <select id="findByConnectedIdString" resultType="java.lang.String">
-        select connected_id from member where member_id = #{memberId}
+        select connected_id
+        from member
+        where member_id = #{memberId}
     </select>
 
     <update id="updateInvestType">
@@ -67,7 +72,7 @@
         SET invest_type = #{type}
         WHERE member_id = #{memberId}
     </update>
-    
+
     <update id="updateConnectedId">
         UPDATE member
         SET connected_id = #{connectedId}
@@ -75,10 +80,11 @@
     </update>
 
     <select id="findInvestTypeById" parameterType="long" resultType="string">
-        select invest_type from member
-        where member_id=#{memberId}
+        select invest_type
+        from member
+        where member_id = #{memberId}
     </select>
-    
+
     <update id="updateIsaType">
         UPDATE member
         SET isa_type = #{isaType}
