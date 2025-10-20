@@ -150,7 +150,7 @@
         FROM action act
                  JOIN account a ON act.account_id = a.account_id
         WHERE act.goal_id = #{goalId}
-          AND act.account_type = 'Deposit'
+          AND act.account_type = 'DEPOSIT'
           AND act.is_deleted = 0
           AND a.is_deleted = 0
     </select>

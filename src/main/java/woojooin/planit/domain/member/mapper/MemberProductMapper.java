@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import woojooin.planit.domain.member.domain.MemberProduct;
 
 public interface MemberProductMapper {
+
+	MemberProduct findById(@Param("id") Long memberProductId);
+
 	void insert(MemberProduct memberProduct);
 
 	void insertBatch(List<MemberProduct> memberProducts);

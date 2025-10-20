@@ -110,7 +110,7 @@
         WHERE member_id = #{memberId}
     </update>
 
-    
+
     <update id="updateIsaType">
         UPDATE member
         SET isa_type = #{isaType}
