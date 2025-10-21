@@ -1,5 +1,6 @@
 package woojooin.planit.global.fcm.service;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -8,6 +9,8 @@ import com.google.firebase.messaging.Notification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import woojooin.planit.global.exception.NotificationException;
+import woojooin.planit.global.util.rabbitMQ.GoalMsg;
 
 @Slf4j
 @Service
@@ -15,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 public class FCMService {
 
 	private final FirebaseMessaging firebaseMessaging;
+	private final RabbitTemplate rabbitTemplate;
+
+	private final int RETRY_LIMIT = 5;
 
 	/**
 	 * 단일 디바이스에 푸시 알림 전송
@@ -40,7 +46,7 @@ public class FCMService {
 			return response;
 		} catch (Exception e) {
 			log.error("FCM 알림 전송 실패: token={}, error={}", token, e.getMessage());
-			throw new RuntimeException("FCM 알림 전송 실패", e);
+			throw new NotificationException("FCM 알림 전송 실패", e);
 		}
 	}
 
@@ -50,10 +56,28 @@ public class FCMService {
 	 * @param goalName 목표 이름
 	 * @param achievementRate 달성률
 	 */
-	public void sendGoalAchievementNotification(String token, String goalName, int achievementRate) {
-		String title = "🎉 목표 달성 축하합니다!";
-		String body = String.format("%s 목표를 %d%% 달성했습니다!", goalName, achievementRate);
-		sendNotification(token, title, body);
+	public void sendGoalAchievementNotification(Long memberId, String token, String goalName, int achievementRate,
+		int retry) {
+		if (retry > RETRY_LIMIT) {
+			log.info("[FCM Service.sendGoalAchievementNotification()] - send notification more 5 times ");
+		}
+
+		String title;
+		String body;
+		if (achievementRate > 100) {
+			title = "🎉 목표 달성 축하합니다!";
+			body = String.format("%s 목표 금액을 달성했습니다!", goalName, achievementRate);
+		} else {
+			title = "🔥 목표 달성률 증가!!";
+			body = String.format("%s 목표를 %s%%만큼 달성했습니다", goalName, achievementRate);
+		}
+
+		try {
+			sendNotification(token, title, body);
+		} catch (NotificationException e) {
+			rabbitTemplate.convertAndSend(new GoalMsg(memberId, goalName, achievementRate, retry + 1));
+		}
+
 	}
 
 	/**
