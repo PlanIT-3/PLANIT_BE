@@ -17,17 +17,7 @@
         <result property="investType" column="invest_type"/>
 
         <association property="goal"
-                     javaType="woojooin.planit.domain.goal.domain.Goal"
-                     column="goal_id"
-                     select="woojooin.planit.domain.goal.mapper.GoalMapper.findById"/>
-
-        <association property="goal"
-                     javaType="woojooin.planit.domain.goal.domain.Goal"
-                     column="goal_id"
-                     select="woojooin.planit.domain.goal.mapper.GoalMapper.findById"/>
-
-        <association property="goal"
-                     javaType="woojooin.planit.domain.goal.domain.Goal"
+                     javaType="woojooin.planit.domain.goal.domain.vo.Goal"
                      column="goal_id"
                      select="woojooin.planit.domain.goal.mapper.GoalMapper.findById"/>
 

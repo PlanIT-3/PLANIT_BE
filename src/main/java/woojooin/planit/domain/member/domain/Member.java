@@ -35,6 +35,7 @@ public class Member {
 	private Double liquid;
 	private Double growth;
 	private Double diversified;
+	private String fcmToken;
 
 	private List<MemberProduct> memberProducts;
 	private List<Goal> goals;
