@@ -42,4 +42,27 @@ public class OpenApiUtil {
 		return ETFResponse;
 	}
 
+	public OpenApiResponse<ETFPriceRes> getETFPriceInfoWithPageAndNumOfRows(int pageNo, int numOfRows) {
+
+		StringBuilder uriBuilder = new StringBuilder();
+
+		uriBuilder.append(OPEN_API_BASE_URL).append("/getETFPriceInfo")
+			.append("?").append("serviceKey=").append(OPEN_API_SERVICE_KEY)
+			.append("&").append("resultType=").append("json")
+			.append("&").append("numOfRows=").append(numOfRows)
+			.append("&").append("pageNo=").append(pageNo);
+
+		String response = ConnectionUtil.sendRequest(uriBuilder.toString());
+		if (response == null || response.trim().isEmpty()) {
+			log.error("response is null or empty");
+		}
+
+		//log.info("==> [OpenDataUtil] response = {}", response);
+		TypeReference<OpenApiResponse<ETFPriceRes>> type = new TypeReference<>() {
+		};
+		OpenApiResponse<ETFPriceRes> ETFResponse = ConnectionUtil.decodeJsonStringToDto(response, type,
+			ConnectionUtil.CAMEL);
+
+		return ETFResponse;
+	}
 }

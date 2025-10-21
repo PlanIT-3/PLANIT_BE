@@ -20,10 +20,52 @@
         <result property="nickname" column="nickname"/>
     </resultMap>
 
+    <resultMap id="memberWithAllDetailsMap" type="woojooin.planit.domain.member.domain.Member">
+        <id property="memberId" column="member_id"/>
+        <result property="role" column="role"/>
+        <result property="connectedId" column="connected_id"/>
+        <result property="rewardCnt" column="reward_cnt"/>
+        <result property="socialId" column="social_id"/>
+        <result property="authVender" column="auth_vender"/>
+        <result property="investType" column="invest_type"/>
+        <result property="lastVisit" column="last_visit"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="benefit" column="benefit"/>
+        <result property="nickname" column="nickname"/>
+
+        <collection property="goals" ofType="woojooin.planit.domain.goal.domain.vo.Goal" select="woojooin.planit.domain.goal.mapper.GoalMapper.selectAllGoals" column="member_id"/>
+
+        <collection property="accounts" ofType="woojooin.planit.domain.account.domain.Account" select="woojooin.planit.domain.account.mapper.AccountMapper.findAllByMemberId" column="member_id"/>
+
+        <collection property="memberProducts" ofType="woojooin.planit.domain.member.domain.MemberProduct" select="woojooin.planit.domain.member.mapper.MemberProductMapper.findAllByMemberId" column="member_id"/>
+
+        <collection property="isaTaxSavingHistories"  ofType="woojooin.planit.domain.report.domain.vo.IsaTaxSavingHistory" select="woojooin.planit.domain.report.mapper.ReportMapper.selectIsaTaxSavingHistoriesByMemberId" column="member_id"/>
+
+        <collection property="depositTaxSavingHistories"  ofType="woojooin.planit.domain.report.domain.vo.DepositTaxSavingHistory" select="woojooin.planit.domain.report.mapper.ReportMapper.selectDepositTaxSavingHistoriesByMemberId" column="member_id"/>
+    </resultMap>
+
+
+    <select id="findByIdWithAllDetails" resultMap="memberWithAllDetailsMap" parameterType="long">
+        SELECT * FROM member WHERE member_id = #{memberId}
+    </select>
+
     <select id="findById" resultMap="MemberResultMap" parameterType="long">
         SELECT * FROM member WHERE member_id = #{memberId}
     </select>
 
+    <select id="findByEmail" resultMap="MemberResultMap" parameterType="String">
+        SELECT * FROM member WHERE email = #{email}
+    </select>
+
+    <select id="findByConnectedIdString" resultType="java.lang.String">
+        select connected_id from member where member_id = #{memberId}
+    </select>
+
+    <select id="findInvestTypeById" parameterType="long" resultType="string">
+        select invest_type from member
+        where member_id=#{memberId}
+    </select>
 
     <insert id="insert" parameterType="woojooin.planit.domain.member.domain.Member" useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO member (
@@ -55,12 +97,6 @@
         DELETE FROM member WHERE member_id = #{memberId}
     </delete>
 
-    <select id="findByEmail" resultMap="MemberResultMap" parameterType="String">
-        SELECT * FROM member WHERE email = #{email}
-    </select>
-    <select id="findByConnectedIdString" resultType="java.lang.String">
-        select connected_id from member where member_id = #{memberId}
-    </select>
 
     <update id="updateInvestType">
         UPDATE member
@@ -74,14 +110,24 @@
         WHERE member_id = #{memberId}
     </update>
 
-    <select id="findInvestTypeById" parameterType="long" resultType="string">
-        select invest_type from member
-        where member_id=#{memberId}
-    </select>
-    
+
     <update id="updateIsaType">
         UPDATE member
         SET isa_type = #{isaType}
         WHERE member_id = #{memberId}
     </update>
+
+    <select id="findByGoalId" resultType="woojooin.planit.domain.member.domain.Member" parameterType="long">
+        SELECT
+            m.member_id, m.role, m.connected_id, m.reward_cnt, m.social_id, m.auth_vender,
+            m.invest_type, m.last_visit, m.email, m.password, m.benefit, m.nickname
+        FROM
+            member m
+                JOIN
+            goal g ON m.member_id = g.member_id
+        WHERE
+            g.goal_id = #{goalId}
+    </select>
+
+
 </mapper>

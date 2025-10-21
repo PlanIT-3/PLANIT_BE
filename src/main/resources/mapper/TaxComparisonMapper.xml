@@ -4,7 +4,7 @@
 <mapper namespace="woojooin.planit.domain.tax.mapper.TaxComparisonMapper">
 
     <!-- QuarterlyTaxData ResultMap -->
-    <resultMap id="quarterlyTaxDataResultMap" type="woojooin.planit.domain.tax.dto.TaxComparisonRes$QuarterlyTaxData">
+    <resultMap id="quarterlyTaxDataResultMap" type="woojooin.planit.domain.tax.api.dto.res.TaxComparisonRes$QuarterlyTaxData">
         <result property="quarter" column="quarter"/>
         <result property="isaProfit" column="isa_profit"/>
         <result property="isaGeneralTax" column="general_tax"/>

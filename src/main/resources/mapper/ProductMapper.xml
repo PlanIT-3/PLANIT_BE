@@ -30,15 +30,20 @@
         WHERE product_id = #{productId}
     </select>
 
+    <select id="findByShortenCode" parameterType="java.lang.String"
+            resultType="woojooin.planit.domain.product.domain.Product">
+        SELECT *
+        FROM product
+        WHERE shorten_code = #{shortenCode}
+    </select>
+
     <select id="selectProductIdByItemName" resultType="java.lang.Long">
         SELECT CAST(shorten_code AS UNSIGNED) as productId
         FROM product
         WHERE item_name = #{itemName}
-          AND base_date = (
-            SELECT MAX(base_date)
-            FROM product
-            WHERE item_name = #{itemName}
-        )
+          AND base_date = (SELECT MAX(base_date)
+                           FROM product
+                           WHERE item_name = #{itemName})
             LIMIT 1
     </select>
 

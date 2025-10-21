@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="woojooin.planit.domain.goal.goalAccount.mapper.GoalAccountMapper">
+<mapper namespace="woojooin.planit.domain.goal.mapper.GoalAccountMapper">
 
     <!-- GoalIsaRes ResultMap -->
-    <resultMap id="GoalIsaResultMap" type="woojooin.planit.domain.goal.goalAccount.dto.res.GoalIsaRes">
+    <resultMap id="GoalIsaResultMap" type="woojooin.planit.domain.goal.api.dto.res.GoalIsaRes">
         <result property="goalName" column="goal_name"/>
         <result property="memberProductId" column="member_product_id"/>
         <result property="itemName" column="item_name"/>
@@ -14,7 +14,7 @@
     </resultMap>
 
     <!-- GoalDepositRes ResultMap -->
-    <resultMap id="GoalDepositResultMap" type="woojooin.planit.domain.goal.goalAccount.dto.res.GoalDepositRes">
+    <resultMap id="GoalDepositResultMap" type="woojooin.planit.domain.goal.api.dto.res.GoalDepositAmountRes">
         <result property="accountId" column="account_id"/>
         <result property="accountBalance" column="account_balance"/>
         <result property="bankCode" column="bank_code"/>
@@ -22,7 +22,7 @@
 
     <!-- ISA Account -->
     <select id="findIsaByMemberId" parameterType="map"
-            resultType="woojooin.planit.domain.goal.goalAccount.dto.res.GoalIsaRes">
+            resultType="woojooin.planit.domain.goal.api.dto.res.GoalIsaRes">
         SELECT
             g.member_id,
             g.goal_name,
@@ -41,7 +41,7 @@
 
     <!-- Deposit Account -->
     <select id="findDepositByMemberId" parameterType="map"
-            resultType="woojooin.planit.domain.goal.goalAccount.dto.res.GoalDepositRes">
+            resultType="woojooin.planit.domain.goal.api.dto.res.GoalDepositAmountRes">
         SELECT
             g.goal_name,
             acc.account_id,

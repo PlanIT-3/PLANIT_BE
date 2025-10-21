@@ -2,7 +2,7 @@ package woojooin.planit.domain.tax.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import woojooin.planit.domain.tax.dto.TaxComparisonRes;
+import woojooin.planit.domain.tax.api.dto.res.TaxComparisonRes;
 
 import java.util.List;
 

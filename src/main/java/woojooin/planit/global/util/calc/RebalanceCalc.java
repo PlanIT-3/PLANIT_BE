@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.domain.vo.Goal;
 import woojooin.planit.domain.member.domain.MemberProduct;
 import woojooin.planit.global.util.calc.dto.RebalanceChoice;
 

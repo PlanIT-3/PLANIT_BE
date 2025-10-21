@@ -11,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import woojooin.planit.domain.account.domain.Account;
 import woojooin.planit.domain.account.mapper.AccountMapper;
-import woojooin.planit.domain.goal.action.domain.Action;
-import woojooin.planit.domain.goal.action.domain.ActionType;
-import woojooin.planit.domain.goal.action.mapper.ActionMapper;
-import woojooin.planit.domain.goal.domain.Goal;
+import woojooin.planit.domain.goal.domain.vo.Action;
+import woojooin.planit.domain.goal.domain.enums.ActionType;
+import woojooin.planit.domain.goal.mapper.ActionMapper;
+import woojooin.planit.domain.goal.domain.vo.Goal;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.member.domain.MemberProduct;
 import woojooin.planit.domain.member.mapper.MemberProductMapper;
@@ -90,7 +90,7 @@ public class RebalanceService {
 				if (action.getAccountType().equals(ActionType.DEPOSIT)) {
 					account = accountMapper.findAccountById(action.getAccountId());
 				} else {
-					memberProductList.add(memberProductMapper.findByMemberId(action.getMemberProductId()));
+					memberProductList.add(memberProductMapper.findByMemberProductId(action.getMemberProductId()));
 				}
 			}
 

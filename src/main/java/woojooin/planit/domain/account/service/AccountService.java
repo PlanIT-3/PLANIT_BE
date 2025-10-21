@@ -14,16 +14,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import woojooin.planit.domain.account.domain.Account;
 import woojooin.planit.domain.account.domain.BalanceData;
-import woojooin.planit.domain.account.dto.res.AccountBankRes;
-import woojooin.planit.domain.account.dto.res.AccountsRes;
-import woojooin.planit.domain.account.dto.res.AccountListRes;
-import woojooin.planit.domain.account.dto.res.BalanceListRes;
-import woojooin.planit.domain.account.dto.res.BalanceRes;
+import woojooin.planit.domain.account.api.dto.res.AccountBankRes;
+import woojooin.planit.domain.account.api.dto.res.AccountsRes;
+import woojooin.planit.domain.account.api.dto.res.AccountListRes;
+import woojooin.planit.domain.account.api.dto.res.BalanceListRes;
+import woojooin.planit.domain.account.api.dto.res.BalanceRes;
 import woojooin.planit.domain.account.mapper.AccountMapper;
-import woojooin.planit.domain.goal.domain.Goal;
-import woojooin.planit.domain.goal.domain.Bank;
-import woojooin.planit.domain.goal.dto.res.GoalRatioListRes;
-import woojooin.planit.domain.goal.dto.res.GoalRatioRes;
+import woojooin.planit.domain.goal.domain.vo.Goal;
+import woojooin.planit.domain.goal.domain.enums.Bank;
+import woojooin.planit.domain.goal.api.dto.res.GoalRatioListRes;
+import woojooin.planit.domain.goal.api.dto.res.GoalRatioRes;
 import woojooin.planit.domain.goal.mapper.GoalMapper;
 import woojooin.planit.domain.member.domain.MemberProduct;
 import woojooin.planit.domain.member.mapper.MemberMapper;
@@ -340,12 +340,12 @@ public class AccountService {
 			memberProduct.setItemCode(item.getResItemCode());
 			memberProduct.setBalanceType(item.getResBalanceType());
 			memberProduct.setAccountCurrency(item.getResAccountCurrency());
-			memberProduct.setAccountNumber(accountNumber);
+//			memberProduct.setAccountNumber(accountNumber);
 			memberProduct.setAccountExtends(accountNumber);
 
 			// 상품명으로 product_id 조회, 없으면 기본값으로 설정
 			Long productIdLong = productMapper.selectProductIdByItemName(item.getResItemName());
-			memberProduct.setProductId(productIdLong != null ? productIdLong.toString() : "1");
+//			memberProduct.setProductId(productIdLong != null ? productIdLong.toString() : "1");
 
 			// BigDecimal 필드 처리 (null 체크 및 변환)
 			if (item.getResQuantity() != null && !item.getResQuantity().isEmpty()) {
@@ -366,11 +366,11 @@ public class AccountService {
 				memberProduct.setPresentAmount(BigDecimal.ZERO);
 			}
 
-			if (item.getResAvgPresentAmt() != null && !item.getResAvgPresentAmt().isEmpty()) {
-				memberProduct.setAvgPresentAmount(new BigDecimal(item.getResAvgPresentAmt()));
-			} else {
-				memberProduct.setAvgPresentAmount(BigDecimal.ZERO);
-			}
+//			if (item.getResAvgPresentAmt() != null && !item.getResAvgPresentAmt().isEmpty()) {
+//				memberProduct.setAvgPresentAmount(new BigDecimal(item.getResAvgPresentAmt()));
+//			} else {
+//				memberProduct.setAvgPresentAmount(BigDecimal.ZERO);
+//			}
 
 			if (item.getResPurchaseAmount() != null && !item.getResPurchaseAmount().isEmpty()) {
 				memberProduct.setPurchaseAmount(new BigDecimal(item.getResPurchaseAmount()));
@@ -396,11 +396,11 @@ public class AccountService {
 				memberProduct.setEarningsRate(BigDecimal.ZERO);
 			}
 
-			if (depositReceived != null && !depositReceived.isEmpty()) {
-				memberProduct.setDepositReceived(new BigDecimal(depositReceived));
-			} else {
-				memberProduct.setDepositReceived(BigDecimal.ZERO);
-			}
+//			if (depositReceived != null && !depositReceived.isEmpty()) {
+//				memberProduct.setDepositReceived(new BigDecimal(depositReceived));
+//			} else {
+//				memberProduct.setDepositReceived(BigDecimal.ZERO);
+//			}
 
 			memberProduct.setIsIntegrated(1);
 			memberProduct.setCreatedAt(LocalDateTime.now());

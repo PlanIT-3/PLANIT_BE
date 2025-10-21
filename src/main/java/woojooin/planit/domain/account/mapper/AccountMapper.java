@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import woojooin.planit.domain.account.domain.Account;
 import woojooin.planit.domain.account.domain.BalanceData;
-import woojooin.planit.domain.account.dto.res.AccountBankRes;
+import woojooin.planit.domain.account.api.dto.res.AccountBankRes;
 
 @Mapper
 public interface AccountMapper {
@@ -27,4 +27,8 @@ public interface AccountMapper {
 	Long findAccountIdByMemberId(@Param("memberId") Long MemberId);
 
 	Long findIsaAccountIdByMemberId(@Param("memberId") Long memberId);
+
+	List<Account> findAllByMemberId(@Param("memberId") Long memberId);
+
+	Account selectAccountWithAllDetails(@Param("accountId") Long accountId);
 }

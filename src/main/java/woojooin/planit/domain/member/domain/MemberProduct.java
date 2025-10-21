@@ -2,11 +2,13 @@ package woojooin.planit.domain.member.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import woojooin.planit.domain.goal.domain.vo.Action;
 import woojooin.planit.domain.product.domain.ProductTypeCode;
 
 @Data
@@ -14,10 +16,11 @@ import woojooin.planit.domain.product.domain.ProductTypeCode;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberProduct {
-
 	private Long memberProductId;
 	private Long memberId;
 	private Long accountId;
+	private List<Action> actionList;
+	private Member member;
 
 	// ==== 상품 정보 ====
 	private ProductTypeCode productTypeCode;            // 상품유형코드

@@ -3,6 +3,50 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="woojooin.planit.domain.member.mapper.MemberProductMapper">
+
+    <resultMap id="MemberProductResultMap" type="woojooin.planit.domain.member.domain.MemberProduct">
+        <id property="memberProductId" column="member_product_id"/>
+
+        <result property="accountId" column="account_id"/>
+        <result property="itemName" column="item_name"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="productId" column="product_id"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="accountExtends" column="account_extends"/>
+        <result property="balanceType" column="balance_type"/>
+        <result property="accountCurrency" column="account_currency"/>
+        <result property="avgPresentAmount" column="avg_present_amount"/>
+        <result property="presentAmount" column="present_amount"/>
+        <result property="valuationPl" column="valuation_pl"/>
+        <result property="valuationAmount" column="valuation_amount"/>
+        <result property="purchaseAmount" column="purchase_amount"/>
+        <result property="earningsRate" column="earnings_rate"/>
+        <result property="depositReceived" column="deposit_received"/>
+        <result property="quantity" column="quantity"/>
+        <result property="settleQuantity" column="settle_quantity"/>
+        <result property="isIntegrated" column="is_integrated"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+
+        <!-- Lazy로 나중에 실행 -->
+        <association property="member"
+                     javaType="woojooin.planit.domain.member.domain.Member"
+                     column="member_id"
+                     select="woojooin.planit.domain.member.mapper.MemberMapper.findById"/>
+
+        <collection property="actionList"
+                    ofType="woojooin.planit.domain.goal.action.domain.Action"
+                    column="member_product_id"
+                    select="woojooin.planit.domain.goal.action.mapper.ActionMapper.findByMemberProductId"/>
+    </resultMap>
+
+    <select id="findByMemberProductId" parameterType="java.lang.Long"
+            resultMap="MemberProductResultMap">
+        SELECT *
+        FROM member_product
+        WHERE member_product_id = #{memberProductId}
+    </select>
+
     <insert id="insert" parameterType="woojooin.planit.domain.member.domain.MemberProduct"
             useGeneratedKeys="true"
             keyProperty="memberProductId"
@@ -155,11 +199,11 @@
         WHERE member_id = #{memberId}
     </select>
 
-    <select id="findByMemberId" parameterType="java.lang.Long"
+    <select id="findById" parameterType="java.lang.Long"
             resultType="woojooin.planit.domain.member.domain.MemberProduct">
         SELECT *
         FROM member_product
-        WHERE member_product_id = #{memberProductId}
+        WHERE member_product_id = #{id}
     </select>
 
     <select id="selectProductIdByItemName" resultType="java.lang.Long">
@@ -172,6 +216,14 @@
             WHERE item_name = #{itemName}
         )
             LIMIT 1
+    </select>
+
+
+    <select id="findAllByMemberId" parameterType="long" resultMap="MemberProductResultMap">
+        SELECT
+            *
+        FROM member_product
+        WHERE member_id = #{memberId}
     </select>
 
 </mapper>

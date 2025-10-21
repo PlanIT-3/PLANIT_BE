@@ -95,7 +95,7 @@
     </insert>
 
     <select id="selectAccountsByMemberId" parameterType="Long"
-            resultType="woojooin.planit.domain.account.dto.res.AccountBankRes">
+            resultType="woojooin.planit.domain.account.api.dto.res.AccountBankRes">
         SELECT bank_code      as bankCode,
                account_number as accountNumber
         FROM account
@@ -126,6 +126,82 @@
           AND account_type = 'ISA'
           AND is_deleted = 0
         LIMIT 1
+    </select>
+
+    <resultMap id="accountResultMap" type="woojooin.planit.domain.account.domain.Account">
+        <id property="accountId" column="account_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="accountName" column="account_name"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="accountCurrency" column="account_currency"/>
+        <result property="accountBalance" column="account_balance"/>
+        <result property="accountDeposit" column="account_deposit"/>
+        <result property="earningsRate" column="earnings_rate"/>
+        <result property="accountInvestedCost" column="account_invested_cost"/>
+        <result property="lastTranDate" column="last_tran_date"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="accountEndDate" column="account_end_date"/>
+        <result property="accountStartDate" column="account_start_date"/>
+        <result property="isIntegrated" column="is_integrated"/>
+        <result property="bankCode" column="bank_code"/>
+        <result property="accountType" column="account_type"/>
+    </resultMap>
+
+    <select id="findAllByMemberId" parameterType="long" resultMap="accountResultMap">
+        SELECT
+            account_id,
+            member_id,
+            account_name,
+            account_number,
+            account_currency,
+            account_balance,
+            account_deposit,
+            earnings_rate,
+            account_invested_cost,
+            last_tran_date,
+            is_deleted,
+            account_end_date,
+            account_start_date,
+            is_integrated,
+            bank_code,
+            account_type
+        FROM account
+        WHERE member_id = #{memberId}
+    </select>
+
+
+    <resultMap id="accountWithAllDetailsMap" type="woojooin.planit.domain.account.domain.Account">
+        <id property="accountId" column="account_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="accountName" column="account_name"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="accountCurrency" column="account_currency"/>
+        <result property="accountBalance" column="account_balance"/>
+        <result property="accountDeposit" column="account_deposit"/>
+        <result property="earningsRate" column="earnings_rate"/>
+        <result property="accountInvestedCost" column="account_invested_cost"/>
+        <result property="lastTranDate" column="last_tran_date"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="accountEndDate" column="account_end_date"/>
+        <result property="accountStartDate" column="account_start_date"/>
+        <result property="isIntegrated" column="is_integrated"/>
+        <result property="bankCode" column="bank_code"/>
+        <result property="accountType" column="account_type"/>
+        <association property="member"
+                     javaType="woojooin.planit.domain.member.domain.Member"
+                     select="woojooin.planit.domain.member.mapper.MemberMapper.findById"
+                     column="member_id"/>
+        <collection property="actions"
+                    ofType="woojooin.planit.domain.goal.domain.vo.Action"
+                    select="woojooin.planit.domain.goal.mapper.ActionMapper.findAllByAccountId"
+                    column="account_id"/>
+        <collection property="depositTaxSavingHistories" ofType="woojooin.planit.domain.report.domain.vo.DepositTaxSavingHistory" select="woojooin.planit.domain.report.mapper.ReportMapper.selectDepositTaxSavingHistoriesByAccountId" column="account_id"/>
+    </resultMap>
+
+    <select id="selectAccountWithAllDetails" parameterType="long" resultMap="accountWithAllDetailsMap">
+        SELECT *
+        FROM account
+        WHERE account_id = #{accountId}
     </select>
 
 </mapper>

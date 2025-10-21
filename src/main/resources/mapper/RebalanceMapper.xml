@@ -4,6 +4,43 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="woojooin.planit.domain.rebalance.mapper.RebalanceMapper">
 
+    <resultMap id="RebalanceResultMap" type="woojooin.planit.domain.rebalance.vo.Rebalance">
+        <!-- 단일 컬럼 매핑 -->
+        <id property="rebalanceId" column="rebalance_id"/>
+        <result property="productCode" column="product_code"/>
+        <result property="memberProductId" column="member_product_id"/>
+        <result property="goalId" column="goal_id"/>
+        <result property="comment" column="comment"/>
+        <result property="expectedReturnRate" column="expected_return_rate"/>
+        <result property="previousProductName" column="previous_product_name"/>
+        <result property="nextProductName" column="next_product_name"/>
+        <result property="investType" column="invest_type"/>
+
+        <association property="goal"
+                     javaType="woojooin.planit.domain.goal.domain.vo.Goal"
+                     column="goal_id"
+                     select="woojooin.planit.domain.goal.mapper.GoalMapper.findById"/>
+
+        <association property="product"
+                     javaType="woojooin.planit.domain.product.domain.Product"
+                     column="product_code"
+                     select="woojooin.planit.domain.product.mapper.ProductMapper.findByShortenCode"/>
+
+
+        <association property="memberProduct"
+                     javaType="woojooin.planit.domain.member.domain.MemberProduct"
+                     column="member_product_id"
+                     select="woojooin.planit.domain.member.mapper.MemberProductMapper.findById"/>
+
+
+    </resultMap>
+
+    <select id="findById" parameterType="java.lang.Long" resultMap="RebalanceResultMap">
+        SELECT *
+        FROM rebalancing
+        WHERE rebalance_id = ${id}
+    </select>
+
     <!-- 단일 insert -->
     <insert id="insert"
             parameterType="woojooin.planit.domain.rebalance.vo.Rebalance"
@@ -92,7 +129,8 @@
         ORDER BY created_at LIMIT 3
     </select>
 
-    <select id="findRebalanceInvestInfoByMemberId" parameterType="long" resultType="woojooin.planit.domain.rebalance.dto.res.RebalanceInvestInfoRes">
+    <select id="findRebalanceInvestInfoByMemberId" parameterType="long"
+            resultType="woojooin.planit.domain.rebalance.dto.res.RebalanceInvestInfoRes">
         select item_name,
                quantity,
                valuation_amount,
