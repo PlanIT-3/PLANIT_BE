@@ -11,4 +11,6 @@ public interface ActionMapper {
 	List<Action> findActionsByGoalId(Long goalId);
 
 	int saveAll(List<Action> action);
+
+	Action findByMemberProductId(Long memberProductId);
 }
