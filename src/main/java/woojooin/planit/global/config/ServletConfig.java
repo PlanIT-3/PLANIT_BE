@@ -19,8 +19,8 @@ import org.springframework.web.servlet.view.JstlView;
         "woojooin.planit.domain.goal.api.controller",
 	"woojooin.planit.domain.goal.deposit.controller",
 	"woojooin.planit.domain.product.controller",
-	"woojooin.planit.domain.tax.controller",  // tax 컨트롤러 추가
-	"woojooin.planit.domain.report.controller",
+        "woojooin.planit.domain.tax.api.controller",  // tax 컨트롤러 추가
+        "woojooin.planit.domain.report.api.controller",
 	"woojooin.planit.global.exception",
 	"woojooin.planit.domain.rebalance.controller",
 	"woojooin.planit.global.controller",  // FCM 컨트롤러 추가

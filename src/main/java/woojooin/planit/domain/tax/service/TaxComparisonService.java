@@ -3,7 +3,7 @@ package woojooin.planit.domain.tax.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import woojooin.planit.domain.tax.dto.TaxComparisonRes;
+import woojooin.planit.domain.tax.api.dto.res.TaxComparisonRes;
 import woojooin.planit.domain.tax.mapper.TaxComparisonMapper;
 
 import java.math.BigDecimal;

@@ -154,12 +154,12 @@ public class GoalSettingService {
 		return updatedGoal;
 	}
 
-	@Transactional
-	public void deleteGoal(Long goalId, Long memberId) {
-		goalMapper.softDeleteActionsByGoalId(goalId,memberId);
-		goalMapper.deleteGoal(goalId, memberId);
-
-	}
+//	@Transactional
+//	public void deleteGoal(Long goalId, Long memberId) {
+//		goalMapper.softDeleteActionsByGoalId(goalId,memberId);
+//		goalMapper.deleteGoal(goalId, memberId);
+//
+//	}
 
 	public List<GoalProgressGraphDto> getGoalProgressByGoalId(Long goalId) {
 		List<GoalProgress> goalProgresses = goalMapper.selectGoalProgressByGoalId(goalId);

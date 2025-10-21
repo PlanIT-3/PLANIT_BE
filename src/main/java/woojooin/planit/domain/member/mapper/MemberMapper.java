@@ -19,5 +19,8 @@ public interface MemberMapper {
     
     void updateIsaType(@Param("memberId") Long memberId, @Param("isaType") String isaType);
 
-//    Member findMemberWithProducts(@Param("memberId") Long memberId);
+    Member findByIdWithAllDetails(@Param("memberId") Long memberId);
+
+    Member findByGoalId(@Param("goalId") Long goalId);
+
 }

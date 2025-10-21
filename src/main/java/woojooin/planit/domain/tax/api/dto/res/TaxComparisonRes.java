@@ -1,4 +1,4 @@
-package woojooin.planit.domain.tax.dto;
+package woojooin.planit.domain.tax.api.dto.res;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

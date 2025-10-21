@@ -1,4 +1,4 @@
-package woojooin.planit.domain.report.controller;
+package woojooin.planit.domain.report.api.controller;
 
 
 import io.swagger.annotations.ApiOperation;
@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import woojooin.planit.domain.account.domain.DailyBalance;
-import woojooin.planit.domain.report.domain.ReturnRateDto;
-import woojooin.planit.domain.report.domain.ReturnType;
-import woojooin.planit.domain.report.domain.res.DailyTotalInvestRes;
-import woojooin.planit.domain.report.domain.res.MonthlyTotalInvestRes;
-import woojooin.planit.domain.report.domain.res.WeeklyTotalInvestRes;
+import woojooin.planit.domain.report.domain.dto.ReturnRateDto;
+import woojooin.planit.domain.report.domain.enums.ReturnType;
+import woojooin.planit.domain.report.api.domain.res.DailyTotalInvestRes;
+import woojooin.planit.domain.report.api.domain.res.MonthlyTotalInvestRes;
+import woojooin.planit.domain.report.api.domain.res.WeeklyTotalInvestRes;
 import woojooin.planit.domain.report.service.ReportService;
 import woojooin.planit.global.response.Response;
 import woojooin.planit.global.security.CustomUserDetails;

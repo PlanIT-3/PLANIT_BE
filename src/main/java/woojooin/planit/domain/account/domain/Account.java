@@ -2,11 +2,15 @@ package woojooin.planit.domain.account.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import woojooin.planit.domain.goal.domain.vo.Action;
+import woojooin.planit.domain.member.domain.Member;
+import woojooin.planit.domain.report.domain.vo.DepositTaxSavingHistory;
 
 @Data
 @Builder
@@ -38,4 +42,8 @@ public class Account {
 
 	private LocalDateTime createdAt;        // timestamp
 	private LocalDateTime updatedAt;        // timestamp
+
+	Member member;
+	List<Action> actions;
+	List<DepositTaxSavingHistory> depositTaxSavingHistories;
 }

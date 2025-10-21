@@ -61,4 +61,69 @@
         </foreach>
     </insert>
 
+    <select id="selectAllByAccount" resultType="woojooin.planit.domain.goal.domain.vo.Action" parameterType="long">
+        SELECT
+            *
+        FROM
+            action
+        WHERE
+            account_id = #{accountId}
+    </select>
+
+    <select id="findByGoalId"
+            resultType="woojooin.planit.domain.goal.domain.vo.Action"
+            parameterType="long">
+        SELECT
+            action_id,
+            goal_id AS action_goal_id, -- 혹시 모를 충돌을 위해 별칭 사용
+            account_id,
+            account_number,
+            member_product_id,
+            account_allocated_rate,
+            account_type,
+            amount,
+            created_at,
+            updated_at
+        FROM action
+        WHERE goal_id = #{goalId}
+    </select>
+
+    <resultMap id="actionWithAllDetailsMap" type="woojooin.planit.domain.goal.domain.vo.Action">
+        <id property="actionId" column="action_id"/>
+        <result property="goalId" column="goal_id"/>
+        <result property="accountId" column="account_id"/>
+        <result property="memberProductId" column="member_product_id"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="accountAllocatedRate" column="account_allocated_rate"/>
+        <result property="accountType" column="account_type"/>
+        <result property="amount" column="amount"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+
+        <association property="goal" javaType="woojooin.planit.domain.goal.domain.vo.Goal"
+                     select="woojooin.planit.domain.goal.mapper.GoalMapper.selectById"
+                     column="goal_id"/>
+
+        <association property="account"
+                     javaType="woojooin.planit.domain.account.domain.Account"
+                     select="woojooin.planit.domain.account.mapper.AccountMapper.findAccountById"
+                     column="account_id"/>
+
+        <association property="memberProduct"
+                     javaType="woojooin.planit.domain.member.domain.MemberProduct"
+                     select="woojooin.planit.domain.member.mapper.MemberProductMapper.findByMemberId"
+                     column="member_product_id"/>
+    </resultMap>
+
+
+    <select id="selectActionWithAllDetails" parameterType="long" resultMap="actionWithAllDetailsMap">
+        SELECT * FROM action WHERE action_id = #{actionId}
+    </select>
+
+    <select id="findAllByAccountId" parameterType="long" resultMap="ActionResultMap">
+        SELECT *
+        FROM action
+        WHERE account_id = #{accountId}
+          AND is_deleted = 0
+    </select>
 </mapper>

@@ -1,4 +1,4 @@
-package woojooin.planit.domain.report.domain.res;
+package woojooin.planit.domain.report.api.domain.res;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -66,16 +66,16 @@
                 return ResponseEntity.ok(Response.ok(updatedGoal));
             }
 
-            @DeleteMapping("/{goalId}")
-            @ApiOperation(value = "목표 삭제", notes = "사용자의 목표를 삭제합니다")
-            public ResponseEntity<Response<Void>> deleteGoal(
-                    @PathVariable Long goalId,
-                    @AuthenticationPrincipal CustomUserDetails userDetails){
-                Long memberId = userDetails.getId();
-                goalService.deleteGoal(goalId,  memberId);
-
-                return ResponseEntity.ok(Response.ok());
-            }
+//            @DeleteMapping("/{goalId}")
+//            @ApiOperation(value = "목표 삭제", notes = "사용자의 목표를 삭제합니다")
+//            public ResponseEntity<Response<Void>> deleteGoal(
+//                    @PathVariable Long goalId,
+//                    @AuthenticationPrincipal CustomUserDetails userDetails){
+//                Long memberId = userDetails.getId();
+//                goalService.deleteGoal(goalId,  memberId);
+//
+//                return ResponseEntity.ok(Response.ok());
+//            }
 
 
 	@GetMapping("/{goalId}/rate")

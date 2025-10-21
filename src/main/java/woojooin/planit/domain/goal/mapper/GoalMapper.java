@@ -26,7 +26,7 @@ public interface GoalMapper {
 
     int deleteGoal(@Param("goalId") Long goalId, @Param("memberId") Long memberId);
 
-    int softDeleteActionsByGoalId(@Param("goalId") Long goalId, @Param("memberId") Long memberId);
+//    int softDeleteActionsByGoalId(@Param("goalId") Long goalId, @Param("memberId") Long memberId);
 
     List<IsaAccountProductRes> findAllocatedIsaByGoal(@Param("memberId") Long memberId, @Param("goalId") Long goalId);
 
@@ -43,4 +43,7 @@ public interface GoalMapper {
 
 	  List<GoalProgress> selectDailyGoalProgressLast6Months(@Param("goalId") Long goalId);
 
+      Goal selectGoalWithAllDetails(@Param("goalId") Long goalId);
+
+      Goal selectById(@Param("goalId") Long goalId);
 }

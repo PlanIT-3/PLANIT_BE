@@ -17,6 +17,7 @@
         <result property="goalRate" column="goal_rate"/>
     </resultMap>
 
+
     <insert id="insertGoal" parameterType="woojooin.planit.domain.goal.domain.vo.Goal" useGeneratedKeys="true" keyProperty="goalId">
     insert  into `goal` (member_id, goal_name, target_amount, start_date, end_date,
             deposit_rate, isa_rate, start_amount, goal_rate
@@ -173,5 +174,39 @@
         WHERE goal_id = #{goalId}
     </select>
 
+    <resultMap id="goalWithAllDetailsMap" type="woojooin.planit.domain.goal.domain.vo.Goal">
+        <id property="goalId" column="goal_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="goalName" column="goal_name"/>
+        <result property="targetAmount" column="target_amount"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="depositRate" column="deposit_rate"/>
+        <result property="isaRate" column="isa_rate"/>
+        <result property="startAmount" column="start_amount"/>
+        <result property="goalRate" column="goal_rate"/>
+
+        <association property="member" javaType="Member"
+                     select="woojooin.planit.domain.member.mapper.MemberMapper.findByGoalId"
+                     column="goal_id"/>
+
+        <collection property="actions"
+                     ofType="woojooin.planit.domain.goal.domain.vo.Action"
+                     select="woojooin.planit.domain.goal.mapper.ActionMapper.findByGoalId"
+                     column="goal_id"/>
+
+        <collection property="rebalances" ofType="woojooin.planit.domain.rebalance.vo.Rebalance"
+                    select="woojooin.planit.domain.rebalance.mapper.RebalanceMapper.selectByGoalId"
+                    column="goal_id"/>
+    </resultMap>
+
+
+    <select id="selectGoalWithAllDetails" parameterType="long" resultMap="goalWithAllDetailsMap">
+        SELECT * FROM goal WHERE goal_id = #{goalId}
+    </select>
+
+    <select id="selectById" resultType="woojooin.planit.domain.goal.domain.vo.Goal" parameterType="long">
+        SELECT * FROM goal WHERE goal_id = #{goalId}
+    </select>
 </mapper>
 

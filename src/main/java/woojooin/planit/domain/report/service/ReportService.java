@@ -1,25 +1,22 @@
 package woojooin.planit.domain.report.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import woojooin.planit.domain.report.domain.AccountComparisonDTO;
-import woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO;
-import woojooin.planit.domain.report.domain.IsaTaxSavingHistory;
+import woojooin.planit.domain.report.domain.dto.AccountComparisonDTO;
+import woojooin.planit.domain.report.domain.dto.IsaCumulativeTaxSavingDTO;
+import woojooin.planit.domain.report.domain.dto.IsaTaxSavingHistoryDto;
 
-import woojooin.planit.domain.report.domain.IsaTaxSavingStatusDTO;
-import woojooin.planit.domain.report.domain.ReturnRateDto;
-import woojooin.planit.domain.report.domain.ReturnType;
-import woojooin.planit.domain.report.domain.res.*;
+import woojooin.planit.domain.report.domain.dto.IsaTaxSavingStatusDTO;
+import woojooin.planit.domain.report.domain.dto.ReturnRateDto;
+import woojooin.planit.domain.report.domain.enums.ReturnType;
+import woojooin.planit.domain.report.api.domain.res.*;
 import woojooin.planit.domain.report.mapper.ReportMapper;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -80,7 +77,7 @@ public class ReportService {
 
     public AccountComparisonDTO getAccountComparison(Long memberId) {
         BigDecimal principalDecimal = reportMapper.getPrincipal(memberId);
-        IsaTaxSavingHistory taxHistory = reportMapper.getLatestIsaTaxSavingHistory(memberId);
+        IsaTaxSavingHistoryDto taxHistory = reportMapper.getLatestIsaTaxSavingHistory(memberId);
 
         String isaType = reportMapper.getIsaType(memberId);
 

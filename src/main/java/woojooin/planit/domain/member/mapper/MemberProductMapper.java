@@ -14,4 +14,8 @@ public interface MemberProductMapper {
 	MemberProduct findByMemberId(@Param("memberProductId") Long memberProductId);
 
 	List<MemberProduct> select(Long memberId);
+
+	List<MemberProduct> findAllByMemberId(@Param("memberId") Long memberId);
+
+
 }

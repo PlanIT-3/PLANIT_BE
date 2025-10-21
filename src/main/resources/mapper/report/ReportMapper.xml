@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace= "woojooin.planit.domain.report.mapper.ReportMapper">
 
-<select id="findReturnRateByType" resultType="woojooin.planit.domain.report.domain.ReturnRateDto">
+<select id="findReturnRateByType" resultType="woojooin.planit.domain.report.domain.dto.ReturnRateDto">
     select
         return_date AS date,
         return_rate AS rate
@@ -18,7 +18,7 @@
         LIMIT 7
 </select>
 
-    <select id="findDailyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.DailyRowRes">
+    <select id="findDailyTotalInvest" resultType="woojooin.planit.domain.report.api.domain.res.DailyRowRes">
         SELECT updated_at AS date,
            daily_invest_total,
            daily_valuation_total
@@ -28,7 +28,7 @@
             LIMIT 7
     </select>
 
-    <select id="findWeeklyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.WeeklyRowRes">
+    <select id="findWeeklyTotalInvest" resultType="woojooin.planit.domain.report.api.domain.res.WeeklyRowRes">
         SELECT updated_at AS date,
             weekly_total_amount AS weekly_invest_total,
            weekly_valuation_total AS weekly_valuation_total
@@ -38,7 +38,7 @@
             LIMIT 7
     </select>
 
-    <select id="findMonthlyTotalInvest" resultType="woojooin.planit.domain.report.domain.res.MonthlyRowRes">
+    <select id="findMonthlyTotalInvest" resultType="woojooin.planit.domain.report.api.domain.res.MonthlyRowRes">
         SELECT updated_at AS date,
             monthly_total_amount AS monthly_invest_total,
             monthly_valuation_total AS monthly_valuation_total
@@ -54,7 +54,7 @@
     </select>
 
     <select id="getCumulativeTaxSavingByMemberId"
-            resultType="woojooin.planit.domain.report.domain.IsaCumulativeTaxSavingDTO">
+            resultType="woojooin.planit.domain.report.domain.dto.IsaCumulativeTaxSavingDTO">
         SELECT quarter, cumulativeTaxSaved
         FROM (
                  SELECT quarter,
@@ -73,7 +73,7 @@
     </select>
 
     <select id="getLatestIsaTaxSavingHistory"
-            resultType="woojooin.planit.domain.report.domain.IsaTaxSavingHistory">
+            resultType="woojooin.planit.domain.report.domain.dto.IsaTaxSavingHistoryDto">
         SELECT general_tax, tax_saved
         FROM isa_tax_saving_history
         WHERE member_id = #{memberId}
@@ -102,4 +102,127 @@
 
     </select>
 
+    <resultMap id="isaTaxSavingHistoryWithMemberMap" type="woojooin.planit.domain.report.domain.vo.IsaTaxSavingHistory">
+
+        <id property="isaTaxSavingHistoryId" column="isa_tax_saving_history_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="quarter" column="quarter"/>
+        <result property="isaProfit" column="isa_profit"/>
+        <result property="generalTax" column="general_tax"/>
+        <result property="taxSaved" column="tax_saved"/>
+
+        <association property="member"
+                     javaType="woojooin.planit.domain.member.domain.Member"
+                     select="woojooin.planit.domain.member.mapper.MemberMapper.findById"
+                     column="member_id"/>
+    </resultMap>
+
+    <select id="selectIsaTaxSavingHistory"
+            parameterType="long"
+            resultMap="isaTaxSavingHistoryWithMemberMap">
+        SELECT
+            isa_tax_saving_history_id,
+            member_id,
+            quarter,
+            isa_profit,
+            general_tax,
+            tax_saved
+        FROM
+            isa_tax_saving_history
+        WHERE
+            isa_tax_saving_history_id = #{isaTaxSavingHistoryId}
+    </select>
+
+    <resultMap id="depositTaxSavingHistoryWithAllDetailsMap" type="woojooin.planit.domain.report.domain.vo.DepositTaxSavingHistory">
+
+        <id property="depositTaxSavingHistoryId" column="deposit_tax_saving_history_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="accountId" column="account_id"/>
+        <result property="quarter" column="quarter"/>
+        <result property="interestIncome" column="interest_income"/>
+        <result property="incomeTax" column="income_tax"/>
+        <result property="localIncomeTax" column="local_income_tax"/>
+        <result property="totalTax" column="total_tax"/>
+        <result property="netIncome" column="net_income"/>
+
+        <association property="member"
+                     javaType="woojooin.planit.domain.member.domain.Member"
+                     select="woojooin.planit.domain.member.mapper.MemberMapper.findById"
+                     column="member_id"/>
+
+        <association property="account"
+                     javaType="woojooin.planit.domain.account.domain.Account"
+                     select="woojooin.planit.domain.account.mapper.AccountMapper.findAccountById"
+                     column="account_id"/>
+    </resultMap>
+
+
+    <select id="selectDepositTaxSavingHistory"
+            parameterType="long"
+            resultMap="depositTaxSavingHistoryWithAllDetailsMap">
+        SELECT *
+        FROM deposit_tax_saving_history
+        WHERE deposit_tax_saving_history_id = #{depositTaxSavingHistoryId}
+    </select>
+
+    <resultMap id="isaTaxSavingHistoryMap" type="woojooin.planit.domain.report.domain.vo.IsaTaxSavingHistory">
+
+        <id property="isaTaxSavingHistoryId" column="isa_tax_saving_history_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="quarter" column="quarter"/>
+        <result property="isaProfit" column="isa_profit"/>
+        <result property="generalTax" column="general_tax"/>
+        <result property="taxSaved" column="tax_saved"/>
+    </resultMap>
+
+    <select id="selectIsaTaxSavingHistoriesByMemberId"
+            parameterType="long"
+            resultMap="isaTaxSavingHistoryMap">
+        SELECT
+         *
+        FROM
+            isa_tax_saving_history
+        WHERE
+            member_id = #{memberId}
+        ORDER BY
+            quarter DESC
+    </select>
+
+    <resultMap id="depositTaxSavingHistoryMap" type="woojooin.planit.domain.report.domain.vo.DepositTaxSavingHistory">
+        <id property="depositTaxSavingHistoryId" column="deposit_tax_saving_history_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="accountId" column="account_id"/>
+        <result property="quarter" column="quarter"/>
+        <result property="interestIncome" column="interest_income"/>
+        <result property="incomeTax" column="income_tax"/>
+        <result property="localIncomeTax" column="local_income_tax"/>
+        <result property="totalTax" column="total_tax"/>
+        <result property="netIncome" column="net_income"/>
+    </resultMap>
+
+    <select id="selectDepositTaxSavingHistoriesByMemberId"
+            parameterType="long"
+            resultMap="depositTaxSavingHistoryMap">
+        SELECT
+            *
+        FROM
+            deposit_tax_saving_history
+        WHERE
+            member_id = #{memberId}
+        ORDER BY
+            quarter DESC
+    </select>
+
+    <select id="selectDepositTaxSavingHistoriesByAccountId"
+            parameterType="long"
+            resultMap="depositTaxSavingHistoryMap">
+        SELECT
+            *
+        FROM
+            deposit_tax_saving_history
+        WHERE
+            account_id = #{accountId}
+        ORDER BY
+            quarter DESC
+    </select>
 </mapper>

@@ -174,4 +174,33 @@
             LIMIT 1
     </select>
 
+    <resultMap id="memberProductResultMap" type="woojooin.planit.domain.member.domain.MemberProduct">
+        <id property="memberProductId" column="member_product_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="accountId" column="account_id"/>
+        <result property="productTypeCode" column="product_type_code"/>
+        <result property="itemName" column="item_name"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="accountExtends" column="account_extends"/>
+        <result property="balanceType" column="balance_type"/>
+        <result property="accountCurrency" column="account_currency"/>
+        <result property="presentAmount" column="present_amount"/>
+        <result property="valuationPl" column="valuation_pl"/>
+        <result property="valuationAmount" column="valuation_amount"/>
+        <result property="purchaseAmount" column="purchase_amount"/>
+        <result property="earningsRate" column="earnings_rate"/>
+        <result property="quantity" column="quantity"/>
+        <result property="settleQuantity" column="settle_quantity"/>
+        <result property="isIntegrated" column="is_integrated"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findAllByMemberId" parameterType="long" resultMap="memberProductResultMap">
+        SELECT
+            *
+        FROM member_product
+        WHERE member_id = #{memberId}
+    </select>
+
 </mapper>

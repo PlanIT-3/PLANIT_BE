@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import woojooin.planit.domain.account.domain.Account;
 import woojooin.planit.domain.goal.domain.enums.ActionType;
+import woojooin.planit.domain.member.domain.MemberProduct;
 
 @Data
 @AllArgsConstructor
@@ -35,4 +37,8 @@ public class Action {
 	private LocalDateTime createdAt;
 
 	private LocalDateTime updatedAt;
+
+	private Goal goal;
+	private Account account;
+	private MemberProduct memberProduct;
 }

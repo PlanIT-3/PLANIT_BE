@@ -1,4 +1,4 @@
-package woojooin.planit.domain.tax.controller;
+package woojooin.planit.domain.tax.api.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import woojooin.planit.domain.tax.dto.TaxComparisonRes;
+import woojooin.planit.domain.tax.api.dto.res.TaxComparisonRes;
 import woojooin.planit.domain.tax.service.TaxComparisonService;
 import woojooin.planit.global.response.Response;
 import woojooin.planit.global.response.ResponseCode;

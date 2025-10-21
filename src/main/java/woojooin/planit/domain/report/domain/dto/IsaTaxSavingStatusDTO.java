@@ -1,4 +1,4 @@
-package woojooin.planit.domain.report.domain;
+package woojooin.planit.domain.report.domain.dto;
 
 import lombok.Data;
 

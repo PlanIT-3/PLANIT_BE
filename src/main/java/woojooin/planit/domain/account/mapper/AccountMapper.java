@@ -27,4 +27,8 @@ public interface AccountMapper {
 	Long findAccountIdByMemberId(@Param("memberId") Long MemberId);
 
 	Long findIsaAccountIdByMemberId(@Param("memberId") Long memberId);
+
+	List<Account> findAllByMemberId(@Param("memberId") Long memberId);
+
+	Account selectAccountWithAllDetails(@Param("accountId") Long accountId);
 }

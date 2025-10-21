@@ -1,4 +1,4 @@
-package woojooin.planit.domain.report.domain.res;
+package woojooin.planit.domain.report.api.domain.res;
 
 
 import lombok.AllArgsConstructor;
@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MonthlyTotalInvestRes {
+public class WeeklyTotalInvestRes {
     private List<Timestamp> date;
-    private List<BigDecimal> monthlyTotalAmount;
-    private List<BigDecimal> monthlyValuationAmount;
+    private List<BigDecimal> weeklyTotalAmount;
+    private List<BigDecimal> weeklyValuationAmount;
 }

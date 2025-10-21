@@ -340,12 +340,12 @@ public class AccountService {
 			memberProduct.setItemCode(item.getResItemCode());
 			memberProduct.setBalanceType(item.getResBalanceType());
 			memberProduct.setAccountCurrency(item.getResAccountCurrency());
-			memberProduct.setAccountNumber(accountNumber);
+//			memberProduct.setAccountNumber(accountNumber);
 			memberProduct.setAccountExtends(accountNumber);
 
 			// 상품명으로 product_id 조회, 없으면 기본값으로 설정
 			Long productIdLong = productMapper.selectProductIdByItemName(item.getResItemName());
-			memberProduct.setProductId(productIdLong != null ? productIdLong.toString() : "1");
+//			memberProduct.setProductId(productIdLong != null ? productIdLong.toString() : "1");
 
 			// BigDecimal 필드 처리 (null 체크 및 변환)
 			if (item.getResQuantity() != null && !item.getResQuantity().isEmpty()) {
@@ -366,11 +366,11 @@ public class AccountService {
 				memberProduct.setPresentAmount(BigDecimal.ZERO);
 			}
 
-			if (item.getResAvgPresentAmt() != null && !item.getResAvgPresentAmt().isEmpty()) {
-				memberProduct.setAvgPresentAmount(new BigDecimal(item.getResAvgPresentAmt()));
-			} else {
-				memberProduct.setAvgPresentAmount(BigDecimal.ZERO);
-			}
+//			if (item.getResAvgPresentAmt() != null && !item.getResAvgPresentAmt().isEmpty()) {
+//				memberProduct.setAvgPresentAmount(new BigDecimal(item.getResAvgPresentAmt()));
+//			} else {
+//				memberProduct.setAvgPresentAmount(BigDecimal.ZERO);
+//			}
 
 			if (item.getResPurchaseAmount() != null && !item.getResPurchaseAmount().isEmpty()) {
 				memberProduct.setPurchaseAmount(new BigDecimal(item.getResPurchaseAmount()));
@@ -396,11 +396,11 @@ public class AccountService {
 				memberProduct.setEarningsRate(BigDecimal.ZERO);
 			}
 
-			if (depositReceived != null && !depositReceived.isEmpty()) {
-				memberProduct.setDepositReceived(new BigDecimal(depositReceived));
-			} else {
-				memberProduct.setDepositReceived(BigDecimal.ZERO);
-			}
+//			if (depositReceived != null && !depositReceived.isEmpty()) {
+//				memberProduct.setDepositReceived(new BigDecimal(depositReceived));
+//			} else {
+//				memberProduct.setDepositReceived(BigDecimal.ZERO);
+//			}
 
 			memberProduct.setIsIntegrated(1);
 			memberProduct.setCreatedAt(LocalDateTime.now());
