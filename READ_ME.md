@@ -91,7 +91,7 @@ Now, Pay Later)**, 즉 ‘저축을 통한 지불’이라는 새로운 개념�
 
 ---
 
-![comatching_diagram-plan-it.drawio (9).png](Readme/comatching_diagram-plan-it.drawio_(9).png)
+![comatching_diagram-plan-it.drawio (9).png](readme/comatching_diagram-plan-it.drawio_(9).png)
 
 ### **🧑‍💻 배치 처리를 위한 DB master-slave 분산 운영**
 
@@ -109,7 +109,7 @@ Now, Pay Later)**, 즉 ‘저축을 통한 지불’이라는 새로운 개념�
 
 ---
 
-![image.png](Readme/image.png)
+![image.png](readme/image.png)
 
 - 최대한 서버 운영 비용을 절감하기 위해서 개인적으로 사용중인 홈서버와 제공받은 노트북을 활용해
 
@@ -122,7 +122,7 @@ Now, Pay Later)**, 즉 ‘저축을 통한 지불’이라는 새로운 개념�
 
 ---
 
-![image.png](Readme/image%201.png)
+![image.png](readme/image%201.png)
 
 ## 팀원 소개
 
