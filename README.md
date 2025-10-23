@@ -131,8 +131,11 @@ Now, Pay Later)**, 즉 ‘저축을 통한 지불’이라는 새로운 개념�
 > Backend Developer
 
 - [greensnapback0229](https://github.com/greensnapback0229)
-    - Ahnseoyeon
+- Ahnseoyeon
+- 김동윤
 
 > Frontend Developer
 
-- 나머지들
+- 박서영
+- 권세림
+- 유승원
