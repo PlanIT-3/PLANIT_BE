@@ -11,6 +11,8 @@ import woojooin.planit.domain.rebalance.vo.Rebalance;
 @Mapper
 public interface RebalanceMapper {
 
+	Rebalance findById(@Param("id") long id);
+
 	/** 단일 리밸런싱 내역 저장 */
 	int insert(Rebalance rebalance);
 

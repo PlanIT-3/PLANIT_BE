@@ -1,15 +1,22 @@
-CREATE TABLE account (
-                         account_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                         member_id BIGINT NOT NULL,
-                         account_name VARCHAR(255) NOT NULL,
-                         account_number VARCHAR(50) NOT NULL UNIQUE,
-                         account_currency VARCHAR(10) NOT NULL DEFAULT 'KRW',
-                         account_balance DECIMAL(20,2) NOT NULL DEFAULT 0.00,
-                         account_deposit DECIMAL(20,2) NOT NULL DEFAULT 0.00,
-                         earnings_rate DECIMAL(5,4) DEFAULT 0.0000,
-                         account_invested_cost DECIMAL(20,2) NOT NULL DEFAULT 0.00,
-                         last_tran_date TIMESTAMP NULL,
-                         is_deleted BOOLEAN NOT NULL DEFAULT FALSE COMMENT '삭제 여부',
-                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+create table plan_it.account
+(
+    account_id            bigint auto_increment
+        primary key,
+    member_id             bigint                                   not null,
+    account_name          varchar(255)                             not null,
+    account_number        varchar(50)                              not null,
+    account_currency      varchar(10)    default 'KRW'             not null,
+    account_balance       decimal(20, 2) default 0.00              not null,
+    account_deposit       decimal(20, 2) default 0.00              not null,
+    earnings_rate         decimal(5, 4)  default 0.0000            null,
+    account_invested_cost decimal(20, 2) default 0.00              not null,
+    last_tran_date        timestamp                                null,
+    is_deleted            tinyint(1)     default 0                 not null,
+    created_at            timestamp      default CURRENT_TIMESTAMP null,
+    updated_at            timestamp      default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    account_start_date    timestamp                                null,
+    account_end_date      timestamp                                null,
+    is_integrated         tinyint(1)     default 0                 not null,
+    constraint account_number
+        unique (account_number)
 );

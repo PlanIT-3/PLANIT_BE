@@ -90,7 +90,7 @@ public class RebalanceService {
 				if (action.getAccountType().equals(ActionType.DEPOSIT)) {
 					account = accountMapper.findAccountById(action.getAccountId());
 				} else {
-					memberProductList.add(memberProductMapper.findByMemberId(action.getMemberProductId()));
+					memberProductList.add(memberProductMapper.findByMemberProductId(action.getMemberProductId()));
 				}
 			}
 

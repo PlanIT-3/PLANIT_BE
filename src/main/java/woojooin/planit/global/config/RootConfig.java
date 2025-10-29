@@ -32,17 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 	})
 @MapperScan(basePackages = {
 	"woojooin.planit.domain.member.mapper",
-	"woojooin.planit.domain.goal.isa.mapper",            // ISA 계좌 mapper 추가
-	"woojooin.planit.domain.goal.deposit.mapper",        // Deposit mapper 추가
 	"woojooin.planit.domain.product.mapper",            // product mapper 추가
 	"woojooin.planit.domain.goal.mapper",                // Goal mapper 추가
-	"woojooin.planit.domain.goal.goalAccount.mapper",    // GoalAccount mapper 추가
 	"woojooin.planit.domain.account.mapper",            // Account mapper 추가
 	"woojooin.planit.domain.openAi.mapper",                // OpenAI mapper 추가
 	"woojooin.planit.domain.report.mapper",            // report mapper 추가
 	"woojooin.planit.domain.tax.mapper",                // tax mapper 추가
 	"woojooin.planit.domain.rebalance.mapper",            // rebalance mapper 추가
-	"woojooin.planit.domain.goal.action.mapper",        // action 추가
 	"woojooin.planit.global.fcm.mapper"                    //fcm 추가
 })
 @Slf4j

@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'plan-it-backend'
+    metrics_path: /test/prometheus         # Micrometer 컨트롤러로 노출한 경로
+    static_configs:
+      - targets: [ 'plan-it-backend:8080' ]   # 같은 docker 네트워크의 서비스명:포트

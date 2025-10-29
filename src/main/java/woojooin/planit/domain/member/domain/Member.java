@@ -35,6 +35,7 @@ public class Member {
 	private Double liquid;
 	private Double growth;
 	private Double diversified;
+	private String fcmToken;
 
 	private String authKey;
 	private int authStatus;
