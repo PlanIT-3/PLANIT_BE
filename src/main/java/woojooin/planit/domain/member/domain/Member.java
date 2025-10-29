@@ -36,6 +36,9 @@ public class Member {
 	private Double growth;
 	private Double diversified;
 
+	private String authKey;
+	private int authStatus;
+
 	private List<MemberProduct> memberProducts;
 	private List<Goal> goals;
 	private List<Account> accounts;

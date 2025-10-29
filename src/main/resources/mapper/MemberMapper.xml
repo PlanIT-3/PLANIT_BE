@@ -70,10 +70,10 @@
     <insert id="insert" parameterType="woojooin.planit.domain.member.domain.Member" useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO member (
             role, connected_id, reward_cnt, social_id, auth_vender,
-            invest_type, last_visit, email, password, benefit, nickname
+            invest_type, last_visit, email, password, benefit, nickname, auth_key, auth_status
         ) VALUES (
                      #{role}, #{connectedId}, #{rewardCnt}, #{socialId}, #{authVender},
-                     #{investType}, #{lastVisit}, #{email}, #{password}, #{benefit}, #{nickname}
+                     #{investType}, #{lastVisit}, #{email}, #{password}, #{benefit}, #{nickname}, #{authKey}, 0
                  )
     </insert>
 
@@ -89,8 +89,9 @@
             email = #{email},
             password = #{password},
             benefit = #{benefit},
-            nickname = #{nickname}
-        WHERE member_id = #{memberId}
+            nickname = #{nickname},
+            auth_status = 1
+        WHERE member_id = #{memberId} AND auth_key = #{authKey}
     </update>
 
     <delete id="delete" parameterType="long">

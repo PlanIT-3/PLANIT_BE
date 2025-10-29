@@ -48,11 +48,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		log.info("Processing JWT authentication for request: {}", request.getRequestURI());
 
 
-//      if ( request.getRequestURI().startsWith("/api")) {
-//         log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
-//         filterChain.doFilter(request, response);
-//         return;
-//      }
+      if ( request.getRequestURI().startsWith("/api")) {
+         log.info("Bypassing JWT filter for URI: {}", request.getRequestURI());
+         filterChain.doFilter(request, response);
+         return;
+      }
 
 		String token = resolveToken(request);
 
@@ -102,6 +102,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				sendErrorResponse(response, "UNEXPECTED_ERROR", "예상치 못한 오류가 발생했습니다.");
 				return;
 			}
+		} else
+		{
+			sendErrorResponse(response, "UNAUTHORIZED", "인증 토큰이 없습니다.");
+			return;
 		}
 		filterChain.doFilter(request, response);
 	}
