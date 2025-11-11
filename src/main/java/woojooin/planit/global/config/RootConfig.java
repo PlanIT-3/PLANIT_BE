@@ -1,5 +1,8 @@
 package woojooin.planit.global.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -22,6 +25,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import lombok.extern.slf4j.Slf4j;
+import woojooin.planit.global.config.datasource.RoutingDataSource;
+import woojooin.planit.global.enums.DataSourceType;
 
 @Configuration
 @PropertySource({"classpath:/application.properties"})
@@ -53,17 +58,51 @@ public class RootConfig {
 	@Value("${jdbc.password}")
 	String password;
 
-	@Bean
-	public DataSource dataSource() {
+	@Value("${jdbc.master.url}")
+	private String masterUrl;
+	@Value("${jdbc.master.username}")
+	private String masterUsername;
+	@Value("${jdbc.master.password}")
+	private String masterPassword;
+	@Value("${jdbc.slave.url}")
+	private String slaveUrl;
+	@Value("${jdbc.slave.username}")
+	private String slaveUsername;
+	@Value("${jdbc.slave.password}")
+	private String slavePassword;
+
+	@Bean(name = "masterDataSource")
+	public DataSource masterDataSource() {
 		HikariConfig config = new HikariConfig();
-
 		config.setDriverClassName(driver);
-		config.setJdbcUrl(url);
-		config.setUsername(username);
-		config.setPassword(password);
+		config.setJdbcUrl(masterUrl);
+		config.setUsername(masterUsername);
+		config.setPassword(masterPassword);
 
-		HikariDataSource dataSource = new HikariDataSource(config);
-		return dataSource;
+		log.info("id = {} password = {}", masterUsername, masterPassword);
+		return new HikariDataSource(config);
+	}
+
+	@Bean(name = "slaveDataSource")
+	public DataSource slaveDataSource() {
+		HikariConfig config = new HikariConfig();
+		config.setDriverClassName(driver);
+		config.setJdbcUrl(slaveUrl);
+		config.setUsername(slaveUsername);
+		config.setPassword(slavePassword);
+		log.info("id={} password={}", slaveUsername, slavePassword);
+		return new HikariDataSource(config);
+	}
+
+	@Bean
+	public DataSource routingDataSource() {
+		RoutingDataSource routingDataSource = new RoutingDataSource();
+		Map<Object, Object> targetDataSources = new HashMap<>();
+		targetDataSources.put(DataSourceType.MASTER, masterDataSource());
+		targetDataSources.put(DataSourceType.SLAVE, slaveDataSource());
+		routingDataSource.setTargetDataSources(targetDataSources);
+		routingDataSource.setDefaultTargetDataSource(masterDataSource());
+		return routingDataSource;
 	}
 
 	@Autowired
@@ -74,17 +113,16 @@ public class RootConfig {
 		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
 		sqlSessionFactory.setConfigLocation(
 			applicationContext.getResource("classpath:/mybatis-config.xml"));
-		sqlSessionFactory.setDataSource(dataSource());
-
 		sqlSessionFactory.setMapperLocations(
 			applicationContext.getResources("classpath:/mapper/**/*.xml"));
+		sqlSessionFactory.setDataSource(routingDataSource());
 
 		return (SqlSessionFactory)sqlSessionFactory.getObject();
 	}
 
 	@Bean
 	public DataSourceTransactionManager transactionManager() {
-		DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
+		DataSourceTransactionManager manager = new DataSourceTransactionManager(routingDataSource());
 		return manager;
 	}
 }
