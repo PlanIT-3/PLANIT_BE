@@ -142,10 +142,6 @@ dependencies {
     implementation 'io.micrometer:micrometer-core:1.7.6'
 
 
-    //Mail
-    implementation 'javax.mail:mail:1.4.7'
-
-
 }
 
 test {
