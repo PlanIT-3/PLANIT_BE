@@ -4,8 +4,6 @@ package woojooin.planit.domain.member.service;
 import woojooin.planit.domain.member.domain.Member;
 import woojooin.planit.domain.member.api.dto.res.InvestScoreRes;
 
-import javax.mail.MessagingException;
-
 public interface MemberService {
     Member findById(Long memberId);
     Member findByEmail(String email);
