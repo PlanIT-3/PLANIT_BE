@@ -37,6 +37,9 @@ public class Member {
 	private Double diversified;
 	private String fcmToken;
 
+	private String authKey;
+	private int authStatus;
+
 	private List<MemberProduct> memberProducts;
 	private List<Goal> goals;
 	private List<Account> accounts;

@@ -32,6 +32,8 @@ public enum ResponseCode {
 	DUPLICATE_EMAIL("AUTH-003", "이미 사용 중인 이메일입니다.", HttpStatus.BAD_REQUEST),
 	INVALID_LOGIN("AUTH-004", "유효하지 않은 이메일 또는 비밀번호입니다.", HttpStatus.UNAUTHORIZED),
 	REISSUE_FAILED("AUTH-005", "리프레시 토큰 재발급에 실패했습니다.", HttpStatus.UNAUTHORIZED),
+	AUTH_KEY_INVALID("AUTH-006", "유효하지 않은 인증 키입니다.", HttpStatus.BAD_REQUEST),
+	EMAIL_SEND_FAILED("AUTH-007", "이메일 전송에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
 	// ISA Account Domain Errors
 	ISA_MEMBER_NOT_FOUND("ISA-001", "해당 회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
