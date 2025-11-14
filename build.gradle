@@ -33,6 +33,7 @@ dependencies {
             { exclude group: 'commons-logging', module: 'commons-logging' }
     implementation "org.springframework:spring-webmvc:${springVersion}"
     implementation 'javax.inject:javax.inject:1'
+    implementation 'org.springframework:spring-aspects:5.3.39'
 
     // AOP
     runtimeOnly 'org.aspectj:aspectjrt:1.9.20'
